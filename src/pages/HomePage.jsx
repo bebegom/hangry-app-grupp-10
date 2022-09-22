@@ -6,10 +6,10 @@ function HomePage() {
   return (
     <LoadScript googleMapsApiKey= {`${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`} >
         <GoogleMap
-            zoom={10}
+            zoom={14}
             center={{
-              lat: -3.745,
-              lng: -38.523
+              lat: 55.60,
+              lng: 13
             }}
             mapContainerClassName="mapContainer"
         >
