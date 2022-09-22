@@ -3,8 +3,7 @@ import Navigation from './components/Navigation'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LogInPage'
 import NotFound from './pages/NotFound'
-import './App.css'
-
+import './assets/scss/App.scss'
 
 function App() {
   return (
