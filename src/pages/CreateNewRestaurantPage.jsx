@@ -4,12 +4,12 @@ import { Container, Form, Button } from 'react-bootstrap'
 import {collection, addDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 
-const CreateNewPlacePage = () => {
+const CreateNewRestaurantPage = () => {
     const [loading, setLoading] = useState(false)
     const {handleSubmit, register, formState: {errors}, reset} = useForm()
 
     const onCreatePlace = async data => {
-        console.log(data)
+        // console.log(data)
         setLoading(true)
         // create the restaurant and store it in Cloud Firestore
         await addDoc(collection(db, 'restaurants'), {
@@ -126,4 +126,4 @@ const CreateNewPlacePage = () => {
     )
 }
 
-export default CreateNewPlacePage
+export default CreateNewRestaurantPage
