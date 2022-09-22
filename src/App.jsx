@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
+import Navigation from './components/Navigation'
 import HomePage from './pages/HomePage'
 import NotFound from './pages/NotFound'
 import CreateNewRestaurantPage from './pages/CreateNewRestaurantPage'
