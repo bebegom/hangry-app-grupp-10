@@ -1,14 +1,34 @@
-import React from 'react'
+import { useState } from 'react'
 import {useForm} from 'react-hook-form'
 import { Container, Form, Button } from 'react-bootstrap'
+import {collection, addDoc } from 'firebase/firestore'
+import { db } from '../firebase'
 
 const CreateNewPlacePage = () => {
-    const {handleSubmit, register, formState: {errors}} = useForm()
+    const [loading, setLoading] = useState(false)
+    const {handleSubmit, register, formState: {errors}, reset} = useForm()
 
-    const onCreatePlace = (data) => {
+    const onCreatePlace = async data => {
         console.log(data)
-
-        // create the place and store it in firestore and storage
+        setLoading(true)
+        // create the restaurant and store it in Cloud Firestore
+        await addDoc(collection(db, 'restaurants'), {
+            namn: data.name,
+            adress: data.adress,
+            ort: data.ort,
+            beskrivning: data.beskrivning,
+            cuisine: data.cuisine,
+            typ: data.typ,
+            utbud: data.utbud
+        })
+        // resetting text-inputs
+        reset()
+        // resetting select-inputs
+        reset({
+            typ: '', 
+            utbud: ''
+        })
+        setLoading(false)
     }
 
     return (
@@ -98,7 +118,9 @@ const CreateNewPlacePage = () => {
                     {errors.utbud && <span>{errors.utbud.message}</span>}
                 </Form.Group>
 
-                <Button type='submit'>Create</Button>
+                <Button disabled={loading} type='submit'>
+                    {loading ? '...creating' : 'Create'}
+                </Button>
             </Form>
         </Container>
     )
