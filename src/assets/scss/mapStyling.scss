@@ -2,18 +2,3 @@
     width: 100%;
     height: 60vh;
 }
-
-.formStyle {
-    width: 50%;
-}
-
-.listStyleItems:hover {
-    cursor: pointer;
-    background-color: #e6e6e6;
-}
-
-@media(min-width: 500px) {
-    .formStyle {
-        width: 50%;
-    }
-}
