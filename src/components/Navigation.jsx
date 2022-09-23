@@ -27,7 +27,7 @@ const Navigation = () => {
 						</>
 					) : (
 						<>
-							{/* Admin is logged in */}
+							{/* Admin is NOT logged in */}
 							<Nav.Link as={NavLink} to="/login">Login</Nav.Link>
 						</>
 					)
