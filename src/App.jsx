@@ -7,6 +7,7 @@ import NotFound from './pages/NotFound'
 import CreateNewRestaurantPage from './pages/CreateNewRestaurantPage'
 import UpdateRestaurantPage from './pages/UpdateRestaurantPage'
 import '../src/assets/scss/App.scss'
+import CreateTipsPage from './pages/CreateTipsPage'
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
       <Route path="*" element={<NotFound/>} />
       <Route path="/create-new-restaurant" element={<CreateNewRestaurantPage/>} />
       <Route path="/update-restaurant" element={<UpdateRestaurantPage/>} />
+      <Route path="/send-tips" element={<CreateTipsPage/>} />
     </Routes>
     </>
   )

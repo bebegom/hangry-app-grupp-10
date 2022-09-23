@@ -28,6 +28,7 @@ const Navigation = () => {
 					) : (
 						<>
 							{/* Admin is NOT logged in */}
+							<Nav.Link as={NavLink} to="/send-tips">Tipsa oss</Nav.Link>
 							<Nav.Link as={NavLink} to="/login">Login</Nav.Link>
 						</>
 					)
