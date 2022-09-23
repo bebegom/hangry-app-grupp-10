@@ -1,6 +1,10 @@
-import { GoogleMap, useJsApiLoader, Autocomplete,  } from '@react-google-maps/api'
+import { GoogleMap, useJsApiLoader} from '@react-google-maps/api'
+import GooglePlacesAutocomplete, 
+{
+    geocodeByAddress, getLatLng
+} 
+from 'react-google-places-autocomplete'
 import { useState } from 'react'
-import Form from 'react-bootstrap/Form'
 import '../assets/scss/mapStyling.scss'
 
 const libraries = ['places']
@@ -13,15 +17,26 @@ const GoogleMapsApi = () => {
 
     const [latitude, setLatitude] = useState(55.60) // Default visar Malmö
     const [longitude, setLongitude] = useState(13) // Default visar Malmö
-    const [inputAddress, setInputAddress] = useState("")
-
+    const [coordinates, setCoordinates] = useState({
+        lat: null,
+        lng: null
+    })
+    const [address, setAddress] = useState('')
 
     if(isLoaded) {
-        const handleSelect = async (e , address) => {
-            e.preventDefault()
-            console.log("hi", inputAddress)
-          
+
+        if(address) {
+            setAddress(address.label)
+            
+            if(typeof address === 'string') {
+                geocodeByAddress(address)
+                    .then(results => getLatLng(results[0]))
+                    .then(({ lat, lng }) =>
+                    console.log('Successfully got latitude and longitude', { lat, lng })
+                )
+            }
         }
+
         return (
             <>
                 <GoogleMap
@@ -32,35 +47,22 @@ const GoogleMapsApi = () => {
                     }}
                     mapContainerClassName="mapContainer"
                 >
+                
                 </GoogleMap>
     
                 <div className="inputStyling">
-                   <Autocomplete> 
-                    <Form onSubmit={handleSelect} className="formStyle">
-                        <Form.Group className="">
-                            <Form.Control
-                                placeholder="Ex: Malmö"
-                                type="text"
-                                onChange={(e) => setInputAddress(e.target.value)}
-                            />
-                            </Form.Group>
-                    </Form>
-                   </Autocomplete>
+                    <GooglePlacesAutocomplete
+                        selectProps={{ 
+                            address,
+                            onChange: setAddress,
+                            placeholder: "Enter an address",
+                        }}
+                    >
+                    </GooglePlacesAutocomplete>
                 </div>
             </>
         )
     }
-
-    const handleSelect = () => {
-        
-    }
-
-    if(isLoaded) {
-        return (
-          <div></div>
-        )
-    }
-
 }
 
 
