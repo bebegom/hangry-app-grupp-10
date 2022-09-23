@@ -1,0 +1,15 @@
+@import 'bootstrap/scss/bootstrap';
+
+#App {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	position: relative;
+}
+
+.center-y {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
