@@ -31,7 +31,7 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
 
     return (
         <Container>
-            <h1>Create a new place for the hangry</h1>
+            <h1>Create a new restaurant for the hangry</h1>
             <Form noValidate onSubmit={handleSubmit(onCreateRestaurant)}>
                 <Form.Group className='mb-3' controlId='namn'>
                     <Form.Label>Namn</Form.Label>
