@@ -23,6 +23,7 @@ const Navigation = () => {
 							<NavDropdown title={userEmail}>
 								<NavLink to="/logout" className="dropdown-item">Log Out</NavLink>
 								<NavLink to="/create-new-restaurant" className="dropdown-item">Create New</NavLink>
+								<NavLink to="/tips" className='dropdown-item'>Alla tips</NavLink>
 							</NavDropdown>
 						</>
 					) : (
