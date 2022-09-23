@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Container, Form, Button } from 'react-bootstrap'
 import {useForm} from 'react-hook-form'
-import {collection, addDoc} from 'firebase/firestore'
+import {collection, addDoc, serverTimestamp} from 'firebase/firestore'
 import { db } from '../firebase'
 
 const CreateTipsForm = () => {
@@ -14,7 +14,8 @@ const CreateTipsForm = () => {
 
         // store tips in Firestore
         await addDoc(collection(db, 'tips'), {
-            message: data.message
+            message: data.message,
+            created: serverTimestamp(),
         })
 
         reset()
