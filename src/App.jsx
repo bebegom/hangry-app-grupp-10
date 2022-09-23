@@ -6,7 +6,7 @@ import LogoutPage from './pages/LogoutPage'
 import NotFound from './pages/NotFound'
 import CreateNewRestaurantPage from './pages/CreateNewRestaurantPage'
 import UpdateRestaurantPage from './pages/UpdateRestaurantPage'
-import './App.scss'
+import '../src/assets/scss/App.scss'
 
 
 function App() {
