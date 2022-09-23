@@ -1,6 +1,7 @@
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 import { auth } from '../firebase'
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth'
+import SyncLoader from 'react-spinners/SyncLoader'
 
 const AuthContext = createContext()
 
@@ -9,6 +10,10 @@ const useAuthContext = () => {
 }
 
 const AuthContextProvider = ({ children }) => {
+    const [currentUser, setCurrentUser] = useState(null)
+    const [userEmail, setUserEmail] = useState(null)
+    const [loading, setLoading] = useState(true)
+
     const login = (email, password) => {
         return signInWithEmailAndPassword(auth, email, password)
     }
@@ -16,17 +21,35 @@ const AuthContextProvider = ({ children }) => {
     const logout = () => {
         return signOut(auth)
     }
-    
+
+    // add auth-state observer 
+	useEffect(() => {
+		// listen for auth-state changes
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
+			setCurrentUser(user)
+			setUserEmail(user?.email)
+			setLoading(false)
+		})
+
+		return unsubscribe
+	}, [])
 
     const values = {
         // everything the children needs
+        currentUser,
         login,
-        logout
+        logout,
     }
 
     return (
         <AuthContext.Provider value={values}>
-            {children}
+            {loading ? (
+				<div id="initial-loader">
+					<SyncLoader color={'#888'} size={15} speedMultiplier={1.1} />
+				</div>
+			) : (
+				children
+			)}
         </AuthContext.Provider>
     )
 }

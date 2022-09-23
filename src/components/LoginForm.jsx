@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react'
 import { Alert, Button, Card, Container, Col, Form, Row } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../contexts/AuthContext'
 
 const LoginForm = () => {
@@ -9,7 +8,6 @@ const LoginForm = () => {
 	const [error, setError] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const { login } = useAuthContext()
-	const navigate = useNavigate()
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
@@ -19,7 +17,6 @@ const LoginForm = () => {
 		try {
 			setLoading(true)
 			await login(emailRef.current.value, passwordRef.current.value)
-			navigate('/')
 
 		} catch (err) {
 			setError(err.message)
