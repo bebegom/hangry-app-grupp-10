@@ -11,6 +11,8 @@ const UpdateRestaurantForm = ({thisRestaurant}) => {
     const onUpdateRestaurant = async data => {
         console.log(data)
 
+        setLoading(true)
+
         // update in Firestore
         await updateDoc(doc(db, 'restaurants', thisRestaurant.id), {
             namn: data.name,
@@ -21,11 +23,12 @@ const UpdateRestaurantForm = ({thisRestaurant}) => {
             typ: data.typ,
             utbud: data.utbud
         })
+        setLoading(false)
     }
 
     return (
         <Container>
-            <h1>Update a restaurant for the hangry</h1>
+            <h1>Update the restaurant for the hangry</h1>
             <Form noValidate onSubmit={handleSubmit(onUpdateRestaurant)}>
                 <Form.Group className='mb-3' controlId='namn'>
                     <Form.Label>Namn</Form.Label>
