@@ -5,17 +5,17 @@ import { Link, NavLink } from 'react-router-dom'
 import { NavDropdown } from 'react-bootstrap'
 import { useAuthContext } from '../contexts/AuthContext'
 
-
-function Navigation() {
+const Navigation = () => {
+    
 	const { currentUser, userEmail } = useAuthContext()
 
-    return (
-      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Container>
-          <Navbar.Brand>Hangry</Navbar.Brand>
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="ms-auto align-items-center">
+      return (
+          <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" className="pb-3">
+            <Container>
+              <Navbar.Brand>Me Hangry</Navbar.Brand>
+              <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+              <Navbar.Collapse id="responsive-navbar-nav">
+  <Nav className="ms-auto align-items-center">
 				{
 					currentUser ? (
 						<>
@@ -32,10 +32,10 @@ function Navigation() {
 					)
 				}
 			</Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-  )
+              </Navbar.Collapse>
+            </Container>
+          </Navbar>
+    )
 }
 
 export default Navigation

@@ -4,19 +4,24 @@ import HomePage from './pages/HomePage'
 import LoginPage from './pages/LogInPage'
 import LogoutPage from './pages/LogoutPage'
 import NotFound from './pages/NotFound'
-import './assets/scss/App.scss'
+import CreateNewRestaurantPage from './pages/CreateNewRestaurantPage'
+import UpdateRestaurantPage from './pages/UpdateRestaurantPage'
+import './App.scss'
+
 
 function App() {
   return (
     <>
       <Navigation />
-
+      
       <Routes>
-        <Route path="/" element={<HomePage/>} />
+      <Route path="/" element={<HomePage/>} />
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/logout" element={<LogoutPage/>} />
-        <Route path="*" element={<NotFound/>} />
-      </Routes>
+      <Route path="*" element={<NotFound/>} />
+      <Route path="/create-new-restaurant" element={<CreateNewRestaurantPage/>} />
+      <Route path="/update-restaurant" element={<UpdateRestaurantPage/>} />
+    </Routes>
     </>
   )
 }
