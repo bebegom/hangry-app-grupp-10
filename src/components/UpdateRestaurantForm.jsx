@@ -1,16 +1,18 @@
-import { useState } from 'react'
+import { doc, updateDoc } from 'firebase/firestore'
+import { useForm } from 'react-hook-form'
+import {db} from '../firebase'
 import { Container, Form, Button } from 'react-bootstrap'
-import {useForm} from 'react-hook-form'
+import { useState } from 'react'
 
-const RestaurantForm = ({ addOrUpdate, col, db }) => {
-    const {handleSubmit, register, formState: {errors}, reset} = useForm()
+const UpdateRestaurantForm = ({thisRestaurant}) => {
+    const {handleSubmit, register, formState: {errors}} = useForm()
     const [loading, setLoading] = useState(false)
 
-    const onCreateRestaurant = async data => {
-        // console.log(data)
-        setLoading(true)
-        // create the restaurant and store it in Cloud Firestore
-        await addOrUpdate(col(db, 'restaurants'), {
+    const onUpdateRestaurant = async data => {
+        console.log(data)
+
+        // update in Firestore
+        await updateDoc(doc(db, 'restaurants', thisRestaurant.id), {
             namn: data.name,
             adress: data.adress,
             ort: data.ort,
@@ -19,26 +21,20 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
             typ: data.typ,
             utbud: data.utbud
         })
-        // resetting text-inputs
-        reset()
-        // resetting select-inputs
-        reset({
-            typ: '', 
-            utbud: ''
-        })
-        setLoading(false)
     }
 
     return (
         <Container>
-            <h1>Create a new place for the hangry</h1>
-            <Form noValidate onSubmit={handleSubmit(onCreateRestaurant)}>
+            <h1>Update a restaurant for the hangry</h1>
+            <Form noValidate onSubmit={handleSubmit(onUpdateRestaurant)}>
                 <Form.Group className='mb-3' controlId='namn'>
                     <Form.Label>Namn</Form.Label>
                     <Form.Control {...register('name', {
                         required: 'Please enter a name',
                         minLength: 3,
-                    })} type='text' />
+                    })} 
+                    type='text'
+                    defaultValue={thisRestaurant.namn} />
                     {errors.name && <span>{errors.name.message}</span>}
                 </Form.Group>
 
@@ -50,7 +46,9 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
                             value: 3,
                             message: 'I do not think that is an adress'
                         },
-                    })} type='text' />
+                    })} 
+                    type='text'
+                    defaultValue={thisRestaurant.adress} />
                     {errors.adress && <span>{errors.adress.message}</span>}
                 </Form.Group>
 
@@ -62,7 +60,9 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
                             value: 3,
                             message: 'Hm, that is not a ort'
                         }
-                    })} type='text' />
+                    })} 
+                    type='text'
+                    defaultValue={thisRestaurant.ort} />
                     {errors.ort && <span>{errors.ort.message}</span>}
                 </Form.Group>
 
@@ -74,7 +74,9 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
                             value: 5,
                             message: 'You do not have to write 2 pages but... Come on...'
                         }
-                    })} type='text' />
+                    })} 
+                    type='text' 
+                    defaultValue={thisRestaurant.beskrivning}/>
                     {errors.beskrivning && <span>{errors.beskrivning.message}</span>}
 
                 </Form.Group>
@@ -84,7 +86,9 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
                     <Form.Control {...register('cuisine', {
                         required: 'Please enter a cuisine',
                         minLength: 5
-                    })} type='text' /> {/* TODO: change to select? */}
+                    })} 
+                    type='text' // TODO: change to select? 
+                    defaultValue={thisRestaurant.cuisine} /> 
                     {errors.cuisine && <span>{errors.cuisine.message}</span>}
                 </Form.Group>
                 
@@ -93,7 +97,7 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
                     <select {...register('typ', {
                         required: 'Please choose a type'
                     })} className='form-select'>
-                        <option selected disabled value=''>Choose</option> {/* TODO: getting a warning in console */}
+                        <option selected value={thisRestaurant.typ}>{thisRestaurant.typ}</option> {/* TODO: getting a warning in console */}
                         <option value='cafe'>Cafe</option>
                         <option value='restaurang'>Restaurang</option>
                         <option value='snabbmat'>Snabbmat</option>
@@ -108,7 +112,7 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
                     <select {...register('utbud', {
                         required: 'Please choose'
                     })} className='form-select'>
-                        <option selected disabled value=''>Choose</option> {/* TODO: getting a warning in console */}
+                        <option selected value={thisRestaurant.utbud}>{thisRestaurant.utbud}</option> {/* TODO: getting a warning in console */}
                         <option value='lunch'>Lunch</option>
                         <option value='after work'>After Work</option>
                         <option value='middag/a la carte'>Middag/A la Carte</option>
@@ -117,11 +121,11 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
                 </Form.Group>
 
                 <Button disabled={loading} type='submit'>
-                    {loading ? '...creating' : 'Create'}
+                    {loading ? '...updating' : 'Update'}
                 </Button>
             </Form>
         </Container>
     )
 }
 
-export default RestaurantForm
+export default UpdateRestaurantForm
