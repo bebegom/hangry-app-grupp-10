@@ -17,7 +17,7 @@ function App() {
       <Navigation />
       
       <Routes>
-      <Route path="/" element={<HomePage/>} />
+        <Route path="/" element={<HomePage/>} />
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/logout" element={<LogoutPage/>} />
       <Route path="*" element={<NotFound/>} />
