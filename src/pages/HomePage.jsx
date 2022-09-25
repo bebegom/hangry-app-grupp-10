@@ -1,4 +1,4 @@
-import { GoogleMap, useJsApiLoader} from '@react-google-maps/api'
+import { GoogleMap, useJsApiLoader, Marker} from '@react-google-maps/api'
 import GMapAPI from '../services/GMapAPI'
 import { useState } from 'react'
 import Button from 'react-bootstrap/Button'
@@ -23,6 +23,7 @@ const HomePage = () => {
 
     // Default Position(Malmö)
     const [position, setPosition] = useState({lat: 55.604981, lng: 13.003822})
+    const [userMarker, setUserMarker] = useState(null)
 
     // Get value from SearchForm and execute new coords
     const handleSubmit = async (address) => {
@@ -34,19 +35,20 @@ const HomePage = () => {
 
         // Get coordinates
         const newCoords = await GMapAPI.getLatLng(address)
-        console.log(newCoords)
 
         // Center to new coordinates
         setPosition(newCoords)
-
     }
 
     const getMyPos = async () => {
 
+        // call on api 
         const getUserCoords = await GMapAPI.getUserLatLng()
-        console.log("this", getUserCoords)
 
+        // update state to user location
         setPosition(getUserCoords)
+
+        setUserMarker(getUserCoords)
 
     }
 
@@ -66,6 +68,7 @@ const HomePage = () => {
                         center={position}
                         mapContainerClassName="mapContainer"
                     >
+                        {userMarker && <Marker position={userMarker} label="You" />}
 
                     </GoogleMap>
                     <Button onClick={getMyPos} variant="outline-primary">Get my location</Button>
