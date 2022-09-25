@@ -1,6 +1,7 @@
 import { GoogleMap, useJsApiLoader} from '@react-google-maps/api'
 import GMapAPI from '../services/GMapAPI'
 import { useState } from 'react'
+import Button from 'react-bootstrap/Button'
 import '../assets/scss/mapStyling.scss'
 import SearchForm from '../components/SearchForm'
 
@@ -40,6 +41,15 @@ const HomePage = () => {
 
     }
 
+    const getMyPos = async () => {
+
+        const getUserCoords = await GMapAPI.getUserLatLng()
+        console.log("this", getUserCoords)
+
+        setPosition(getUserCoords)
+
+    }
+
    return (
         <>
             {!isLoaded && ( 
@@ -58,6 +68,7 @@ const HomePage = () => {
                     >
 
                     </GoogleMap>
+                    <Button onClick={getMyPos} variant="outline-primary">Get my location</Button>
                 </>
             )}
         </>
