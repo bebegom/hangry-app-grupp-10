@@ -15,7 +15,7 @@ const Navigation = () => {
               <Navbar.Brand>Me Hangry</Navbar.Brand>
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
               <Navbar.Collapse id="responsive-navbar-nav">
-  <Nav className="ms-auto align-items-center">
+  				<Nav className="ms-auto align-items-center">
 				{
 					currentUser ? (
 						<>
