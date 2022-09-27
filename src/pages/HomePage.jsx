@@ -4,6 +4,9 @@ import { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import '../assets/scss/mapStyling.scss'
 import SearchForm from '../components/SearchForm'
+// import useStreamCollection from '../hooks/useStreamCollection'
+// import { where } from 'firebase/firestore'
+import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
 
 /* a library of data for maps api */
 const libraries = ['places']
@@ -14,6 +17,7 @@ const places = [{
 }]
 
 const HomePage = () => {
+    
 
     /* Call on maps api, give apikey and libraries */
     const { isLoaded } = useJsApiLoader({
@@ -25,8 +29,12 @@ const HomePage = () => {
     const [position, setPosition] = useState({lat: 55.604981, lng: 13.003822})
     const [userMarker, setUserMarker] = useState(null)
 
+    const [searched, setSearched] = useState(false)
+    const [searchedLocation, setSearchedLocation] = useState(null)
+
     // Get value from SearchForm and execute new coords
     const handleSubmit = async (address) => {
+        console.log(address)
 
         // no value? Return
         if(!address) {
@@ -34,10 +42,14 @@ const HomePage = () => {
         }
 
         // Get coordinates
-        const newCoords = await GMapAPI.getLatLng(address)
+        const [newCoords, city] = await GMapAPI.getLatLng(address)
+
+        
 
         // Center to new coordinates
         setPosition(newCoords)
+        setSearched(true)
+        setSearchedLocation(city)
     }
 
     const getMyPos = async () => {
@@ -69,6 +81,9 @@ const HomePage = () => {
                         mapContainerClassName="mapContainer"
                     >
                         {userMarker && <Marker position={userMarker} label="You" />}
+
+                        {/* Get list of places/restaurants nearby the searched city */}
+                        {searched && <ListOfNearbyRestaurants searchedLocation={searchedLocation} />}
 
                     </GoogleMap>
                     <Button onClick={getMyPos} variant="outline-primary">Get my location</Button>

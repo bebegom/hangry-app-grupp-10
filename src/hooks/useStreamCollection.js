@@ -14,7 +14,7 @@ const useStreamCollection = (coll, ...queryConstraints) => {
         const orderedList = query(ref, ...queryConstraints)
 
         // listen to changes in collection
-        const snap = onSnapshot(orderedList, (snapshot) => {
+        const unSubscribe = onSnapshot(orderedList, (snapshot) => {
             const docs = snapshot.docs.map(doc => {
                 return {
                     id: doc.id,
@@ -25,6 +25,8 @@ const useStreamCollection = (coll, ...queryConstraints) => {
             setData(docs)
             setLoading(false)
         })
+
+        return unSubscribe
     }, [])
 
     return {
