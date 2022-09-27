@@ -34,7 +34,7 @@ const HomePage = () => {
 
     // Get value from SearchForm and execute new coords
     const handleSubmit = async (address) => {
-        console.log(address)
+        // console.log(address)
 
         // no value? Return
         if(!address) {
