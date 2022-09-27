@@ -17,7 +17,12 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
             beskrivning: data.beskrivning,
             cuisine: data.cuisine,
             typ: data.typ,
-            utbud: data.utbud
+            utbud: data.utbud,
+            email: data.email,
+            telefon: data.telefon,
+            hemsida: data.hemsida,
+            facebook: data.facebook,
+            instagram: data.instagram,
         })
         // resetting text-inputs
         reset()
@@ -114,6 +119,31 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
                         <option value='middag/a la carte'>Middag/A la Carte</option>
                     </select>
                     {errors.utbud && <span>{errors.utbud.message}</span>}
+                </Form.Group>
+
+                <Form.Group className='mb-3' controlId='email'>
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control {...register('email')} type='email' />
+                </Form.Group>
+
+                <Form.Group className='mb-3' controlId='telefon'>
+                    <Form.Label>Telefon</Form.Label>
+                    <Form.Control {...register('telefon')} type='tel' />
+                </Form.Group>
+
+                <Form.Group className='mb-3' controlId='hemsida'>
+                    <Form.Label>Hemsida</Form.Label>
+                    <Form.Control {...register('hemsida')} type='url' />
+                </Form.Group>
+
+                <Form.Group className='mb-3' controlId='facebook'>
+                    <Form.Label>Facebook</Form.Label>
+                    <Form.Control {...register('facebook')} type='url' />
+                </Form.Group>
+
+                <Form.Group className='mb-3' controlId='instagram'>
+                    <Form.Label>Instagram</Form.Label>
+                    <Form.Control {...register('instagram')} type='url' />
                 </Form.Group>
 
                 <Button disabled={loading} type='submit'>

@@ -21,7 +21,13 @@ const UpdateRestaurantForm = ({thisRestaurant}) => {
             beskrivning: data.beskrivning,
             cuisine: data.cuisine,
             typ: data.typ,
-            utbud: data.utbud
+            utbud: data.utbud,
+            email: data.email,
+            telefon: data.telefon,
+            hemsida: data.hemsida,
+            facebook: data.facebook,
+            instagram: data.instagram,
+
         })
         setLoading(false)
     }
@@ -121,6 +127,31 @@ const UpdateRestaurantForm = ({thisRestaurant}) => {
                         <option value='middag/a la carte'>Middag/A la Carte</option>
                     </select>
                     {errors.utbud && <span>{errors.utbud.message}</span>}
+                </Form.Group>
+
+                <Form.Group className='mb-3' controlId='email'>
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control {...register('email')} type='email' defaultValue={thisRestaurant.email} />
+                </Form.Group>
+
+                <Form.Group className='mb-3' controlId='telefon'>
+                    <Form.Label>Telefon</Form.Label>
+                    <Form.Control {...register('telefon')} type='tel' defaultValue={thisRestaurant.telefon} />
+                </Form.Group>
+
+                <Form.Group className='mb-3' controlId='hemsida'>
+                    <Form.Label>Hemsida</Form.Label>
+                    <Form.Control {...register('hemsida')} type='url' defaultValue={thisRestaurant.hemsida} />
+                </Form.Group>
+
+                <Form.Group className='mb-3' controlId='facebook'>
+                    <Form.Label>Facebook</Form.Label>
+                    <Form.Control {...register('facebook')} type='url' defaultValue={thisRestaurant.facebook} />
+                </Form.Group>
+
+                <Form.Group className='mb-3' controlId='instagram'>
+                    <Form.Label>Instagram</Form.Label>
+                    <Form.Control {...register('instagram')} type='url' defaultValue={thisRestaurant.instagram} />
                 </Form.Group>
 
                 <Button disabled={loading} type='submit'>

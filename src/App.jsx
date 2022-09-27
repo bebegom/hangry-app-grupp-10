@@ -8,6 +8,8 @@ import NotFound from './pages/NotFound'
 import CreateNewRestaurantPage from './pages/CreateNewRestaurantPage'
 import UpdateRestaurantPage from './pages/UpdateRestaurantPage'
 import '../src/assets/scss/App.scss'
+import CreateTipsPage from './pages/CreateTipsPage'
+import TipsPage from './pages/TipsPage'
 
 
 function App() {
@@ -16,13 +18,15 @@ function App() {
       <Navigation />
       
       <Routes>
-      <Route path="/" element={<HomePage/>} />
+        <Route path="/" element={<HomePage/>} />
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/logout" element={<LogoutPage/>} />
         <Route path="/signup" element={<SignupPage/>} />
       <Route path="*" element={<NotFound/>} />
       <Route path="/create-new-restaurant" element={<CreateNewRestaurantPage/>} />
       <Route path="/update-restaurant" element={<UpdateRestaurantPage/>} />
+      <Route path="/send-tips" element={<CreateTipsPage/>} />
+      <Route path="/tips" element={<TipsPage/>} />
     </Routes>
     </>
   )
