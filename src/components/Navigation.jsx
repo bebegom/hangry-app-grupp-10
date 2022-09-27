@@ -19,14 +19,14 @@ const Navigation = () => {
 				{
 					currentUser ? (
 						<>
-							{/* Admin is logged in */}
+							{/* User is logged in */}
 							<NavDropdown title={userEmail}>
 								<NavLink to="/logout" className="dropdown-item">Log Out</NavLink>
 							</NavDropdown>
 						</>
 					) : (
 						<>
-							{/* No admin is logged in */}
+							{/* No user is logged in */}
 							<Nav.Link as={NavLink} to="/login">Login</Nav.Link>
 							<Nav.Link as={NavLink} to="/signup">Signup</Nav.Link>
 						</>
