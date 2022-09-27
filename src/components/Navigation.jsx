@@ -1,18 +1,18 @@
-import Container from 'react-bootstrap/Container';
+import Container from 'react-bootstrap/Container'
+import Image from 'react-bootstrap/Image'
 import Nav from 'react-bootstrap/Nav'
-import Navbar from 'react-bootstrap/Navbar';
+import Navbar from 'react-bootstrap/Navbar'
 import { Link, NavLink } from 'react-router-dom'
 import { NavDropdown } from 'react-bootstrap'
 import { useAuthContext } from '../contexts/AuthContext'
 
 const Navigation = () => {
-    
-	const { currentUser, userEmail } = useAuthContext()
+	const { currentUser, userEmail, userPhotoUrl } = useAuthContext()
 
       return (
           <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" className="pb-3">
             <Container>
-              <Navbar.Brand>Me Hangry</Navbar.Brand>
+              <Navbar.Brand as={Link} to="/">Me Hangry</Navbar.Brand>
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
               <Navbar.Collapse id="responsive-navbar-nav">
   				<Nav className="ms-auto align-items-center">
@@ -20,7 +20,17 @@ const Navigation = () => {
 					currentUser ? (
 						<>
 							{/* User is logged in */}
-							<NavDropdown title={userEmail}>
+							<NavDropdown title={
+								userPhotoUrl
+								? <Image
+									src={userPhotoUrl}
+									height={30}
+									width={30}
+									fluid
+									roundedCircle
+								  />
+								: userEmail
+							}>
 								<NavLink to="/logout" className="dropdown-item">Log Out</NavLink>
 							</NavDropdown>
 						</>
