@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Container, Form, Button } from 'react-bootstrap'
 import {useForm} from 'react-hook-form'
+import GMapAPI from '../services/GMapAPI'
 
 const RestaurantForm = ({ addOrUpdate, col, db }) => {
     const {handleSubmit, register, formState: {errors}, reset} = useForm()
@@ -9,6 +10,11 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
     const onCreateRestaurant = async data => {
         // console.log(data)
         setLoading(true)
+
+        // Get lat and lng for the restaurant
+        const [latLng, _city] = await GMapAPI.getLatLng(`${data.adress} ${data.ort}`)
+        console.log(latLng)
+
         // create the restaurant and store it in Cloud Firestore
         await addOrUpdate(col(db, 'restaurants'), {
             namn: data.name,
@@ -23,6 +29,8 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
             hemsida: data.hemsida,
             facebook: data.facebook,
             instagram: data.instagram,
+            lat: latLng.lat,
+            lng: latLng.lng,
         })
         // resetting text-inputs
         reset()

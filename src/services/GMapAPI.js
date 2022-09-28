@@ -19,15 +19,24 @@ const getLatLng = async (address) => {
     // console.log(cityObj)
 
     /* return the coordinates to whatever called the function */
-    return [coordinates, cityObj.long_name]
+    return [coordinates, cityObj]
 
+}
+
+const getAdressFromLatLng = async (lat, lng) => {
+    const res = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`)
+    // console.log('getAdressFrom.. res', res)
+
+    const addressComponents = res.data.results[0].address_components
+    const cityObj = addressComponents.find(i => i.types[0] === "postal_town")
+    // console.log('cityObj', cityObj.long_name)
+    return cityObj.long_name
 }
 
 const getUserLatLng = async () => {
 
     // request to URL
     const res = await axios.post(`https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`)
-
     // Get the location(latitude and longitude) of the address from response data
     const coordinates = res.data.location
 
@@ -38,6 +47,7 @@ const getUserLatLng = async () => {
 const exports = {
     getLatLng,
     getUserLatLng,
+    getAdressFromLatLng,
 }
 
 export default exports

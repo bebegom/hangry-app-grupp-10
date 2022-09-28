@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button'
 import '../assets/scss/mapStyling.scss'
 import SearchForm from '../components/SearchForm'
 import DirectionForm from '../components/DirectionForm'
+import MarkersComponent from '../components/MarkersComponent'
 // import useStreamCollection from '../hooks/useStreamCollection'
 // import { where } from 'firebase/firestore'
 import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
@@ -18,8 +19,6 @@ const places = [{
 }]
 
 const HomePage = () => {
-    
-
     /* Call on maps api, give apikey and libraries */
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -30,6 +29,7 @@ const HomePage = () => {
     const [position, setPosition] = useState({lat: 55.604981, lng: 13.003822})
     const [userMarker, setUserMarker] = useState(null)
     const [renderDirection, setRenderDirection] = useState(null)
+    const [weHaveReadableTown, setWeHaveReadableTown] = useState(null)
 
     const [searched, setSearched] = useState(false)
     const [searchedLocation, setSearchedLocation] = useState(null)
@@ -44,12 +44,10 @@ const HomePage = () => {
         // Get coordinates
         const [newCoords, city] = await GMapAPI.getLatLng(address)
 
-        
-
         // Center to new coordinates
         setPosition(newCoords)
         setSearched(true)
-        setSearchedLocation(city)
+        setSearchedLocation(city.long_name)
     }
 
     // When clicked "get my position" run this
@@ -57,11 +55,13 @@ const HomePage = () => {
         // call on api 
         const getUserCoords = await GMapAPI.getUserLatLng()
 
+        const weHaveReadable = await GMapAPI.getAdressFromLatLng(getUserCoords.lat, getUserCoords.lng)
+        // console.log('weHaveReadable', weHaveReadable[0])
+
         // update state to user location
         setPosition(getUserCoords)
-
         setUserMarker(getUserCoords)
-
+        setWeHaveReadableTown(weHaveReadable)
     }
 
     const directionSubmit = async (origin, destination) => {
@@ -88,6 +88,7 @@ const HomePage = () => {
 
     useEffect(() => {
         getMyPos()
+        
     }, [])
 
    return (
@@ -114,6 +115,8 @@ const HomePage = () => {
                     >
                         {userMarker && <Marker position={userMarker} label="You" />}
                         {renderDirection && <DirectionsRenderer directions={renderDirection} />}
+
+                        {weHaveReadableTown && <MarkersComponent town={weHaveReadableTown} />}
 
                         {/* Get list of places/restaurants nearby the searched city */}
                         {searched && <ListOfNearbyRestaurants searchedLocation={searchedLocation} />}
