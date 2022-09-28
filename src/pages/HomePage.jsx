@@ -33,6 +33,7 @@ const HomePage = () => {
 
     const [searched, setSearched] = useState(false)
     const [searchedLocation, setSearchedLocation] = useState(null)
+    const [showList, setShowList] = useState(false)
 
     // Get value from SearchForm and execute new coords
     const searchSubmit = async (address) => {
@@ -108,6 +109,7 @@ const HomePage = () => {
                         {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>}
                     </div>
 
+                    <Button onClick={() => setShowList(!showList)}>Show list</Button>
 
                     <GoogleMap
                         zoom={12}
@@ -118,12 +120,12 @@ const HomePage = () => {
                         {renderDirection && <DirectionsRenderer directions={renderDirection} />}
 
                         {weHaveReadableTown && <MarkersComponent town={weHaveReadableTown} />}
-                        {weHaveReadableTown && <ListOfNearbyRestaurants searchedLocation={weHaveReadableTown} />}
+                        {weHaveReadableTown && showList && <ListOfNearbyRestaurants searchedLocation={weHaveReadableTown} />}
 
                         {/* Get list of places/restaurants nearby the searched city */}
                         {searched && (
                             <>
-                                <ListOfNearbyRestaurants searchedLocation={searchedLocation} />
+                                {showList && <ListOfNearbyRestaurants searchedLocation={searchedLocation} />}
                                 <MarkersComponent town={searchedLocation}/>
                             </>
                         )}
