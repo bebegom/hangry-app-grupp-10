@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { Container, Row, Col, Form, Button, Card, Alert } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../contexts/AuthContext'
 
 const SignupForm = () => {
@@ -12,6 +12,7 @@ const SignupForm = () => {
 	const [loading, setLoading] = useState(false)
     const [photo, setPhoto] = useState(false)
 	const { signup } = useAuthContext()
+	const navigate = useNavigate()
 
     const handleFileChange = (e) => {
 		if (!e.target.files.length) {
@@ -37,6 +38,7 @@ const SignupForm = () => {
 		try {
 			setLoading(true)
             await signup(emailRef.current.value, passwordRef.current.value, photo)
+			navigate('/')
 
 		} catch (err) {
 			setError(err.message)
