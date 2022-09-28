@@ -70,11 +70,6 @@ const HomePage = () => {
         setRenderDirection(results)
     }
 
-    // removes user marker from map
-    const removeUserMarker = () => {
-        setUserMarker(null)
-    }
-
     // removes direction from map
     const removeDirection = () => {
         setRenderDirection(null)
@@ -105,7 +100,6 @@ const HomePage = () => {
 
                     </GoogleMap>
                     <Button onClick={getMyPos} variant="outline-primary">Get my location</Button>
-                    <Button onClick={removeUserMarker}>Remove My Marker</Button>
                 </>
             )}
         </>
