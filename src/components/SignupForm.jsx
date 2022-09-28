@@ -5,7 +5,6 @@ import { useAuthContext } from '../contexts/AuthContext'
 
 const SignupForm = () => {
 	const emailRef = useRef()
-    const displayNameRef = useRef()
 	const passwordRef = useRef()
 	const passwordConfirmRef = useRef()
 	const [error, setError] = useState(null)
