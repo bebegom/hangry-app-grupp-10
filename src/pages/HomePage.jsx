@@ -118,6 +118,7 @@ const HomePage = () => {
                         {renderDirection && <DirectionsRenderer directions={renderDirection} />}
 
                         {weHaveReadableTown && <MarkersComponent town={weHaveReadableTown} />}
+                        {weHaveReadableTown && <ListOfNearbyRestaurants searchedLocation={weHaveReadableTown} />}
 
                         {/* Get list of places/restaurants nearby the searched city */}
                         {searched && (
