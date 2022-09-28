@@ -37,7 +37,7 @@ const getUserLatLng = async () => {
 
 const exports = {
     getLatLng,
-    getUserLatLng
+    getUserLatLng,
 }
 
 export default exports

@@ -1,9 +1,10 @@
-import { GoogleMap, useJsApiLoader, Marker} from '@react-google-maps/api'
+import { GoogleMap, useJsApiLoader, Marker, DirectionsRenderer} from '@react-google-maps/api'
 import GMapAPI from '../services/GMapAPI'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import '../assets/scss/mapStyling.scss'
 import SearchForm from '../components/SearchForm'
+import DirectionForm from '../components/DirectionForm'
 // import useStreamCollection from '../hooks/useStreamCollection'
 // import { where } from 'firebase/firestore'
 import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
@@ -25,17 +26,16 @@ const HomePage = () => {
         libraries
     })
 
-    // Default Position(Malmö)
+    // Default Position(Malmö) om getMyPos failar
     const [position, setPosition] = useState({lat: 55.604981, lng: 13.003822})
     const [userMarker, setUserMarker] = useState(null)
+    const [renderDirection, setRenderDirection] = useState(null)
 
     const [searched, setSearched] = useState(false)
     const [searchedLocation, setSearchedLocation] = useState(null)
 
     // Get value from SearchForm and execute new coords
-    const handleSubmit = async (address) => {
-        // console.log(address)
-
+    const searchSubmit = async (address) => {
         // no value? Return
         if(!address) {
             return
@@ -52,8 +52,8 @@ const HomePage = () => {
         setSearchedLocation(city)
     }
 
+    // When clicked "get my position" run this
     const getMyPos = async () => {
-
         // call on api 
         const getUserCoords = await GMapAPI.getUserLatLng()
 
@@ -64,6 +64,32 @@ const HomePage = () => {
 
     }
 
+    const directionSubmit = async (origin, destination) => {
+  
+        const google = window.google
+        const directionsService = new google.maps.DirectionsService()
+
+        const results = await new directionsService.route(
+            {
+                origin: origin,
+                destination: destination,
+                travelMode: google.maps.TravelMode.DRIVING
+            }
+        )
+
+        // update renderDirection state
+        setRenderDirection(results)
+    }
+
+    // removes direction from map
+    const removeDirection = () => {
+        setRenderDirection(null)
+    }
+
+    useEffect(() => {
+        getMyPos()
+    }, [])
+
    return (
         <>
             {!isLoaded && ( 
@@ -73,7 +99,13 @@ const HomePage = () => {
             {/* if true, render map and searchform */}
             {isLoaded && (
                 <>
-                    <SearchForm onSubmit={handleSubmit} />
+                    <SearchForm onSubmit={searchSubmit} />
+
+                    <div>
+                        <DirectionForm onSubmit={directionSubmit} />
+                        {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>}
+                    </div>
+
 
                     <GoogleMap
                         zoom={12}
@@ -81,12 +113,13 @@ const HomePage = () => {
                         mapContainerClassName="mapContainer"
                     >
                         {userMarker && <Marker position={userMarker} label="You" />}
+                        {renderDirection && <DirectionsRenderer directions={renderDirection} />}
 
                         {/* Get list of places/restaurants nearby the searched city */}
                         {searched && <ListOfNearbyRestaurants searchedLocation={searchedLocation} />}
 
                     </GoogleMap>
-                    <Button onClick={getMyPos} variant="outline-primary">Get my location</Button>
+                    {!userMarker && <Button onClick={getMyPos} variant="outline-primary">Get my location</Button>}
                 </>
             )}
         </>
