@@ -77,7 +77,7 @@ const HomePage = () => {
 
     useEffect(() => {
         getMyPos()
-    })
+    }, [])
 
    return (
         <>
