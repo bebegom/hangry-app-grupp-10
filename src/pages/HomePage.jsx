@@ -1,6 +1,6 @@
 import { GoogleMap, useJsApiLoader, Marker, DirectionsRenderer} from '@react-google-maps/api'
 import GMapAPI from '../services/GMapAPI'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import '../assets/scss/mapStyling.scss'
 import SearchForm from '../components/SearchForm'
@@ -22,7 +22,7 @@ const HomePage = () => {
         libraries
     })
 
-    // Default Position(Malmö)
+    // Default Position(Malmö) om getMyPos failar
     const [position, setPosition] = useState({lat: 55.604981, lng: 13.003822})
     const [userMarker, setUserMarker] = useState(null)
     const [renderDirection, setRenderDirection] = useState(null)
@@ -75,6 +75,10 @@ const HomePage = () => {
         setRenderDirection(null)
     }
 
+    useEffect(() => {
+        getMyPos()
+    })
+
    return (
         <>
             {!isLoaded && ( 
@@ -86,8 +90,10 @@ const HomePage = () => {
                 <>
                     <SearchForm onSubmit={searchSubmit} />
 
-                    <DirectionForm onSubmit={directionSubmit} />
-                    <Button onClick={removeDirection}>Remove Direction</Button>
+                    <div>
+                        <DirectionForm onSubmit={directionSubmit} />
+                        {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>}
+                    </div>
 
 
                     <GoogleMap
@@ -99,7 +105,7 @@ const HomePage = () => {
                         {renderDirection && <DirectionsRenderer directions={renderDirection} />}
 
                     </GoogleMap>
-                    <Button onClick={getMyPos} variant="outline-primary">Get my location</Button>
+                    {!userMarker && <Button onClick={getMyPos} variant="outline-primary">Get my location</Button>}
                 </>
             )}
         </>

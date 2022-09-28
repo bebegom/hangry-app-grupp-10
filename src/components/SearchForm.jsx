@@ -24,7 +24,7 @@ const SearchForm = ({ onSubmit }) => {
 
     return (
         <Form onSubmit={handleForm}>
-            <Form.Group className="d-flex justify-content-center">
+            <Form.Group>
                <Autocomplete>
                     <Form.Control
                         type="text"
