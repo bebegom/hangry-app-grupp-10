@@ -48,6 +48,7 @@ const HomePage = () => {
         setPosition(newCoords)
         setSearched(true)
         setSearchedLocation(city.long_name)
+        setWeHaveReadableTown(null)
     }
 
     // When clicked "get my position" run this
@@ -119,7 +120,12 @@ const HomePage = () => {
                         {weHaveReadableTown && <MarkersComponent town={weHaveReadableTown} />}
 
                         {/* Get list of places/restaurants nearby the searched city */}
-                        {searched && <ListOfNearbyRestaurants searchedLocation={searchedLocation} />}
+                        {searched && (
+                            <>
+                                <ListOfNearbyRestaurants searchedLocation={searchedLocation} />
+                                <MarkersComponent town={searchedLocation}/>
+                            </>
+                        )}
 
                     </GoogleMap>
                     {!userMarker && <Button onClick={getMyPos} variant="outline-primary">Get my location</Button>}
