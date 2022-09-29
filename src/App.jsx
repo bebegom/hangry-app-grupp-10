@@ -12,7 +12,7 @@ import CreateTipsPage from './pages/CreateTipsPage'
 import TipsPage from './pages/TipsPage'
 import UserListPage from './pages/UserListPage'
 import RestaurantsListPage from './pages/RestaurantsListPage'
-
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 function App() {
   return (
@@ -32,6 +32,8 @@ function App() {
         <Route path="/send-tips" element={<CreateTipsPage/>} />
         <Route path="/tips" element={<TipsPage/>} />
     </Routes>
+
+    <ReactQueryDevtools />
     </>
   )
 }
