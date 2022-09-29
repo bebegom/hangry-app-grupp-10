@@ -11,6 +11,7 @@ import '../src/assets/scss/App.scss'
 import CreateTipsPage from './pages/CreateTipsPage'
 import TipsPage from './pages/TipsPage'
 import UserListPage from './pages/UserListPage'
+import RestaurantsListPage from './pages/RestaurantsListPage'
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="*" element={<NotFound/>} />
         <Route path="/create-new-restaurant" element={<CreateNewRestaurantPage/>} />
         <Route path="/update-restaurant" element={<UpdateRestaurantPage/>} />
+        <Route path="/restaurantlist" element={<RestaurantsListPage/>} />
         <Route path="/send-tips" element={<CreateTipsPage/>} />
         <Route path="/tips" element={<TipsPage/>} />
     </Routes>
