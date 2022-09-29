@@ -31,23 +31,25 @@ const DirectionForm = ({ onSubmit }) => {
 
     return (
         <Form onSubmit={handleForm}>
-            <Form.Group>
-                <Autocomplete>
-                    <Form.Control
-                        type="text"
-                        ref={startPointRef}
-                        placeholder="Enter startpoint"
-                        required
-                    />
-                </Autocomplete>
-                <Autocomplete>
+            <Form.Group className="my-4">
+                <div className="d-flex">
+                    <Autocomplete>
+                        <Form.Control
+                            type="text"
+                            ref={startPointRef}
+                            placeholder="Enter startpoint"
+                            required
+                        />
+                    </Autocomplete>
+                    <Autocomplete>
                      <Form.Control
                         type="text"
                         ref={endPointRef}
                         placeholder="Enter endpoint"
                         required
-                    />
-                </Autocomplete>
+                        />
+                    </Autocomplete>
+                </div>
                <Button type="submit" variant="outline-primary">Show me the way!</Button>
             </Form.Group>
         </Form>

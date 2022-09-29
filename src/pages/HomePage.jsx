@@ -13,10 +13,6 @@ import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
 /* a library of data for maps api */
 const libraries = ['places']
 
-/* Fetch data from Firebase and store inside of places */
-const places = [{
-
-}]
 
 const HomePage = () => {
     /* Call on maps api, give apikey and libraries */
@@ -102,14 +98,16 @@ const HomePage = () => {
             {/* if true, render map and searchform */}
             {isLoaded && (
                 <>
-                    <SearchForm onSubmit={searchSubmit} />
-
                     <div>
+                        <SearchForm onSubmit={searchSubmit} />
+
+                    
                         <DirectionForm onSubmit={directionSubmit} />
                         {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>}
-                    </div>
 
-                    <Button onClick={() => setShowList(!showList)}>Show list</Button>
+
+                        <Button className="mb-3" onClick={() => setShowList(!showList)}>Show list</Button>
+                    </div>
 
                     <GoogleMap
                         zoom={12}

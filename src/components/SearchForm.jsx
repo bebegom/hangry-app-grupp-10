@@ -24,7 +24,7 @@ const SearchForm = ({ onSubmit }) => {
 
     return (
         <Form onSubmit={handleForm}>
-            <Form.Group>
+            <Form.Group className="d-flex my-4">
                <Autocomplete>
                     <Form.Control
                         type="text"
