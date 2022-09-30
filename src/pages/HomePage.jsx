@@ -48,7 +48,7 @@ const HomePage = () => {
         setWeHaveReadableTown(null)
     }
 
-    // When clicked "get my position" run this
+    // run this on startup
     const getMyPos = async () => {
         // call on api 
         const getUserCoords = await GMapAPI.getUserLatLng()
@@ -110,7 +110,7 @@ const HomePage = () => {
                     </div>
 
                     <GoogleMap
-                        zoom={12}
+                        zoom={13}
                         center={position}
                         mapContainerClassName="mapContainer"
                     >

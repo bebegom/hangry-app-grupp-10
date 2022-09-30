@@ -1,15 +1,15 @@
-// import {useState} from 'react'
-import { where } from 'firebase/firestore'
+import {useState} from 'react'
+import { where, orderBy } from 'firebase/firestore'
 import {ListGroup} from 'react-bootstrap'
+import Button from 'react-bootstrap/Button'
 import useGetCollection from '../hooks/useGetCollection'
 
 const ListOfNearbyRestaurants = ({searchedLocation}) => {
-    // const [listOfRestaurants, setListOfRestaurants] = useState([])
+    /* const [listOfRestaurants, setListOfRestaurants] = useState([]) */
+    const [orderByName, setOrderByName] = useState(false)
 
-    // const restaurants = useStreamCollection('restaurants', where("ort", "==", searchedLocation))
-    const restaurants = useGetCollection('restaurants', searchedLocation)
+    const restaurants = useGetCollection('restaurants', searchedLocation, orderByName)
     
-    // setListOfRestaurants(restaurants)
     console.log(restaurants)
 
     return (
@@ -20,12 +20,13 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
 
             {!restaurants.isLoading && restaurants.data && (
                 <div className='absolute-list'>
-                    hello {searchedLocation}
+                    Location: {searchedLocation}
                     <ListGroup>
                         {restaurants.data.map(restaurant => (
                             <ListGroup.Item key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
                         ))}
                     </ListGroup>
+                    <Button className="my-2" onClick={getOrderByName}>Sort by name</Button>
                 </div>
             )}
         </>
