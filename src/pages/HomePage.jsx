@@ -2,6 +2,7 @@ import { GoogleMap, useJsApiLoader, Marker, DirectionsRenderer} from '@react-goo
 import GMapAPI from '../services/GMapAPI'
 import { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 import '../assets/scss/mapStyling.scss'
 import SearchForm from '../components/SearchForm'
 import DirectionForm from '../components/DirectionForm'
@@ -13,6 +14,10 @@ import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
 /* a library of data for maps api */
 const libraries = ['places']
 
+/* Fetch data from Firebase and store inside of places */
+const places = [{
+
+}]
 
 const HomePage = () => {
     /* Call on maps api, give apikey and libraries */
@@ -30,6 +35,7 @@ const HomePage = () => {
     const [searched, setSearched] = useState(false)
     const [searchedLocation, setSearchedLocation] = useState(null)
     const [showList, setShowList] = useState(false)
+    const [showFilters, setShowFilters] = useState(false)
 
     // Get value from SearchForm and execute new coords
     const searchSubmit = async (address) => {
@@ -48,7 +54,16 @@ const HomePage = () => {
         setWeHaveReadableTown(null)
     }
 
-    // run this on startup
+    const handleFilter = () => {
+        setShowFilters(!showFilters)
+    }
+
+    const handleFilterSubmit = (e) => {
+        e.preventDefault()
+        console.log('filter this')
+    }
+
+    // When clicked "get my position" run this
     const getMyPos = async () => {
         // call on api 
         const getUserCoords = await GMapAPI.getUserLatLng()
@@ -98,19 +113,18 @@ const HomePage = () => {
             {/* if true, render map and searchform */}
             {isLoaded && (
                 <>
-                    <div>
-                        <SearchForm onSubmit={searchSubmit} />
+                    <SearchForm onSubmit={searchSubmit} />
 
-                    
+                    <div>
                         <DirectionForm onSubmit={directionSubmit} />
                         {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>}
-
-
-                        <Button className="mb-3" onClick={() => setShowList(!showList)}>Show list</Button>
                     </div>
 
+                    <Button onClick={() => setShowList(!showList)}>Show list</Button>
+                    <Button onClick={handleFilter}>Filters</Button>
+
                     <GoogleMap
-                        zoom={13}
+                        zoom={12}
                         center={position}
                         mapContainerClassName="mapContainer"
                     >
@@ -126,6 +140,18 @@ const HomePage = () => {
                                 {showList && <ListOfNearbyRestaurants searchedLocation={searchedLocation} />}
                                 <MarkersComponent town={searchedLocation}/>
                             </>
+                        )}
+
+                        {showFilters && (
+                            <div className='absolute-list'>
+                                <Form>
+                                    <Form.Group>
+                                        <Form.Check type='checkbox' label='Restaurang' />
+                                        <Form.Check type='checkbox' label='Snabbmat' />
+                                    </Form.Group>
+                                    <Button onClick={handleFilterSubmit} type='submit'>Filter</Button>
+                                </Form>
+                            </div>
                         )}
 
                     </GoogleMap>

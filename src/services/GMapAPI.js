@@ -3,7 +3,6 @@ import axios from 'axios'
 /* store key inside of variable */
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
-
 const getLatLng = async (address) => {
 
     // Request to api with address and apiKey
@@ -15,8 +14,12 @@ const getLatLng = async (address) => {
 
     // Get the city of address user searched for
     const addressComponents = res.data.results[0].address_components
-    const cityObj = addressComponents.find(i => i.types[0] === "locality")
-    // console.log(cityObj)
+    let cityObj = addressComponents.find(i => i.types[0] === "locality")
+
+    if(cityObj === undefined) {
+        cityObj = addressComponents.find(i => i.types[0] === "postal_town")
+    }
+    // console.log('cityObj', cityObj)
 
     /* return the coordinates to whatever called the function */
     return [coordinates, cityObj]
