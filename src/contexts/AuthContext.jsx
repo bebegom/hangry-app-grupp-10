@@ -20,14 +20,14 @@ const AuthContextProvider = ({ children }) => {
     const signup = async (email, password, photo) => {
 		await createUserWithEmailAndPassword(auth, email, password)
 
-        // set display photo
-        await setDisplayPhoto(photo)
+		const photoPicture = await setDisplayPhoto(photo)
+		setUserPhotoUrl(photoPicture)
 
-        // create user document
 		const docRef = doc(db, 'users', auth.currentUser.uid) 
 		await setDoc(docRef, {
 			email,
-			photoURL: auth.currentUser.photoURL,
+			photoURL: photoPicture,
+			admin: false,
 		})
 	}
 
@@ -53,6 +53,8 @@ const AuthContextProvider = ({ children }) => {
 			photoURL = await getDownloadURL(uploadResult.ref)
 
 			console.log("Photo has been uploaded successfully, download url is:", photoURL)
+
+			return photoURL
 		}
 	}
 
