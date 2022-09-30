@@ -35,7 +35,6 @@ const HomePage = () => {
     const [searched, setSearched] = useState(false)
     const [searchedLocation, setSearchedLocation] = useState(null)
     const [showList, setShowList] = useState(false)
-    const [showFilters, setShowFilters] = useState(false)
 
     // Get value from SearchForm and execute new coords
     const searchSubmit = async (address) => {
@@ -52,15 +51,6 @@ const HomePage = () => {
         setSearched(true)
         setSearchedLocation(city.long_name)
         setWeHaveReadableTown(null)
-    }
-
-    const handleFilter = () => {
-        setShowFilters(!showFilters)
-    }
-
-    const handleFilterSubmit = (e) => {
-        e.preventDefault()
-        console.log('filter this')
     }
 
     // When clicked "get my position" run this
@@ -121,7 +111,6 @@ const HomePage = () => {
                     </div>
 
                     <Button onClick={() => setShowList(!showList)}>Show list</Button>
-                    <Button onClick={handleFilter}>Filters</Button>
 
                     <GoogleMap
                         zoom={12}
@@ -140,18 +129,6 @@ const HomePage = () => {
                                 {showList && <ListOfNearbyRestaurants searchedLocation={searchedLocation} />}
                                 <MarkersComponent town={searchedLocation}/>
                             </>
-                        )}
-
-                        {showFilters && (
-                            <div className='absolute-list'>
-                                <Form>
-                                    <Form.Group>
-                                        <Form.Check type='checkbox' label='Restaurang' />
-                                        <Form.Check type='checkbox' label='Snabbmat' />
-                                    </Form.Group>
-                                    <Button onClick={handleFilterSubmit} type='submit'>Filter</Button>
-                                </Form>
-                            </div>
                         )}
 
                     </GoogleMap>
