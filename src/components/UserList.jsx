@@ -1,3 +1,5 @@
+import Image from 'react-bootstrap/Image'
+
 const UserList = ({ users }) => {
 	return (
 		<div>
@@ -7,6 +9,7 @@ const UserList = ({ users }) => {
 						<th>List</th>
 						<th>Id</th>
 						<th>Email</th>
+						<th>Photo</th>
 					</tr>
 				</thead>
                 
@@ -17,6 +20,7 @@ const UserList = ({ users }) => {
 								<th>{i + 1}</th>
 								<td>{allUsers.id}</td>
 								<td>{allUsers.email}</td>
+								<td><Image src={allUsers.photoURL} height={50} width={50} fluid roundedCircle /></td>
 							</tr>
 						))}
 				</tbody>
