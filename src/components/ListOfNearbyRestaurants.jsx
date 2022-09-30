@@ -8,7 +8,7 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
 
-    const restaurants = useGetCollection('restaurants', searchedLocation, orderByName)
+    const restaurants = useGetCollection('restaurants', searchedLocation)
     
     // setListOfRestaurants(restaurants)
     // console.log(restaurants)
