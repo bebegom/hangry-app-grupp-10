@@ -27,14 +27,13 @@ const Navigation = () => {
 									height={30}
 									width={30}
 									fluid
-									roundedCircle
 								  />
 								: userEmail
 							}>
 								<NavLink to="/logout" className="dropdown-item">Log Out</NavLink>
 								<NavLink to="/create-new-restaurant" className="dropdown-item">Create New</NavLink>
 								<NavLink to="/tips" className='dropdown-item'>Alla tips</NavLink>
-								<NavLink to="/userlist" className='dropdown-item'>Alla användare</NavLink>
+								<NavLink to="/userlist" className='dropdown-item'>Alla admins</NavLink>
 							</NavDropdown>
 						</>
 					) : (
