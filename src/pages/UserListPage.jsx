@@ -7,7 +7,7 @@ const UserListPage = () => {
 
     return (
         <Container>
-            <h1>Alla användare</h1>
+            <h1>Alla admins</h1>
 
             <UserList users={users}/>
         </Container>
