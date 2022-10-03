@@ -63,9 +63,11 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
 
             {!restaurants.isLoading && restaurants.data && (
                 <>
-                    <div className='absolute-list'>
-                        <div>
-                            Filter:
+                    <div className='absolute-list p-2'>
+                        <div className='m-2'>
+                            <span className='mx-2'>
+                                Filters:
+                            </span>
                             <Button onClick={toGetOnlyRestaurants} variant={onlyRestaurants ? 'primary' : 'outline-primary'}>Restaurang</Button>
                             <Button onClick={toGetOnlySnabbmat} variant={onlySnabbmat ? 'primary' : 'outline-primary'}>Snabbmat</Button>
                         </div>
