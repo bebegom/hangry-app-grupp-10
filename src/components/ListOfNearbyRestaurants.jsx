@@ -9,14 +9,17 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
     // const [listOfRestaurants, setListOfRestaurants] = useState([])
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
-    // const [filteredByTypList, setFilteredByTypList] = useState(null)
     const [getOnlyRestaurants, setGetOnlyRestaurants] = useState(false)
     const [getOnlySnabbmat, setGetOnlySnabbmat] = useState(false)
     const [onlyRestaurants, setOnlyRestaurants] = useState(null)
+    const [onlySnabbmat, setOnlySnabbmat] = useState(null)
 
     const restaurants = useGetCollection('restaurants', searchedLocation)
 
     const toGetOnlyRestaurants = () => {
+        setShowDetails(false)
+        setOnlySnabbmat(null)
+
         if(onlyRestaurants) {
             setOnlyRestaurants(null)
             setGetOnlyRestaurants(false)
@@ -29,9 +32,21 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
         setOnlyRestaurants(list)
     }
     
-    const onlySnabbmat = () => {
-        setGetOnlySnabbmat(!getOnlySnabbmat)
+    const toGetOnlySnabbmat = () => {
+        // setOnlyRestaurants(null)
+        setShowDetails(false)
+        setOnlyRestaurants(null)
+
+        if(onlySnabbmat) {
+            setOnlySnabbmat(null)
+            setGetOnlySnabbmat(false)
+            return
+        }
+
+        setGetOnlySnabbmat(true)
         setGetOnlyRestaurants(false)
+        const list = restaurants.data.filter(i => i.typ === 'snabbmat')
+        setOnlySnabbmat(list)
     }
     
     const seeDetails = (thisRestaurant) => {
@@ -59,26 +74,37 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
                     <div className='absolute-list'>
                         <div>
                             Filter:
-                            <Button onClick={toGetOnlyRestaurants} variant={getOnlyRestaurants ? 'primary' : 'outline-primary'}>Restaurang</Button>
-                            <Button onClick={onlySnabbmat} variant={getOnlySnabbmat ? 'primary' : 'outline-primary'}>Snabbmat</Button>
+                            <Button onClick={toGetOnlyRestaurants} variant={onlyRestaurants ? 'primary' : 'outline-primary'}>Restaurang</Button>
+                            <Button onClick={toGetOnlySnabbmat} variant={onlySnabbmat ? 'primary' : 'outline-primary'}>Snabbmat</Button>
                         </div>
-                        {!onlyRestaurants && (
+
+                        {!onlyRestaurants && !onlySnabbmat && (
                             <div className='d-md-inline-block'>
-                            <ListGroup>
-                                {restaurants.data.map(restaurant => (
-                                    <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
-                                ))}
-                            </ListGroup>
-                        </div>
+                                <ListGroup>
+                                    {restaurants.data.map(restaurant => (
+                                        <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
+                                    ))}
+                                </ListGroup>
+                            </div>
                         )}
-                        {onlyRestaurants && (
+                        {onlyRestaurants && !onlySnabbmat && (
                             <div className='d-md-inline-block'>
-                            <ListGroup>
-                                {onlyRestaurants.map(restaurant => (
-                                    <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
-                                ))}
-                            </ListGroup>
-                        </div>
+                                <ListGroup>
+                                    {onlyRestaurants.map(restaurant => (
+                                        <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
+                                    ))}
+                                </ListGroup>
+                            </div>
+                        )}
+
+                        {onlySnabbmat && !onlyRestaurants && (
+                            <div className='d-md-inline-block'>
+                                <ListGroup>
+                                    {onlySnabbmat.map(restaurant => (
+                                        <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
+                                    ))}
+                                </ListGroup>
+                            </div>
                         )}
                         
                         {showDetails && (
