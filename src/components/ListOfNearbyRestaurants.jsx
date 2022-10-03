@@ -3,16 +3,24 @@ import { where } from 'firebase/firestore'
 import {Card, ListGroup} from 'react-bootstrap'
 import useGetCollection from '../hooks/useGetCollection'
 
+import { Form } from 'react-bootstrap'
+
 const ListOfNearbyRestaurants = ({searchedLocation}) => {
     // const [listOfRestaurants, setListOfRestaurants] = useState([])
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
+    const [filteredByTypList, setFilteredByTypList] = useState(null)
 
     // const restaurants = useStreamCollection('restaurants', where("ort", "==", searchedLocation))
     const restaurants = useGetCollection('restaurants', searchedLocation)
     
     // setListOfRestaurants(restaurants)
     // console.log(restaurants)
+
+    const filterRestauratsByTyp = (filterOption) => {
+        // const filteredList = restaurants.filter()
+        setFilteredByTypList()
+    }
 
     const seeDetails = (thisRestaurant) => {
         // console.log('clicked on: ', thisRestaurant)
@@ -37,6 +45,12 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
             {!restaurants.isLoading && restaurants.data && (
                 <>
                     <div className='absolute-list'>
+                        <div>
+                            <Form>
+                                <Form.Check inline type='checkbox' label='restaurang' />
+                                <Form.Check inline type='checkbox' label='snabbmat' />
+                            </Form>
+                        </div>
                         <div className='d-md-inline-block'>
                             <ListGroup>
                                 {restaurants.data.map(restaurant => (

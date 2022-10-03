@@ -2,7 +2,7 @@ import { GoogleMap, useJsApiLoader, Marker, DirectionsRenderer} from '@react-goo
 import GMapAPI from '../services/GMapAPI'
 import { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
+// import Form from 'react-bootstrap/Form'
 import '../assets/scss/mapStyling.scss'
 import SearchForm from '../components/SearchForm'
 import DirectionForm from '../components/DirectionForm'
@@ -35,7 +35,7 @@ const HomePage = () => {
     const [searched, setSearched] = useState(false)
     const [searchedLocation, setSearchedLocation] = useState(null)
     const [showList, setShowList] = useState(false)
-    const [showFilters, setShowFilters] = useState(false)
+    // const [showFilters, setShowFilters] = useState(false)
 
     // Get value from SearchForm and execute new coords
     const searchSubmit = async (address) => {
@@ -54,14 +54,15 @@ const HomePage = () => {
         setWeHaveReadableTown(null)
     }
 
-    const handleFilter = () => {
-        setShowFilters(!showFilters)
-    }
+    // const handleFilter = () => {
+    //     setShowFilters(!showFilters)
+    // }
 
-    const handleFilterSubmit = (e) => {
-        e.preventDefault()
-        console.log('filter this')
-    }
+    // const handleFilterSubmit = (e) => {
+    //     e.preventDefault()
+    //     console.log('filter this')
+    //     console.log('e: ', e)
+    // }
 
     // When clicked "get my position" run this
     const getMyPos = async () => {
@@ -121,7 +122,7 @@ const HomePage = () => {
                     </div>
 
                     <Button onClick={() => setShowList(!showList)}>Show list</Button>
-                    <Button onClick={handleFilter}>Filters</Button>
+                    {/* <Button onClick={handleFilter}>Filters</Button> */}
 
                     <GoogleMap
                         zoom={12}
@@ -142,17 +143,9 @@ const HomePage = () => {
                             </>
                         )}
 
-                        {showFilters && (
-                            <div className='absolute-list'>
-                                <Form>
-                                    <Form.Group>
-                                        <Form.Check type='checkbox' label='Restaurang' />
-                                        <Form.Check type='checkbox' label='Snabbmat' />
-                                    </Form.Group>
-                                    <Button onClick={handleFilterSubmit} type='submit'>Filter</Button>
-                                </Form>
-                            </div>
-                        )}
+                        {/* {showFilters && (
+                        
+                        )} */}
 
                     </GoogleMap>
                     {!userMarker && <Button onClick={getMyPos} variant="outline-primary">Get my location</Button>}
