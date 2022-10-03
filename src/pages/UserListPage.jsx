@@ -1,16 +1,48 @@
 import { Container } from 'react-bootstrap'
+import { useMemo } from 'react'
 import useUsers from '../hooks/useUsers'
-import UserList from '../components/UserList'
+import SortableTable from '../components/SortableTable'
 
 const UserListPage = () => {
-    const { data: users } = useUsers('users')
+    const { data: users, error, isError, isLoading } = useUsers('users')
+
+    const columns = useMemo(() => {
+        return [
+            {
+                Header: 'ID',
+                accessor: 'id'
+            },
+            {
+                Header: 'Email',
+                accessor: 'email'
+            },
+            {
+                Header: 'Profilbild',
+                accessor: 'photoURL',
+                    Cell: tableProps => (
+                        <img	
+                            src={tableProps.row.original.photoURL}
+                            width={40}
+                        />
+                    ) 
+            }
+        ]
+    }, [])
+
+    console.log(users)
 
     return (
-        <Container>
-            <h1>Alla admins</h1>
+        <>
+            <Container>
+                <h1>Alla admins: </h1>
+                
+                {isLoading && (<p>Loading...</p>)}
 
-            <UserList users={users}/>
-        </Container>
+                {isError && (<p>{error.message}</p>)}
+
+                {users && <SortableTable columns={columns} data={users} />}
+            </Container>
+        </>
     )
 }
 
