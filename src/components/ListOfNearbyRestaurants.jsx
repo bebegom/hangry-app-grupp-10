@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import { where } from 'firebase/firestore'
-import {Card, ListGroup} from 'react-bootstrap'
+import {Card, ListGroup, Button} from 'react-bootstrap'
 import useGetCollection from '../hooks/useGetCollection'
 
 import { Form } from 'react-bootstrap'
@@ -9,19 +9,31 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
     // const [listOfRestaurants, setListOfRestaurants] = useState([])
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
-    const [filteredByTypList, setFilteredByTypList] = useState(null)
+    // const [filteredByTypList, setFilteredByTypList] = useState(null)
+    const [getOnlyRestaurants, setGetOnlyRestaurants] = useState(false)
+    const [getOnlySnabbmat, setGetOnlySnabbmat] = useState(false)
+    const [onlyRestaurants, setOnlyRestaurants] = useState(null)
 
-    // const restaurants = useStreamCollection('restaurants', where("ort", "==", searchedLocation))
     const restaurants = useGetCollection('restaurants', searchedLocation)
-    
-    // setListOfRestaurants(restaurants)
-    // console.log(restaurants)
 
-    const filterRestauratsByTyp = (filterOption) => {
-        // const filteredList = restaurants.filter()
-        setFilteredByTypList()
+    const toGetOnlyRestaurants = () => {
+        if(onlyRestaurants) {
+            setOnlyRestaurants(null)
+            setGetOnlyRestaurants(false)
+            return
+        }
+
+        setGetOnlyRestaurants(true)
+        setGetOnlySnabbmat(false)
+        const list = restaurants.data.filter(i => i.typ === 'restaurang')
+        setOnlyRestaurants(list)
     }
-
+    
+    const onlySnabbmat = () => {
+        setGetOnlySnabbmat(!getOnlySnabbmat)
+        setGetOnlyRestaurants(false)
+    }
+    
     const seeDetails = (thisRestaurant) => {
         // console.log('clicked on: ', thisRestaurant)
 
@@ -46,18 +58,28 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
                 <>
                     <div className='absolute-list'>
                         <div>
-                            <Form>
-                                <Form.Check inline type='checkbox' label='restaurang' />
-                                <Form.Check inline type='checkbox' label='snabbmat' />
-                            </Form>
+                            Filter:
+                            <Button onClick={toGetOnlyRestaurants} variant={getOnlyRestaurants ? 'primary' : 'outline-primary'}>Restaurang</Button>
+                            <Button onClick={onlySnabbmat} variant={getOnlySnabbmat ? 'primary' : 'outline-primary'}>Snabbmat</Button>
                         </div>
-                        <div className='d-md-inline-block'>
+                        {!onlyRestaurants && (
+                            <div className='d-md-inline-block'>
                             <ListGroup>
                                 {restaurants.data.map(restaurant => (
                                     <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
                                 ))}
                             </ListGroup>
                         </div>
+                        )}
+                        {onlyRestaurants && (
+                            <div className='d-md-inline-block'>
+                            <ListGroup>
+                                {onlyRestaurants.map(restaurant => (
+                                    <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
+                                ))}
+                            </ListGroup>
+                        </div>
+                        )}
                         
                         {showDetails && (
                         <div className='d-md-inline-block border rounded p-2'>

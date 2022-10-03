@@ -54,16 +54,6 @@ const HomePage = () => {
         setWeHaveReadableTown(null)
     }
 
-    // const handleFilter = () => {
-    //     setShowFilters(!showFilters)
-    // }
-
-    // const handleFilterSubmit = (e) => {
-    //     e.preventDefault()
-    //     console.log('filter this')
-    //     console.log('e: ', e)
-    // }
-
     // When clicked "get my position" run this
     const getMyPos = async () => {
         // call on api 
