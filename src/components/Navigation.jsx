@@ -7,7 +7,7 @@ import { NavDropdown } from 'react-bootstrap'
 import { useAuthContext } from '../contexts/AuthContext'
 
 const Navigation = () => {
-	const { currentUser, userEmail, userPhotoUrl } = useAuthContext()
+	const { currentUser, userEmail } = useAuthContext()
 
 	return (
 		<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" className="pb-3">
@@ -20,17 +20,7 @@ const Navigation = () => {
 				currentUser ? (
 					<>
 						{/* User is logged in */}
-						<NavDropdown title={
-								userPhotoUrl 
-								?<Image
-									src={userPhotoUrl}
-									height={40}
-									width={40}
-									fluid
-									roundedCircle
-								/>	
-								: userEmail
-							}>
+						<NavDropdown title={userEmail}>
 								<NavLink to="/logout" className="dropdown-item">Log Out</NavLink>
 								<NavLink to="/create-new-restaurant" className="dropdown-item">Create New</NavLink>
 								<NavLink to="/tips" className='dropdown-item'>Alla tips</NavLink>
