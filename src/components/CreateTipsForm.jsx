@@ -35,7 +35,7 @@ const CreateTipsForm = () => {
                             value: 20,
                             message: 'gotta give us more than that',
                         },
-                    })} as='textarea' rows={6} />
+                    })} as='textarea' rows={6} placeholder="Enter at least 20 characters" />
                     {errors.message && <span>{errors.message.message}</span>}
                 </Form.Group>
 
