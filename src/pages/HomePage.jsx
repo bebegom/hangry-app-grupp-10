@@ -10,6 +10,7 @@ import MarkersComponent from '../components/MarkersComponent'
 // import useStreamCollection from '../hooks/useStreamCollection'
 // import { where } from 'firebase/firestore'
 import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
+import '../assets/scss/HomePage.scss'
 
 /* a library of data for maps api */
 const libraries = ['places']
@@ -103,15 +104,6 @@ const HomePage = () => {
             {/* if true, render map and searchform */}
             {isLoaded && (
                 <>
-                    <SearchForm onSubmit={searchSubmit} />
-
-                    <div>
-                        <DirectionForm onSubmit={directionSubmit} />
-                        {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>}
-                    </div>
-
-                    <Button onClick={() => setShowList(!showList)}>Show list</Button>
-
                     <GoogleMap
                         zoom={12}
                         center={position}
@@ -132,7 +124,19 @@ const HomePage = () => {
                         )}
 
                     </GoogleMap>
-                    {!userMarker && <Button onClick={getMyPos} variant="outline-primary">Get my location</Button>}
+                    <Button className="mt-2" onClick={() => setShowList(!showList)}>Show list</Button>
+
+                    
+                    <div className="mapButtons">
+
+                        <SearchForm onSubmit={searchSubmit} />
+
+                        <DirectionForm onSubmit={directionSubmit} />
+
+                        {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>}
+
+                        {!userMarker && <Button onClick={getMyPos}>Get my location</Button>}
+                    </div>
                 </>
             )}
         </>
