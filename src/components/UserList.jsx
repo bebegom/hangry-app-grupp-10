@@ -1,14 +1,13 @@
 import Image from 'react-bootstrap/Image'
+import Table from 'react-bootstrap/Table'
 
 const UserList = ({ users }) => {
 	const admin = users.filter(i => i.admin === true)
 
 	return (
-		<div>
-			<table className="table w-full">
+			<Table className="table w-full">
 				<thead>
 					<tr>
-						<th>List</th>
 						<th>Id</th>
 						<th>Email</th>
 						<th>Photo</th>
@@ -17,17 +16,15 @@ const UserList = ({ users }) => {
                 
 				<tbody>
 					{admin &&  
-						admin.map((allUsers, i) => (
+						admin.map((allUsers) => (
 							<tr key={allUsers.id}>
-								<th>{i + 1}</th>
 								<td>{allUsers.id}</td>
 								<td>{allUsers.email}</td>
 								<td>{allUsers.photoURL ? <Image src={allUsers.photoURL} height={50} width={50} fluid roundedCircle /> : "No picture for you" } </td>
 							</tr>
 						))}
 				</tbody>
-			</table>
-		</div>
+			</Table>
 	)
 }
 
