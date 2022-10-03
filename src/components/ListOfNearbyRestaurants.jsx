@@ -1,20 +1,15 @@
-import {useState} from 'react'
-import { where } from 'firebase/firestore'
-import {Card, ListGroup, Button} from 'react-bootstrap'
+import { useState } from 'react'
+import { ListGroup, Button } from 'react-bootstrap'
 import useGetCollection from '../hooks/useGetCollection'
-
-import { Form } from 'react-bootstrap'
+import MarkersComponent from './MarkersComponent'
 
 const ListOfNearbyRestaurants = ({searchedLocation}) => {
-    // const [listOfRestaurants, setListOfRestaurants] = useState([])
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
-    const [getOnlyRestaurants, setGetOnlyRestaurants] = useState(false)
-    const [getOnlySnabbmat, setGetOnlySnabbmat] = useState(false)
     const [onlyRestaurants, setOnlyRestaurants] = useState(null)
     const [onlySnabbmat, setOnlySnabbmat] = useState(null)
-
     const restaurants = useGetCollection('restaurants', searchedLocation)
+    const [list, setList] = useState(null)
 
     const toGetOnlyRestaurants = () => {
         setShowDetails(false)
@@ -22,31 +17,28 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
 
         if(onlyRestaurants) {
             setOnlyRestaurants(null)
-            setGetOnlyRestaurants(false)
+            setList(null)
             return
         }
 
-        setGetOnlyRestaurants(true)
-        setGetOnlySnabbmat(false)
-        const list = restaurants.data.filter(i => i.typ === 'restaurang')
-        setOnlyRestaurants(list)
+        const newList = restaurants.data.filter(i => i.typ === 'restaurang')
+        setList(newList)
+        setOnlyRestaurants(newList)
     }
     
     const toGetOnlySnabbmat = () => {
-        // setOnlyRestaurants(null)
         setShowDetails(false)
         setOnlyRestaurants(null)
 
         if(onlySnabbmat) {
             setOnlySnabbmat(null)
-            setGetOnlySnabbmat(false)
+            setList(null)
             return
         }
 
-        setGetOnlySnabbmat(true)
-        setGetOnlyRestaurants(false)
-        const list = restaurants.data.filter(i => i.typ === 'snabbmat')
-        setOnlySnabbmat(list)
+        const newList = restaurants.data.filter(i => i.typ === 'snabbmat')
+        setList(newList)
+        setOnlySnabbmat(newList)
     }
     
     const seeDetails = (thisRestaurant) => {
@@ -165,6 +157,8 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
                         </div>
                         )}
                     </div>
+
+                    <MarkersComponent restaurants={restaurants} town={searchedLocation} filteredList={list} />
                 </>
             )}
         </>
