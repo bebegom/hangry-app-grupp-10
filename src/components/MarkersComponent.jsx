@@ -7,8 +7,8 @@ const MarkersComponent = ({restaurants, town, filteredList}) => {
     // console.log(listOfNearByPlaces)
     // const [filteredList, setFilteredList] = useState(null)
 
-    console.log('restaurants: ', restaurants)
-    console.log('filteredList: ', filteredList)
+    // console.log('restaurants: ', restaurants)
+    // console.log('filteredList: ', filteredList)
 
     return (
         <>

@@ -10,6 +10,7 @@ import MarkersComponent from '../components/MarkersComponent'
 // import useStreamCollection from '../hooks/useStreamCollection'
 // import { where } from 'firebase/firestore'
 import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
+import '../assets/scss/HomePage.scss'
 
 /* a library of data for maps api */
 const libraries = ['places']
@@ -104,15 +105,6 @@ const HomePage = () => {
             {/* if true, render map and searchform */}
             {isLoaded && (
                 <>
-                    <SearchForm onSubmit={searchSubmit} />
-
-                    <div>
-                        <DirectionForm onSubmit={directionSubmit} />
-                        {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>}
-                    </div>
-
-                    <Button onClick={() => setShowList(!showList)}>{showList ? 'Hide list' : 'Show list'}</Button>
-                    {/* <Button onClick={handleFilter}>Filters</Button> */}
 
                     <GoogleMap
                         zoom={12}
@@ -133,12 +125,19 @@ const HomePage = () => {
                             </>
                         )}
 
-                        {/* {showFilters && (
-                        
-                        )} */}
+                    </GoogleMap>                    
+                    <div className="mapButtonLayout">
 
-                    </GoogleMap>
-                    {!userMarker && <Button onClick={getMyPos} variant="outline-primary">Get my location</Button>}
+                        <Button className="mt-3 btnBlack" onClick={() => setShowList(!showList)}>Show list</Button>
+
+                        <SearchForm onSubmit={searchSubmit} />
+
+                        <DirectionForm onSubmit={directionSubmit} />
+
+                        {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>}
+
+                        {!userMarker && <Button className="btnBlack mb-2" onClick={getMyPos}>Get my location</Button>}
+                    </div>
                 </>
             )}
         </>

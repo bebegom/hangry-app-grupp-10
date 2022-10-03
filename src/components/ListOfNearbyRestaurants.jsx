@@ -1,5 +1,7 @@
-import { useState } from 'react'
-import { ListGroup, Button } from 'react-bootstrap'
+import {useState} from 'react'
+import { where } from 'firebase/firestore'
+import {Card, ListGroup, Button} from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import useGetCollection from '../hooks/useGetCollection'
 import MarkersComponent from './MarkersComponent'
 
@@ -156,6 +158,10 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
                                     </span>
                                 )}
                             </div>
+                            <Button className="mt-2"
+                                as={Link}
+                                to="/update-restaurant"
+                            >Update info</Button>
                         </div>
                         )}
                     </div>

@@ -13,6 +13,7 @@ import TipsPage from './pages/TipsPage'
 import UserListPage from './pages/UserListPage'
 import RestaurantsListPage from './pages/RestaurantsListPage'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import RequireAuth from './components/RequireAuth'
 
 function App() {
   return (
@@ -20,17 +21,44 @@ function App() {
       <Navigation />
       
       <Routes>
+        {/* Guest Routes */}
         <Route path="/" element={<HomePage/>} />
+        <Route path="*" element={<NotFound/>} />
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/logout" element={<LogoutPage/>} />
         <Route path="/signup" element={<SignupPage/>} />
-        <Route path="/userlist" element={<UserListPage/>} />
-        <Route path="*" element={<NotFound/>} />
-        <Route path="/create-new-restaurant" element={<CreateNewRestaurantPage/>} />
-        <Route path="/update-restaurant" element={<UpdateRestaurantPage/>} />
-        <Route path="/restaurantlist" element={<RestaurantsListPage/>} />
         <Route path="/send-tips" element={<CreateTipsPage/>} />
-        <Route path="/tips" element={<TipsPage/>} />
+
+        {/* Protected Routes */}
+        <Route path="/create-new-restaurant" element={
+          <RequireAuth>
+             <CreateNewRestaurantPage/>
+          </RequireAuth>
+        } />
+
+        <Route path="/update-restaurant" element={
+          <RequireAuth>
+            <UpdateRestaurantPage/>
+          </RequireAuth>
+        } />
+
+        <Route path="/restaurantlist" element={
+          <RequireAuth>
+            <RestaurantsListPage/>
+          </RequireAuth>
+        } />
+
+        <Route path="/tips" element={
+          <RequireAuth>
+            <TipsPage/>
+          </RequireAuth>
+        } />
+
+        <Route path="/userlist" element={
+          <RequireAuth>
+            <UserListPage/>
+          </RequireAuth>
+        } />
     </Routes>
 
     <ReactQueryDevtools />
