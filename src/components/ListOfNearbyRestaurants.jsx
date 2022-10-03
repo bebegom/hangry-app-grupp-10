@@ -1,6 +1,5 @@
 import {useState} from 'react'
-import { where } from 'firebase/firestore'
-import {Card, ListGroup, Button} from 'react-bootstrap'
+import {ListGroup, Button} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import useGetCollection from '../hooks/useGetCollection'
 import MarkersComponent from './MarkersComponent'
@@ -66,7 +65,7 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
             {!restaurants.isLoading && restaurants.data && (
                 <>
                     <div className='absolute-list p-2'>
-                        <div className='m-2'>
+                        <div className='m-2 '>
                             <span className='mx-2'>
                                 Filters:
                             </span>
@@ -74,96 +73,98 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
                             <Button onClick={toGetOnlySnabbmat} variant={onlySnabbmat ? 'primary' : 'outline-primary'}>Snabbmat</Button>
                         </div>
 
-                        {!onlyRestaurants && !onlySnabbmat && (
-                            <div className='d-md-inline-block'>
-                                <ListGroup>
-                                    {restaurants.data.map(restaurant => (
-                                        <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
-                                    ))}
-                                </ListGroup>
+                        <div className='d-flex'>
+                            {!onlyRestaurants && !onlySnabbmat && (
+                                <div className='d-md-inline-block'>
+                                    <ListGroup>
+                                        {restaurants.data.map(restaurant => (
+                                            <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
+                                        ))}
+                                    </ListGroup>
+                                </div>
+                            )}
+                            {onlyRestaurants && !onlySnabbmat && (
+                                <div className='d-md-inline-block'>
+                                    <ListGroup>
+                                        {onlyRestaurants.map(restaurant => (
+                                            <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
+                                        ))}
+                                    </ListGroup>
+                                </div>
+                            )}
+
+                            {onlySnabbmat && !onlyRestaurants && (
+                                <div className='d-md-inline-block'>
+                                    <ListGroup>
+                                        {onlySnabbmat.map(restaurant => (
+                                            <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
+                                        ))}
+                                    </ListGroup>
+                                </div>
+                            )}
+                            
+                            {showDetails && (
+                            <div className='d-md-inline-block border rounded p-2'>
+                                <div className='d-flex flex-column'>
+                                    <h5>
+                                        {clickedRestaurant.namn}
+                                    </h5>
+                                    <span>
+                                        {clickedRestaurant.beskrivning}
+                                    </span>
+                                    <span>
+                                        Adress: {clickedRestaurant.adress}
+                                    </span>
+                                    <span>
+                                        Ort: {clickedRestaurant.ort}
+                                    </span>
+                                    <span>
+                                        Cuisine: {clickedRestaurant.cuisine}
+                                    </span>
+                                    <span>
+                                        Typ: {clickedRestaurant.typ}
+                                    </span>
+                                    <span>
+                                        Utbud: {clickedRestaurant.utbud}
+                                    </span>
+
+                                    {clickedRestaurant.telefon && (
+                                        <span>
+                                            Telefon: {clickedRestaurant.telefon}
+                                        </span>
+                                    )}
+
+                                    {clickedRestaurant.facebook && (
+                                        <span>
+                                            Facebook: {clickedRestaurant.facebook}
+                                        </span>
+                                    )}
+
+                                    {clickedRestaurant.email && (
+                                        <span>
+                                            Email: {clickedRestaurant.email}
+                                        </span>
+                                    )}
+
+                                    {clickedRestaurant.hemsida && (
+                                        <span>
+                                            Hemsida: {clickedRestaurant.hemsida}
+                                        </span>
+                                    )}
+
+                                    {clickedRestaurant.instagram && (
+                                        <span>
+                                            Instagram: {clickedRestaurant.instagram}
+                                        </span>
+                                    )}
+                                </div>
+                                <Button className="mt-2"
+                                    as={Link}
+                                    to="/update-restaurant"
+                                >Update info</Button>
                             </div>
-                        )}
-                        {onlyRestaurants && !onlySnabbmat && (
-                            <div className='d-md-inline-block'>
-                                <ListGroup>
-                                    {onlyRestaurants.map(restaurant => (
-                                        <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
-                                    ))}
-                                </ListGroup>
-                            </div>
-                        )}
-
-                        {onlySnabbmat && !onlyRestaurants && (
-                            <div className='d-md-inline-block'>
-                                <ListGroup>
-                                    {onlySnabbmat.map(restaurant => (
-                                        <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
-                                    ))}
-                                </ListGroup>
-                            </div>
-                        )}
-                        
-                        {showDetails && (
-                        <div className='d-md-inline-block border rounded p-2'>
-                            <div className='d-flex flex-column'>
-                                <h5>
-                                    {clickedRestaurant.namn}
-                                </h5>
-                                <span>
-                                    {clickedRestaurant.beskrivning}
-                                </span>
-                                <span>
-                                    Adress: {clickedRestaurant.adress}
-                                </span>
-                                <span>
-                                    Ort: {clickedRestaurant.ort}
-                                </span>
-                                <span>
-                                    Cuisine: {clickedRestaurant.cuisine}
-                                </span>
-                                <span>
-                                    Typ: {clickedRestaurant.typ}
-                                </span>
-                                <span>
-                                    Utbud: {clickedRestaurant.utbud}
-                                </span>
-
-                                {clickedRestaurant.telefon && (
-                                    <span>
-                                        Telefon: {clickedRestaurant.telefon}
-                                    </span>
-                                )}
-
-                                {clickedRestaurant.facebook && (
-                                    <span>
-                                        Facebook: {clickedRestaurant.facebook}
-                                    </span>
-                                )}
-
-                                {clickedRestaurant.email && (
-                                    <span>
-                                        Email: {clickedRestaurant.email}
-                                    </span>
-                                )}
-
-                                {clickedRestaurant.hemsida && (
-                                    <span>
-                                        Hemsida: {clickedRestaurant.hemsida}
-                                    </span>
-                                )}
-
-                                {clickedRestaurant.instagram && (
-                                    <span>
-                                        Instagram: {clickedRestaurant.instagram}
-                                    </span>
-                                )}
-                            </div>
-                            <Button className="mt-2"
-                                as={Link}
-                                to="/update-restaurant"
-                            >Update info</Button>
+                            )}
                         </div>
-                        )}
                     </div>
 
                     <MarkersComponent restaurants={restaurants} town={searchedLocation} filteredList={list} />
