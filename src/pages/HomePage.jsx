@@ -129,7 +129,7 @@ const HomePage = () => {
                         {searched && (
                             <>
                                 {showList && <ListOfNearbyRestaurants searchedLocation={searchedLocation} />}
-                                <MarkersComponent restaurants={restaurants} town={searchedLocation}/>
+                                {/* <MarkersComponent restaurants={restaurants} town={searchedLocation}/> */}
                             </>
                         )}
 
