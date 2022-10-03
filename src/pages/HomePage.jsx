@@ -111,7 +111,7 @@ const HomePage = () => {
                         {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>}
                     </div>
 
-                    <Button onClick={() => setShowList(!showList)}>Show list</Button>
+                    <Button onClick={() => setShowList(!showList)}>{showList ? 'Hide list' : 'Show list'}</Button>
                     {/* <Button onClick={handleFilter}>Filters</Button> */}
 
                     <GoogleMap
