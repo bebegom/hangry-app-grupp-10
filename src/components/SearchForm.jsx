@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import  Form  from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { Autocomplete } from '@react-google-maps/api'
+import '../assets/scss/HomePage.scss'
 
 
 const SearchForm = ({ onSubmit }) => {
@@ -24,7 +25,7 @@ const SearchForm = ({ onSubmit }) => {
 
     return (
         <Form onSubmit={handleForm}>
-            <Form.Group className="d-flex my-4">
+            <Form.Group className="mt-3 text-center">
                <Autocomplete>
                     <Form.Control
                         type="text"
@@ -33,7 +34,7 @@ const SearchForm = ({ onSubmit }) => {
                         required
                     />
                </Autocomplete>
-               <Button type="submit" variant="outline-primary">Go now!</Button>
+               <Button type="submit" className="mt-2 submitButton">Go now!</Button>
             </Form.Group>
         </Form>
     )

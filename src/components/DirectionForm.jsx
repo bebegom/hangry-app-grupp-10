@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import  Form  from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { Autocomplete } from '@react-google-maps/api'
+import '../assets/scss/HomePage.scss'
 
 
 const DirectionForm = ({ onSubmit }) => {
@@ -31,7 +32,7 @@ const DirectionForm = ({ onSubmit }) => {
 
     return (
         <Form onSubmit={handleForm}>
-            <Form.Group className="my-4">
+            <Form.Group className="my-4 text-center">
                 <div>
                     <Autocomplete>
                         <Form.Control
@@ -51,7 +52,7 @@ const DirectionForm = ({ onSubmit }) => {
                         />
                     </Autocomplete>
                 </div>
-               <Button type="submit" className="mt-2">Get waypoint</Button>
+               <Button type="submit" className="mt-2 submitButton">Get waypoint</Button>
             </Form.Group>
         </Form>
     )
