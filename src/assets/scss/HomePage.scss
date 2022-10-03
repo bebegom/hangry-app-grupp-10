@@ -1,5 +1,14 @@
-.mapButtons {
+.mapButtonLayout {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.submitButton {
+    width: 100%;
+    background-color: #36454F!important;
+}
+
+.btnBlack {
+    background-color: #36454F!important;
 }

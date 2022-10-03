@@ -123,11 +123,10 @@ const HomePage = () => {
                             </>
                         )}
 
-                    </GoogleMap>
-                    <Button className="mt-2" onClick={() => setShowList(!showList)}>Show list</Button>
+                    </GoogleMap>                    
+                    <div className="mapButtonLayout">
 
-                    
-                    <div className="mapButtons">
+                        <Button className="mt-3 btnBlack" onClick={() => setShowList(!showList)}>Show list</Button>
 
                         <SearchForm onSubmit={searchSubmit} />
 
@@ -135,7 +134,7 @@ const HomePage = () => {
 
                         {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>}
 
-                        {!userMarker && <Button onClick={getMyPos}>Get my location</Button>}
+                        {!userMarker && <Button className="btnBlack mb-2" onClick={getMyPos}>Get my location</Button>}
                     </div>
                 </>
             )}
