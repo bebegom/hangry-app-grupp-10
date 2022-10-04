@@ -5,41 +5,10 @@ import { Link } from 'react-router-dom'
 const ListOfNearbyRestaurants = ({restaurants, town}) => {
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
-    // const [onlyRestaurants, setOnlyRestaurants] = useState(null)
-    // const [onlySnabbmat, setOnlySnabbmat] = useState(null)
-    // const [list, setList] = useState(null)
 
-    // const toGetOnlyRestaurants = () => {
-    //     setShowDetails(false)
-    //     setOnlySnabbmat(null)
-
-    //     if(onlyRestaurants) {
-    //         setOnlyRestaurants(null)
-    //         setList(null)
-    //         return
-    //     }
-
-    //     const newList = restaurantsInLocation.filter(i => i.typ === 'restaurang')
-    //     setList(newList)
-    //     setOnlyRestaurants(newList)
-    // }
-    
-    // const toGetOnlySnabbmat = () => {
-    //     setShowDetails(false)
-    //     setOnlyRestaurants(null)
-
-    //     if(onlySnabbmat) {
-    //         setOnlySnabbmat(null)
-    //         setList(null)
-    //         return
-    //     }
-
-    //     const newList = restaurantsInLocation.filter(i => i.typ === 'snabbmat')
-    //     setList(newList)
-    //     setOnlySnabbmat(newList)
-    // }
-
+    console.log('restaurants', restaurants)
     const nearByRestaurants = restaurants.filter(i => i.ort == town)
+    console.log('nearbyrestaurants', nearByRestaurants)
     
     const seeDetails = (thisRestaurant) => {
         // console.log('clicked on: ', thisRestaurant)
@@ -57,53 +26,18 @@ const ListOfNearbyRestaurants = ({restaurants, town}) => {
 
     return (
         <>
-            {/* {restaurants.isLoading && (<div className='absolute-list'>Loading...</div>)} */}
-
-            {/* {restaurants.isError && (<div className='absolute-list'>{restaurants.error}</div>)} */}
-
             {nearByRestaurants && (
                 <>
-                    <div className='absolute-list p-2'>
-                        {/* <div className='m-2 '>
-                            <span className='mx-2'>
-                                Filters:
-                            </span>
-                            <Button onClick={toGetOnlyRestaurants} variant={onlyRestaurants ? 'primary' : 'outline-primary'}>Restaurang</Button>
-                            <Button onClick={toGetOnlySnabbmat} variant={onlySnabbmat ? 'primary' : 'outline-primary'}>Snabbmat</Button>
-                        </div> */}
-
-                        <div className='d-flex'>
-                            {/* {!onlyRestaurants && !onlySnabbmat && ( */}
-                                <div className='d-md-inline-block'>
-                                    <ListGroup>
-                                        {nearByRestaurants.map(restaurant => (
-                                            <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
-                                        ))}
-                                    </ListGroup>
-                                </div>
-                            {/* )} */}
-
-                            {/* {onlyRestaurants && !onlySnabbmat && (
-                                <div className='d-md-inline-block'>
-                                    <ListGroup>
-                                        {onlyRestaurants.map(restaurant => (
-                                            <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
-                                        ))}
-                                    </ListGroup>
-                                </div>
-                            )}
-
-                            {onlySnabbmat && !onlyRestaurants && (
-                                <div className='d-md-inline-block'>
-                                    <ListGroup>
-                                        {onlySnabbmat.map(restaurant => (
-                                            <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
-                                        ))}
-                                    </ListGroup>
-                                </div>
-                            )} */}
-                            
-                            {showDetails && (
+                    <div className='absolute-list p-2 d-flex'>
+                        <div className='d-md-inline-block'>
+                            <ListGroup>
+                                {nearByRestaurants.map(restaurant => (
+                                    <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
+                                ))}
+                            </ListGroup>
+                        </div>
+                        
+                        {showDetails && (
                             <div className='d-md-inline-block border rounded p-2'>
                                 <div className='d-flex flex-column'>
                                     <h5>
@@ -163,11 +97,8 @@ const ListOfNearbyRestaurants = ({restaurants, town}) => {
                                     to="/update-restaurant"
                                 >Update info</Button>
                             </div>
-                            )}
-                        </div>
+                        )}
                     </div>
-
-                    {/* <MarkersComponent restaurants={restaurants} town={searchedLocation} filteredList={list} /> */}
                 </>
             )}
         </>
