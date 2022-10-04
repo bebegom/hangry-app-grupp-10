@@ -1,46 +1,45 @@
 import {useState} from 'react'
 import {ListGroup, Button} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-// import useGetCollection from '../hooks/useGetCollection'
-// import MarkersComponent from './MarkersComponent'
 
-const ListOfNearbyRestaurants = ({restaurantsInLocation}) => {
+const ListOfNearbyRestaurants = ({restaurants, town}) => {
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
-    const [onlyRestaurants, setOnlyRestaurants] = useState(null)
-    const [onlySnabbmat, setOnlySnabbmat] = useState(null)
-    // const restaurants = useGetCollection('restaurants', searchedLocation)
-    const [list, setList] = useState(null)
+    // const [onlyRestaurants, setOnlyRestaurants] = useState(null)
+    // const [onlySnabbmat, setOnlySnabbmat] = useState(null)
+    // const [list, setList] = useState(null)
 
-    const toGetOnlyRestaurants = () => {
-        setShowDetails(false)
-        setOnlySnabbmat(null)
+    // const toGetOnlyRestaurants = () => {
+    //     setShowDetails(false)
+    //     setOnlySnabbmat(null)
 
-        if(onlyRestaurants) {
-            setOnlyRestaurants(null)
-            setList(null)
-            return
-        }
+    //     if(onlyRestaurants) {
+    //         setOnlyRestaurants(null)
+    //         setList(null)
+    //         return
+    //     }
 
-        const newList = restaurantsInLocation.filter(i => i.typ === 'restaurang')
-        setList(newList)
-        setOnlyRestaurants(newList)
-    }
+    //     const newList = restaurantsInLocation.filter(i => i.typ === 'restaurang')
+    //     setList(newList)
+    //     setOnlyRestaurants(newList)
+    // }
     
-    const toGetOnlySnabbmat = () => {
-        setShowDetails(false)
-        setOnlyRestaurants(null)
+    // const toGetOnlySnabbmat = () => {
+    //     setShowDetails(false)
+    //     setOnlyRestaurants(null)
 
-        if(onlySnabbmat) {
-            setOnlySnabbmat(null)
-            setList(null)
-            return
-        }
+    //     if(onlySnabbmat) {
+    //         setOnlySnabbmat(null)
+    //         setList(null)
+    //         return
+    //     }
 
-        const newList = restaurantsInLocation.filter(i => i.typ === 'snabbmat')
-        setList(newList)
-        setOnlySnabbmat(newList)
-    }
+    //     const newList = restaurantsInLocation.filter(i => i.typ === 'snabbmat')
+    //     setList(newList)
+    //     setOnlySnabbmat(newList)
+    // }
+
+    const nearByRestaurants = restaurants.filter(i => i.ort == town)
     
     const seeDetails = (thisRestaurant) => {
         // console.log('clicked on: ', thisRestaurant)
@@ -62,28 +61,29 @@ const ListOfNearbyRestaurants = ({restaurantsInLocation}) => {
 
             {/* {restaurants.isError && (<div className='absolute-list'>{restaurants.error}</div>)} */}
 
-            {restaurantsInLocation && (
+            {nearByRestaurants && (
                 <>
                     <div className='absolute-list p-2'>
-                        <div className='m-2 '>
+                        {/* <div className='m-2 '>
                             <span className='mx-2'>
                                 Filters:
                             </span>
                             <Button onClick={toGetOnlyRestaurants} variant={onlyRestaurants ? 'primary' : 'outline-primary'}>Restaurang</Button>
                             <Button onClick={toGetOnlySnabbmat} variant={onlySnabbmat ? 'primary' : 'outline-primary'}>Snabbmat</Button>
-                        </div>
+                        </div> */}
 
                         <div className='d-flex'>
-                            {!onlyRestaurants && !onlySnabbmat && (
+                            {/* {!onlyRestaurants && !onlySnabbmat && ( */}
                                 <div className='d-md-inline-block'>
                                     <ListGroup>
-                                        {restaurantsInLocation.map(restaurant => (
+                                        {nearByRestaurants.map(restaurant => (
                                             <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
                                         ))}
                                     </ListGroup>
                                 </div>
-                            )}
-                            {onlyRestaurants && !onlySnabbmat && (
+                            {/* )} */}
+
+                            {/* {onlyRestaurants && !onlySnabbmat && (
                                 <div className='d-md-inline-block'>
                                     <ListGroup>
                                         {onlyRestaurants.map(restaurant => (
@@ -101,7 +101,7 @@ const ListOfNearbyRestaurants = ({restaurantsInLocation}) => {
                                         ))}
                                     </ListGroup>
                                 </div>
-                            )}
+                            )} */}
                             
                             {showDetails && (
                             <div className='d-md-inline-block border rounded p-2'>

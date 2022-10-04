@@ -8,7 +8,7 @@ import DirectionForm from '../components/DirectionForm'
 import MarkersComponent from '../components/MarkersComponent'
 import useGetCollection from '../hooks/useGetCollection'
 import useStreamCollection from '../hooks/useStreamCollection'
-// import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
+import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
 import '../assets/scss/HomePage.scss'
 
 /* a library of data for maps api */
@@ -37,7 +37,7 @@ const HomePage = () => {
     const [weHaveReadableTown, setWeHaveReadableTown] = useState(null)
 
     const [searched, setSearched] = useState(false)
-    // const [searchedLocation, setSearchedLocation] = useState(null)
+    const [searchedLocation, setSearchedLocation] = useState(null)
     const [showList, setShowList] = useState(false)
     const [restaurantsInUserLocation, setRestaurantsInUserLocation] = useState([])
     // const [restaurantsInSearchedLocation, setRestaurantsInSearchedLocation] = useState(null)
@@ -59,9 +59,6 @@ const HomePage = () => {
         setSearched(true)
         setSearchedLocation(city.long_name)
         setWeHaveReadableTown(null)
-
-        // const newListOfRestaurants = allRestaurants.data.filter(i => i.ort == city.long_name)
-        // setRestaurantsInSearchedLocation(newListOfRestaurants)
     }
 
     // When clicked "get my position" run this
@@ -103,10 +100,6 @@ const HomePage = () => {
         getMyPos()
     }, [])
 
-    console.log('data: ', allRestaurants)
-    console.log('weHaveReadableTown: ', weHaveReadableTown)
-
-
    return (
         <>
             {!isLoaded && (
@@ -126,9 +119,24 @@ const HomePage = () => {
 
 
                         {allRestaurants.data && !searched && (
-                            <MarkersComponent restaurants={allRestaurants.data} town={weHaveReadableTown} />
+                            <>
+                                <MarkersComponent restaurants={allRestaurants.data} town={weHaveReadableTown} />
+
+                                {showList && (
+                                    <ListOfNearbyRestaurants restaurants={allRestaurants.data} town={weHaveReadableTown} />
+                                )}
+                            </>
                         )}
 
+                        {searched && (
+                            <>
+                                <MarkersComponent restaurants={allRestaurants.data} town={searchedLocation} />
+
+                                {showList && (
+                                    <ListOfNearbyRestaurants restaurants={allRestaurants.data} town={searchedLocation} />
+                                )}
+                            </>
+                        )}
 
                     </GoogleMap>                    
                     <div className="mapButtonLayout">
