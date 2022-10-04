@@ -1,15 +1,15 @@
 import {useState} from 'react'
 import {ListGroup, Button} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import useGetCollection from '../hooks/useGetCollection'
-import MarkersComponent from './MarkersComponent'
+// import useGetCollection from '../hooks/useGetCollection'
+// import MarkersComponent from './MarkersComponent'
 
-const ListOfNearbyRestaurants = ({searchedLocation}) => {
+const ListOfNearbyRestaurants = ({restaurantsInLocation}) => {
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
     const [onlyRestaurants, setOnlyRestaurants] = useState(null)
     const [onlySnabbmat, setOnlySnabbmat] = useState(null)
-    const restaurants = useGetCollection('restaurants', searchedLocation)
+    // const restaurants = useGetCollection('restaurants', searchedLocation)
     const [list, setList] = useState(null)
 
     const toGetOnlyRestaurants = () => {
@@ -22,7 +22,7 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
             return
         }
 
-        const newList = restaurants.data.filter(i => i.typ === 'restaurang')
+        const newList = restaurantsInLocation.filter(i => i.typ === 'restaurang')
         setList(newList)
         setOnlyRestaurants(newList)
     }
@@ -37,7 +37,7 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
             return
         }
 
-        const newList = restaurants.data.filter(i => i.typ === 'snabbmat')
+        const newList = restaurantsInLocation.filter(i => i.typ === 'snabbmat')
         setList(newList)
         setOnlySnabbmat(newList)
     }
@@ -58,11 +58,11 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
 
     return (
         <>
-            {restaurants.isLoading && (<div className='absolute-list'>Loading...</div>)}
+            {/* {restaurants.isLoading && (<div className='absolute-list'>Loading...</div>)} */}
 
-            {restaurants.isError && (<div className='absolute-list'>{restaurants.error}</div>)}
+            {/* {restaurants.isError && (<div className='absolute-list'>{restaurants.error}</div>)} */}
 
-            {!restaurants.isLoading && restaurants.data && (
+            {restaurantsInLocation && (
                 <>
                     <div className='absolute-list p-2'>
                         <div className='m-2 '>
@@ -77,7 +77,7 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
                             {!onlyRestaurants && !onlySnabbmat && (
                                 <div className='d-md-inline-block'>
                                     <ListGroup>
-                                        {restaurants.data.map(restaurant => (
+                                        {restaurantsInLocation.map(restaurant => (
                                             <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
                                         ))}
                                     </ListGroup>
@@ -167,7 +167,7 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
                         </div>
                     </div>
 
-                    <MarkersComponent restaurants={restaurants} town={searchedLocation} filteredList={list} />
+                    {/* <MarkersComponent restaurants={restaurants} town={searchedLocation} filteredList={list} /> */}
                 </>
             )}
         </>

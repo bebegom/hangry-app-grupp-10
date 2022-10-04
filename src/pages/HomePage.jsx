@@ -6,7 +6,9 @@ import '../assets/scss/mapStyling.scss'
 import SearchForm from '../components/SearchForm'
 import DirectionForm from '../components/DirectionForm'
 import MarkersComponent from '../components/MarkersComponent'
-import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
+import useGetCollection from '../hooks/useGetCollection'
+import useStreamCollection from '../hooks/useStreamCollection'
+// import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
 import '../assets/scss/HomePage.scss'
 
 /* a library of data for maps api */
@@ -24,6 +26,10 @@ const HomePage = () => {
         libraries
     })
 
+    // get all reastaurants from firestore
+    const allRestaurants = useStreamCollection('restaurants')
+    // console.log('allRestaurants', allRestaurants)
+
     // Default Position(Malmö) om getMyPos failar
     const [position, setPosition] = useState({lat: 55.604981, lng: 13.003822})
     const [userMarker, setUserMarker] = useState(null)
@@ -31,9 +37,11 @@ const HomePage = () => {
     const [weHaveReadableTown, setWeHaveReadableTown] = useState(null)
 
     const [searched, setSearched] = useState(false)
-    const [searchedLocation, setSearchedLocation] = useState(null)
+    // const [searchedLocation, setSearchedLocation] = useState(null)
     const [showList, setShowList] = useState(false)
-    // const [showFilters, setShowFilters] = useState(false)
+    const [restaurantsInUserLocation, setRestaurantsInUserLocation] = useState([])
+    // const [restaurantsInSearchedLocation, setRestaurantsInSearchedLocation] = useState(null)
+    // const [filteredList, setFilteredList] = useState(null)
 
     // Get value from SearchForm and execute new coords
     const searchSubmit = async (address) => {
@@ -47,9 +55,13 @@ const HomePage = () => {
 
         // Center to new coordinates
         setPosition(newCoords)
+
         setSearched(true)
         setSearchedLocation(city.long_name)
         setWeHaveReadableTown(null)
+
+        // const newListOfRestaurants = allRestaurants.data.filter(i => i.ort == city.long_name)
+        // setRestaurantsInSearchedLocation(newListOfRestaurants)
     }
 
     // When clicked "get my position" run this
@@ -58,7 +70,7 @@ const HomePage = () => {
         const getUserCoords = await GMapAPI.getUserLatLng()
 
         const weHaveReadable = await GMapAPI.getAdressFromLatLng(getUserCoords.lat, getUserCoords.lng)
-        // console.log('weHaveReadable', weHaveReadable[0])
+        // console.log('weHaveReadable: ', weHaveReadable)
 
         // update state to user location
         setPosition(getUserCoords)
@@ -89,19 +101,30 @@ const HomePage = () => {
 
     useEffect(() => {
         getMyPos()
-        
     }, [])
+
+    console.log('data: ', allRestaurants)
+        console.log('weHaveReadableTown: ', weHaveReadableTown)
+
+    // useEffect(() => {
+    //     if(allRestaurants.data.length = 0) {
+    //         return
+    //     }
+        
+    //     const filteredList = allRestaurants.data.filter(i => i.ort == weHaveReadableTown)
+    //     setRestaurantsInUserLocation(filteredList)
+
+    // }, [allRestaurants])
 
    return (
         <>
-            {!isLoaded && ( 
+            {!isLoaded && (
                 <p>Loading maps...</p>
             )}
 
             {/* if true, render map and searchform */}
             {isLoaded && (
                 <>
-
                     <GoogleMap
                         zoom={12}
                         center={position}
@@ -109,21 +132,21 @@ const HomePage = () => {
                     >
                         {userMarker && <Marker position={userMarker} label="You" />}
                         {renderDirection && <DirectionsRenderer directions={renderDirection} />}
-                        
-                        {weHaveReadableTown && showList && <ListOfNearbyRestaurants searchedLocation={weHaveReadableTown} />}
 
-                        {/* Get list of places/restaurants nearby the searched city */}
-                        {searched && (
+
+                        {/* {restaurantsInUserLocation && (
                             <>
-                                {showList && <ListOfNearbyRestaurants searchedLocation={searchedLocation} />}
-                                {/* <MarkersComponent restaurants={restaurants} town={searchedLocation}/> */}
+                                <MarkersComponent restaurants={restaurantsInUserLocation} />
                             </>
-                        )}
+                        )} */}
+
 
                     </GoogleMap>                    
                     <div className="mapButtonLayout">
 
-                        <Button className="mt-3 btnBlack" onClick={() => setShowList(!showList)}>Show list</Button>
+                        <Button disabled={allRestaurants.data.length == 0} className="mt-3 btnBlack" onClick={() => setShowList(!showList)}>
+                            {showList ? 'Hide list' : 'Show list'}
+                        </Button>
 
                         <SearchForm onSubmit={searchSubmit} />
 
