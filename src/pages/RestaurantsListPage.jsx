@@ -9,12 +9,20 @@ const RestaurantsListPage = () => {
     const columns = useMemo(() => {
         return [
             {
-                Header: 'ID',
-                accessor: 'id'
-            },
-            {
                 Header: 'Namn',
                 accessor: 'namn'
+            },
+            {
+                Header: 'Gatuadress',
+                accessor: 'adress'
+            },
+            {
+                Header: 'Ort',
+                accessor: 'ort'
+            },
+            {
+                Header: 'Typ',
+                accessor: 'typ'
             },
         ]
     }, [])
