@@ -140,6 +140,10 @@ const HomePage = () => {
                             </>
                         )} */}
 
+                        {allRestaurants.data && (
+                            <MarkersComponent restaurants={allRestaurants.data} />
+                        )}
+
 
                     </GoogleMap>                    
                     <div className="mapButtonLayout">
