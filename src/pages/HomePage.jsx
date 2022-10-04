@@ -104,17 +104,8 @@ const HomePage = () => {
     }, [])
 
     console.log('data: ', allRestaurants)
-        console.log('weHaveReadableTown: ', weHaveReadableTown)
+    console.log('weHaveReadableTown: ', weHaveReadableTown)
 
-    // useEffect(() => {
-    //     if(allRestaurants.data.length = 0) {
-    //         return
-    //     }
-        
-    //     const filteredList = allRestaurants.data.filter(i => i.ort == weHaveReadableTown)
-    //     setRestaurantsInUserLocation(filteredList)
-
-    // }, [allRestaurants])
 
    return (
         <>
@@ -134,14 +125,8 @@ const HomePage = () => {
                         {renderDirection && <DirectionsRenderer directions={renderDirection} />}
 
 
-                        {/* {restaurantsInUserLocation && (
-                            <>
-                                <MarkersComponent restaurants={restaurantsInUserLocation} />
-                            </>
-                        )} */}
-
-                        {allRestaurants.data && (
-                            <MarkersComponent restaurants={allRestaurants.data} />
+                        {allRestaurants.data && !searched && (
+                            <MarkersComponent restaurants={allRestaurants.data} town={weHaveReadableTown} />
                         )}
 
 
