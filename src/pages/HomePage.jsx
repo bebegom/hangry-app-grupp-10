@@ -41,9 +41,14 @@ const HomePage = () => {
     const [showList, setShowList] = useState(false)
 
     const [filteredListByTyp, setFilteredListByTyp] = useState(null)
+    const [filteredListByUtbud, setFilteredListByUtbud] = useState(null)
 
     const toGetOnlyByTyp = (typ) => {
         console.log('typ:' , typ)
+
+        if(filteredListByUtbud) {
+            setFilteredListByUtbud(null)
+        }
 
         if(searched) {
             if(filteredListByTyp != null && filteredListByTyp.length > 0 && filteredListByTyp[0].typ == typ) {
@@ -69,6 +74,19 @@ const HomePage = () => {
         const filteredList = filteredByTyp.filter(i => i.ort == weHaveReadableTown)
         // console.log(filteredList)
         setFilteredListByTyp(filteredList)
+    }
+
+    const toGetOnlyByUtbud = (utbud) => {
+        console.log('utbud: ', utbud)
+
+        if(filteredListByUtbud != null && filteredListByUtbud.length > 0 && filteredListByUtbud[0].utbud == utbud) {
+            setFilteredListByUtbud(null)
+            return
+        }
+
+        const newList = filteredListByTyp.filter(i => i.utbud == utbud)
+        setFilteredListByUtbud(newList)
+        // setHaveFilteredByUtbud(true)
     }
 
     // Get value from SearchForm and execute new coords
@@ -152,8 +170,12 @@ const HomePage = () => {
                                     <MarkersComponent restaurants={allRestaurants.data} town={weHaveReadableTown} />
                                 )}
 
-                                {filteredListByTyp && (
+                                {filteredListByTyp && !filteredListByUtbud && (
                                     <MarkersComponent restaurants={filteredListByTyp} town={weHaveReadableTown} />
+                                )}
+
+                                {filteredListByUtbud && (
+                                    <MarkersComponent restaurants={filteredListByUtbud} town={weHaveReadableTown} />
                                 )}
 
                                 {showList && (
@@ -162,8 +184,12 @@ const HomePage = () => {
                                             <ListOfNearbyRestaurants restaurants={allRestaurants.data} town={weHaveReadableTown} />
                                         )}
 
-                                        {filteredListByTyp && (
+                                        {filteredListByTyp && !filteredListByUtbud && (
                                             <ListOfNearbyRestaurants restaurants={filteredListByTyp} town={weHaveReadableTown} />
+                                        )}
+
+                                        {filteredListByUtbud && (
+                                            <ListOfNearbyRestaurants restaurants={filteredListByUtbud} town={weHaveReadableTown} />
                                         )}
                                     </>
                                 )}
@@ -176,8 +202,12 @@ const HomePage = () => {
                                     <MarkersComponent restaurants={allRestaurants.data} town={searchedLocation} />
                                 )}
 
-                                {filteredListByTyp && (
+                                {filteredListByTyp && !filteredListByUtbud && (
                                     <MarkersComponent restaurants={filteredListByTyp} town={searchedLocation} />
+                                )}
+
+                                {filteredListByUtbud && (
+                                    <MarkersComponent restaurants={filteredListByUtbud} town={searchedLocation} />
                                 )}
 
                                 {showList && (
@@ -186,8 +216,12 @@ const HomePage = () => {
                                             <ListOfNearbyRestaurants restaurants={allRestaurants.data} town={searchedLocation} />
                                         )}
 
-                                        {filteredListByTyp && (
+                                        {filteredListByTyp && !filteredListByUtbud && (
                                             <ListOfNearbyRestaurants restaurants={filteredListByTyp} town={searchedLocation} />
+                                        )}
+
+                                        {filteredListByUtbud && (
+                                            <ListOfNearbyRestaurants restaurants={filteredListByUtbud} town={searchedLocation} />
                                         )}
                                     </>
                                 )}
@@ -197,18 +231,17 @@ const HomePage = () => {
                     </GoogleMap>
                     <div className="mapButtonLayout">
 
-                        <div className='d-flex mt-3'>
+                        <div className='mt-3'>
                             <Button onClick={() => toGetOnlyByTyp('restaurang')} variant='outline-primary'>Restaurang</Button>
                             <Button onClick={() => toGetOnlyByTyp('snabbmat')} variant='outline-primary'>Snabbmat</Button>
                             <Button onClick={() => toGetOnlyByTyp('cafe')} variant='outline-primary'>Café</Button>
-                            <Button onClick={() => toGetOnlyByTyp('kiosk/grill')} variant='outline-primary'>Kiosk/grill</Button>
-                            <Button onClick={() => toGetOnlyByTyp('foodtruck')} variant='outline-primary'>Foodtruck</Button>
+                            {/* <Button onClick={() => toGetOnlyByTyp('kiosk/grill')} variant='outline-primary'>Kiosk/grill</Button>
+                            <Button onClick={() => toGetOnlyByTyp('foodtruck')} variant='outline-primary'>Foodtruck</Button> */}
 
                         </div>
-                        <div className='mt-3'>
-                            <Button variant='outline-primary'>Lunch</Button>
-                            <Button variant='outline-primary'>After Work</Button>
-                            <Button variant='outline-primary'>Middag/Á la carte</Button>
+                        <div className={`mt-3 ${filteredListByTyp ? '' : 'd-none'}`}>
+                            <Button disabled={!filteredListByTyp} onClick={() => toGetOnlyByUtbud('lunch')} variant='outline-primary'>Lunch</Button>
+                            <Button disabled={!filteredListByTyp} onClick={() => toGetOnlyByUtbud('middag')} variant='outline-primary'>Middag</Button>
                         </div>
 
                         <Button disabled={allRestaurants.data.length == 0} className="mt-3 btnBlack" onClick={() => setShowList(!showList)}>
