@@ -6,7 +6,8 @@ import '../assets/scss/mapStyling.scss'
 import SearchForm from '../components/SearchForm'
 import DirectionForm from '../components/DirectionForm'
 import MarkersComponent from '../components/MarkersComponent'
-import useStreamCollection from '../hooks/useStreamCollection'
+// import useStreamCollection from '../hooks/useStreamCollection'
+import useRestaurants from '../hooks/useRestaurants'
 import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
 import '../assets/scss/HomePage.scss'
 
@@ -26,7 +27,8 @@ const HomePage = () => {
     })
 
     // get all reastaurants from firestore
-    const allRestaurants = useStreamCollection('restaurants')
+    // const allRestaurants = useStreamCollection('restaurants')
+    const allRestaurants = useRestaurants()
 
     // Default Position(Malmö) om getMyPos failar
     const [position, setPosition] = useState({lat: 55.604981, lng: 13.003822})
