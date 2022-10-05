@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import useGetCollection from '../hooks/useGetCollection'
 import MarkersComponent from './MarkersComponent'
 import useUsers from '../hooks/useUsers'
+import UpdateRestaurantForm from './UpdateRestaurantForm'
 import { useAuthContext } from '../contexts/AuthContext'
 
 const ListOfNearbyRestaurants = ({restaurants, town}) => {
@@ -18,6 +19,8 @@ const ListOfNearbyRestaurants = ({restaurants, town}) => {
     // console.log(thisUser)
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
+
+    const [showUpdateForm, setShowUpdateForm] = useState(false) 
 
     // console.log('restaurants', restaurants)
     const nearByRestaurants = restaurants.filter(i => i.ort == town)
@@ -113,9 +116,12 @@ const ListOfNearbyRestaurants = ({restaurants, town}) => {
                                 </div>
                                 {thisUser.length === 1 && thisUser[0].admin && (
                                     <Button className="mt-2"
-                                        as={Link}
-                                        to="/update-restaurant"
+                                        onClick={() => setShowUpdateForm(!showUpdateForm)}
                                     >Update info</Button>
+                                )}
+
+                                {showUpdateForm && (
+                                    <UpdateRestaurantForm thisRestaurant={clickedRestaurant} />
                                 )}
                             </div>
                         )}
