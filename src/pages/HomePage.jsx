@@ -98,6 +98,7 @@ const HomePage = () => {
         setSearched(true)
         setSearchedLocation(city.long_name)
         setWeHaveReadableTown(null)
+        setShowList(false)
     }
 
     // When clicked "get my position" run this
