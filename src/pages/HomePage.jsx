@@ -168,7 +168,29 @@ const HomePage = () => {
                                 {filteredListByUtbud && (
                                     <MarkersComponent restaurants={filteredListByUtbud} town={weHaveReadableTown} />
                                 )}
+                            </>
+                        )}
 
+                        {searched && (
+                            <>
+                                {!filteredListByTyp && (
+                                    <MarkersComponent restaurants={allRestaurants.data} town={searchedLocation} />
+                                )}
+
+                                {filteredListByTyp && !filteredListByUtbud && (
+                                    <MarkersComponent restaurants={filteredListByTyp} town={searchedLocation} />
+                                )}
+
+                                {filteredListByUtbud && (
+                                    <MarkersComponent restaurants={filteredListByUtbud} town={searchedLocation} />
+                                )}
+                            </>
+                        )}
+                    </GoogleMap>
+
+
+                    {allRestaurants.data && !searched && (
+                            <>
                                 {showList && (
                                     <>
                                         {!filteredListByTyp && (
@@ -189,18 +211,6 @@ const HomePage = () => {
 
                         {searched && (
                             <>
-                                {!filteredListByTyp && (
-                                    <MarkersComponent restaurants={allRestaurants.data} town={searchedLocation} />
-                                )}
-
-                                {filteredListByTyp && !filteredListByUtbud && (
-                                    <MarkersComponent restaurants={filteredListByTyp} town={searchedLocation} />
-                                )}
-
-                                {filteredListByUtbud && (
-                                    <MarkersComponent restaurants={filteredListByUtbud} town={searchedLocation} />
-                                )}
-
                                 {showList && (
                                     <>
                                         {!filteredListByTyp && (
@@ -218,7 +228,10 @@ const HomePage = () => {
                                 )}
                             </>
                         )}
-                    </GoogleMap>
+
+
+
+
 
                     <div className="mapButtonLayout">
 
