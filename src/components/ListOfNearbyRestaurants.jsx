@@ -105,7 +105,7 @@ const ListOfNearbyRestaurants = ({restaurants, town}) => {
                                         </span>
                                     )}
                                 </div>
-                                {thisUser.length === 1 && thisUser[0].admin && (
+                                {currentUser && thisUser.length === 1 && thisUser[0].admin && (
                                     <Button className="mt-2"
                                         onClick={() => setShowUpdateForm(!showUpdateForm)}
                                     >{showUpdateForm ? 'Close Form' : 'Update info'}</Button>
