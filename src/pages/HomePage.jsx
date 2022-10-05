@@ -6,6 +6,8 @@ import '../assets/scss/mapStyling.scss'
 import SearchForm from '../components/SearchForm'
 import DirectionForm from '../components/DirectionForm'
 import MarkersComponent from '../components/MarkersComponent'
+import useGetCollection from '../hooks/useGetCollection'
+import useStreamCollection from '../hooks/useStreamCollection'
 import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
 import '../assets/scss/HomePage.scss'
 
@@ -24,6 +26,10 @@ const HomePage = () => {
         libraries
     })
 
+    // get all reastaurants from firestore
+    const allRestaurants = useStreamCollection('restaurants')
+    // console.log('allRestaurants', allRestaurants)
+
     // Default Position(Malmö) om getMyPos failar
     const [position, setPosition] = useState({lat: 55.604981, lng: 13.003822})
     const [userMarker, setUserMarker] = useState(null)
@@ -33,7 +39,48 @@ const HomePage = () => {
     const [searched, setSearched] = useState(false)
     const [searchedLocation, setSearchedLocation] = useState(null)
     const [showList, setShowList] = useState(false)
-    // const [showFilters, setShowFilters] = useState(false)
+
+    const [filteredListByTyp, setFilteredListByTyp] = useState(null)
+    const [filteredListByUtbud, setFilteredListByUtbud] = useState(null)
+
+    const toGetOnlyByTyp = (typ) => {
+
+        if(filteredListByUtbud) {
+            setFilteredListByUtbud(null)
+        }
+
+        if(searched) {
+            if(filteredListByTyp != null && filteredListByTyp.length > 0 && filteredListByTyp[0].typ == typ) {
+                setFilteredListByTyp(null)
+                return
+            }
+
+            const filteredByTyp = allRestaurants.data.filter(i => i.typ == typ)
+            const filteredList = filteredByTyp.filter(i => i.ort == searchedLocation)
+            setFilteredListByTyp(filteredList)
+            return
+        }
+
+        if(filteredListByTyp != null && filteredListByTyp.length > 0 && filteredListByTyp[0].typ == typ) {
+            setFilteredListByTyp(null)
+            return
+        }
+
+        const filteredByTyp = allRestaurants.data.filter(i => i.typ == typ)
+        const filteredList = filteredByTyp.filter(i => i.ort == weHaveReadableTown)
+        setFilteredListByTyp(filteredList)
+    }
+
+    const toGetOnlyByUtbud = (utbud) => {
+
+        if(filteredListByUtbud != null && filteredListByUtbud.length > 0 && filteredListByUtbud[0].utbud == utbud) {
+            setFilteredListByUtbud(null)
+            return
+        }
+
+        const newList = filteredListByTyp.filter(i => i.utbud == utbud)
+        setFilteredListByUtbud(newList)
+    }
 
     // Get value from SearchForm and execute new coords
     const searchSubmit = async (address) => {
@@ -47,6 +94,7 @@ const HomePage = () => {
 
         // Center to new coordinates
         setPosition(newCoords)
+
         setSearched(true)
         setSearchedLocation(city.long_name)
         setWeHaveReadableTown(null)
@@ -58,7 +106,6 @@ const HomePage = () => {
         const getUserCoords = await GMapAPI.getUserLatLng()
 
         const weHaveReadable = await GMapAPI.getAdressFromLatLng(getUserCoords.lat, getUserCoords.lng)
-        // console.log('weHaveReadable', weHaveReadable[0])
 
         // update state to user location
         setPosition(getUserCoords)
@@ -89,19 +136,17 @@ const HomePage = () => {
 
     useEffect(() => {
         getMyPos()
-        
     }, [])
 
    return (
         <>
-            {!isLoaded && ( 
+            {!isLoaded && (
                 <p>Loading maps...</p>
             )}
 
             {/* if true, render map and searchform */}
             {isLoaded && (
                 <>
-
                     <GoogleMap
                         zoom={12}
                         center={position}
@@ -109,21 +154,88 @@ const HomePage = () => {
                     >
                         {userMarker && <Marker position={userMarker} label="You" />}
                         {renderDirection && <DirectionsRenderer directions={renderDirection} />}
-                        
-                        {weHaveReadableTown && showList && <ListOfNearbyRestaurants searchedLocation={weHaveReadableTown} />}
 
-                        {/* Get list of places/restaurants nearby the searched city */}
-                        {searched && (
+                        {allRestaurants.data && !searched && (
                             <>
-                                {showList && <ListOfNearbyRestaurants searchedLocation={searchedLocation} />}
-                                {/* <MarkersComponent restaurants={restaurants} town={searchedLocation}/> */}
+                                {!filteredListByTyp && (
+                                    <MarkersComponent restaurants={allRestaurants.data} town={weHaveReadableTown} />
+                                )}
+
+                                {filteredListByTyp && !filteredListByUtbud && (
+                                    <MarkersComponent restaurants={filteredListByTyp} town={weHaveReadableTown} />
+                                )}
+
+                                {filteredListByUtbud && (
+                                    <MarkersComponent restaurants={filteredListByUtbud} town={weHaveReadableTown} />
+                                )}
+
+                                {showList && (
+                                    <>
+                                        {!filteredListByTyp && (
+                                            <ListOfNearbyRestaurants restaurants={allRestaurants.data} town={weHaveReadableTown} />
+                                        )}
+
+                                        {filteredListByTyp && !filteredListByUtbud && (
+                                            <ListOfNearbyRestaurants restaurants={filteredListByTyp} town={weHaveReadableTown} />
+                                        )}
+
+                                        {filteredListByUtbud && (
+                                            <ListOfNearbyRestaurants restaurants={filteredListByUtbud} town={weHaveReadableTown} />
+                                        )}
+                                    </>
+                                )}
                             </>
                         )}
 
-                    </GoogleMap>                    
+                        {searched && (
+                            <>
+                                {!filteredListByTyp && (
+                                    <MarkersComponent restaurants={allRestaurants.data} town={searchedLocation} />
+                                )}
+
+                                {filteredListByTyp && !filteredListByUtbud && (
+                                    <MarkersComponent restaurants={filteredListByTyp} town={searchedLocation} />
+                                )}
+
+                                {filteredListByUtbud && (
+                                    <MarkersComponent restaurants={filteredListByUtbud} town={searchedLocation} />
+                                )}
+
+                                {showList && (
+                                    <>
+                                        {!filteredListByTyp && (
+                                            <ListOfNearbyRestaurants restaurants={allRestaurants.data} town={searchedLocation} />
+                                        )}
+
+                                        {filteredListByTyp && !filteredListByUtbud && (
+                                            <ListOfNearbyRestaurants restaurants={filteredListByTyp} town={searchedLocation} />
+                                        )}
+
+                                        {filteredListByUtbud && (
+                                            <ListOfNearbyRestaurants restaurants={filteredListByUtbud} town={searchedLocation} />
+                                        )}
+                                    </>
+                                )}
+                            </>
+                        )}
+                    </GoogleMap>
+
                     <div className="mapButtonLayout">
 
-                        <Button className="mt-3 btnBlack" onClick={() => setShowList(!showList)}>{showList ? 'Hide list' : 'Show list'}</Button>
+                        <div className='mt-3'>
+                            <Button onClick={() => toGetOnlyByTyp('restaurang')} variant='outline-primary'>Restaurang</Button>
+                            <Button onClick={() => toGetOnlyByTyp('snabbmat')} variant='outline-primary'>Snabbmat</Button>
+                            <Button onClick={() => toGetOnlyByTyp('cafe')} variant='outline-primary'>Café</Button>
+                        </div>
+
+                        <div className={`mt-3 ${filteredListByTyp ? '' : 'd-none'}`}>
+                            <Button disabled={!filteredListByTyp} onClick={() => toGetOnlyByUtbud('lunch')} variant='outline-primary'>Lunch</Button>
+                            <Button disabled={!filteredListByTyp} onClick={() => toGetOnlyByUtbud('middag')} variant='outline-primary'>Middag</Button>
+                        </div>
+
+                        <Button disabled={allRestaurants.data.length == 0} className="mt-3 btnBlack" onClick={() => setShowList(!showList)}>
+                            {showList ? 'Hide list' : 'Show list'}
+                        </Button>
 
                         <SearchForm onSubmit={searchSubmit} />
 

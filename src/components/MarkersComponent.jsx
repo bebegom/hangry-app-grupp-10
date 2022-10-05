@@ -1,20 +1,14 @@
 import { Marker} from '@react-google-maps/api'
 
-const MarkersComponent = ({restaurants, town, filteredList}) => {
+const MarkersComponent = ({restaurants, town = null}) => {
+    // console.log(restaurants)
+    const array = restaurants.filter(i => i.ort == town)
 
     return (
         <>
-            {restaurants && !filteredList && (
+            {array && (
                 <>
-                    {restaurants.data.map(restaurant => (
-                        <Marker key={restaurant.id} position={{lat: restaurant.lat, lng: restaurant.lng}} label={restaurant.namn} />
-                    ))}
-                </>
-            )}
-
-            {filteredList && (
-                <>
-                    {filteredList.map(restaurant => (
+                    {array.map(restaurant => (
                         <Marker key={restaurant.id} position={{lat: restaurant.lat, lng: restaurant.lng}} label={restaurant.namn} />
                     ))}
                 </>

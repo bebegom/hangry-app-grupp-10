@@ -5,45 +5,14 @@ import useGetCollection from '../hooks/useGetCollection'
 import MarkersComponent from './MarkersComponent'
 import { useAuthContext } from '../contexts/AuthContext'
 
-const ListOfNearbyRestaurants = ({searchedLocation}) => {
+const ListOfNearbyRestaurants = ({restaurants, town}) => {
     const { currentUser } = useAuthContext()
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
-    const [onlyRestaurants, setOnlyRestaurants] = useState(null)
-    const [onlySnabbmat, setOnlySnabbmat] = useState(null)
-    const restaurants = useGetCollection('restaurants', searchedLocation)
-    const [list, setList] = useState(null)
 
-    // filter list to only get restaurants
-    const toGetOnlyRestaurants = () => {
-        setShowDetails(false)
-        setOnlySnabbmat(null)
-
-        if(onlyRestaurants) {
-            setOnlyRestaurants(null)
-            setList(null)
-            return
-        }
-
-        const newList = restaurants.data.filter(i => i.typ === 'restaurang')
-        setList(newList)
-        setOnlyRestaurants(newList)
-    }
-    
-    const toGetOnlySnabbmat = () => {
-        setShowDetails(false)
-        setOnlyRestaurants(null)
-
-        if(onlySnabbmat) {
-            setOnlySnabbmat(null)
-            setList(null)
-            return
-        }
-
-        const newList = restaurants.data.filter(i => i.typ === 'snabbmat')
-        setList(newList)
-        setOnlySnabbmat(newList)
-    }
+    // console.log('restaurants', restaurants)
+    const nearByRestaurants = restaurants.filter(i => i.ort == town)
+    // console.log('nearbyrestaurants', nearByRestaurants)
     
     const seeDetails = (thisRestaurant) => {
         // console.log('clicked on: ', thisRestaurant)
@@ -61,75 +30,47 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
 
     return (
         <>
-            {restaurants.isLoading && (<div className='absolute-list'>Loading...</div>)}
+            {nearByRestaurants && nearByRestaurants.length == 0 && (
+                <div className='absolute-list p-2'>
+                    No matches
+                </div>
+            )}
 
-            {restaurants.isError && (<div className='absolute-list'>{restaurants.error}</div>)}
-
-            {!restaurants.isLoading && restaurants.data && (
+            {nearByRestaurants && nearByRestaurants.length > 0 && (
                 <>
-                    <div className='absolute-list p-2'>
-                        <div className='m-2 '>
-                            <span className='mx-2'>
-                                Filters:
-                            </span>
-                            <Button onClick={toGetOnlyRestaurants} variant={onlyRestaurants ? 'primary' : 'outline-primary'}>Restaurang</Button>
-                            <Button onClick={toGetOnlySnabbmat} variant={onlySnabbmat ? 'primary' : 'outline-primary'}>Snabbmat</Button>
+                    <div className='absolute-list p-2 d-flex'>
+                        <div className='d-md-inline-block'>
+                            <ListGroup>
+                                {nearByRestaurants.map(restaurant => (
+                                    <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
+                                ))}
+                            </ListGroup>
                         </div>
-
-                        <div className='d-flex'>
-                            {!onlyRestaurants && !onlySnabbmat && (
-                                <div className='d-md-inline-block'>
-                                    <ListGroup>
-                                        {restaurants.data.map(restaurant => (
-                                            <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
-                                        ))}
-                                    </ListGroup>
-                                </div>
-                            )}
-                            {onlyRestaurants && !onlySnabbmat && (
-                                <div className='d-md-inline-block'>
-                                    <ListGroup>
-                                        {onlyRestaurants.map(restaurant => (
-                                            <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
-                                        ))}
-                                    </ListGroup>
-                                </div>
-                            )}
-
-                            {onlySnabbmat && !onlyRestaurants && (
-                                <div className='d-md-inline-block'>
-                                    <ListGroup>
-                                        {onlySnabbmat.map(restaurant => (
-                                            <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
-                                        ))}
-                                    </ListGroup>
-                                </div>
-                            )}
-                            
-                            {showDetails && (
-                                <div className='d-md-inline-block border rounded p-2'>
-                                    <div className='d-flex flex-column'>
-                                        <h5>
-                                            {clickedRestaurant.namn}
-                                        </h5>
-                                        <span>
-                                            {clickedRestaurant.beskrivning}
-                                        </span>
-                                        <span>
-                                            Adress: {clickedRestaurant.adress}
-                                        </span>
-                                        <span>
-                                            Ort: {clickedRestaurant.ort}
-                                        </span>
-                                        <span>
-                                            Cuisine: {clickedRestaurant.cuisine}
-                                        </span>
-                                        <span>
-                                            Typ: {clickedRestaurant.typ}
-                                        </span>
-                                        <span>
-                                            Utbud: {clickedRestaurant.utbud}
-                                        </span>
+                        
+                        {showDetails && (
+                            <div className='d-md-inline-block border rounded p-2'>
+                                <div className='d-flex flex-column'>
+                                    <h5>
+                                        {clickedRestaurant.namn}
+                                    </h5>
+                                    <span>
+                                        {clickedRestaurant.beskrivning}
+                                    </span>
+                                    <span>
+                                        Adress: {clickedRestaurant.adress}
+                                    </span>
+                                    <span>
+                                        Ort: {clickedRestaurant.ort}
+                                    </span>
+                                    <span>
+                                        Cuisine: {clickedRestaurant.cuisine}
+                                    </span>
+                                    <span>
+                                        Typ: {clickedRestaurant.typ}
+                                    </span>
+                                    <span>
+                                        Utbud: {clickedRestaurant.utbud}
+                                    </span>
 
                                         {clickedRestaurant.telefon && (
                                             <span>
@@ -168,10 +109,8 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
                                     >Update info</Button>
                                 )}
                             </div>
-                            )}
-                        </div>
+                        )}
                     </div>
-                    <MarkersComponent restaurants={restaurants} town={searchedLocation} filteredList={list} />
                 </>
             )}
         </>
