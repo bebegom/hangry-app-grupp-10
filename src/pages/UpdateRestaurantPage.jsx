@@ -4,15 +4,15 @@ import useStreamDocument from '../hooks/useStreamDocument'
 
 const UpdateRestaurantPage = () => {
     const {data, loading} = useStreamDocument('restaurants', 'vNb1wtA2bv0pc9mgjiHg')
+
     return (
         <>
-			{loading && <p>Loading restaurant...</p>}
+	    	{loading && <p>Loading restaurant...</p>}
 
             <UpdateRestaurantForm thisRestaurant={data} />
 
 			{!loading && !data && <p>Restaurant not found</p>}
         </>
-
     )
 }
 

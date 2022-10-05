@@ -1,7 +1,6 @@
 import { Marker} from '@react-google-maps/api'
 
 const MarkersComponent = ({restaurants, town = null}) => {
-    // console.log(restaurants)
     const array = restaurants.filter(i => i.ort == town)
 
     return (

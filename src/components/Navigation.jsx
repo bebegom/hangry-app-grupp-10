@@ -13,7 +13,6 @@ const Navigation = () => {
 	const admins = users.filter(i => i.admin === true)
 
 	let thisUser;
-
 	if (currentUser) {
 		thisUser = admins.filter(user => user.email === currentUser.email)
 	}

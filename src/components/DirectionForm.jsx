@@ -4,7 +4,6 @@ import Button from 'react-bootstrap/Button'
 import { Autocomplete } from '@react-google-maps/api'
 import '../assets/scss/HomePage.scss'
 
-
 const DirectionForm = ({ onSubmit }) => {
 
     /* Initiate reference */

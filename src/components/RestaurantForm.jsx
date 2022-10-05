@@ -8,7 +8,6 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
     const [loading, setLoading] = useState(false)
 
     const onCreateRestaurant = async data => {
-        // console.log(data)
         setLoading(true)
 
         // Get lat and lng for the restaurant
@@ -34,6 +33,7 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
         })
         // resetting text-inputs
         reset()
+
         // resetting select-inputs
         reset({
             typ: '', 
@@ -97,7 +97,7 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
                     <Form.Control {...register('cuisine', {
                         required: 'Please enter a cuisine',
                         minLength: 5
-                    })} type='text' /> {/* TODO: change to select? */}
+                    })} type='text' />
                     {errors.cuisine && <span>{errors.cuisine.message}</span>}
                 </Form.Group>
                 

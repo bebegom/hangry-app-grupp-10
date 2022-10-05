@@ -9,7 +9,7 @@ const CreateTipsForm = () => {
     const [loading, setLoading] = useState(false)
 
     const onCreateTips = async (data) => {
-        // setLoading(true)
+        setLoading(true)
         console.log(data)
 
         // store tips in Firestore
@@ -38,7 +38,6 @@ const CreateTipsForm = () => {
                     })} as='textarea' rows={6} placeholder="Enter at least 20 characters" />
                     {errors.message && <span>{errors.message.message}</span>}
                 </Form.Group>
-
 
                 <Button disabled={loading} type='submit'>
                     {loading ? '...sending' : 'Send'}

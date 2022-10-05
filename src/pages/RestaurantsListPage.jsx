@@ -27,7 +27,6 @@ const RestaurantsListPage = () => {
         ]
     }, [])
 
-
     return (
         <>
             <Container>
@@ -38,7 +37,7 @@ const RestaurantsListPage = () => {
                 {isError && (<p>{error.message}</p>)}
 
                 {restaurants && <SortableTable columns={columns} data={restaurants} />}
-        </Container>
+            </Container>
         </>
     )
 }

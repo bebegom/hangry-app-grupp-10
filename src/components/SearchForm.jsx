@@ -6,7 +6,6 @@ import '../assets/scss/HomePage.scss'
 
 
 const SearchForm = ({ onSubmit }) => {
-
     /* Initiate reference */
     const ref = useRef()
 

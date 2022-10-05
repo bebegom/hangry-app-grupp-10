@@ -96,7 +96,7 @@ const UpdateRestaurantForm = ({thisRestaurant}) => {
                         required: 'Please enter a cuisine',
                         minLength: 5
                     })} 
-                    type='text' // TODO: change to select? 
+                    type='text'
                     defaultValue={thisRestaurant.cuisine} /> 
                     {errors.cuisine && <span>{errors.cuisine.message}</span>}
                 </Form.Group>

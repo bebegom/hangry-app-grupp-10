@@ -2,7 +2,7 @@ import { db } from '../firebase'
 import { collection, orderBy, query, where } from 'firebase/firestore'
 import { useFirestoreQueryData } from '@react-query-firebase/firestore'
 
-const useGetCollection = (coll, searchedLocation, orderByName) => {
+const useGetCollection = (searchedLocation) => {
     // create ref to the collection
     const restaurantsCollectionRef = collection(db, 'restaurants')
 

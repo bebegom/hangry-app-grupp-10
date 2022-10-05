@@ -1,8 +1,5 @@
 import {useState} from 'react'
 import {ListGroup, Button} from 'react-bootstrap'
-import { Link } from 'react-router-dom'
-import useGetCollection from '../hooks/useGetCollection'
-import MarkersComponent from './MarkersComponent'
 import useUsers from '../hooks/useUsers'
 import UpdateRestaurantForm from './UpdateRestaurantForm'
 import { useAuthContext } from '../contexts/AuthContext'
@@ -11,24 +8,18 @@ const ListOfNearbyRestaurants = ({restaurants, town}) => {
     let thisUser
     const { currentUser } = useAuthContext()
     const allUsers = useUsers()
-    // console.log(allUsers)
     if (currentUser) {
         const user = allUsers.data.filter(user => user.email == currentUser.email)
         thisUser = user
     }
-    // console.log(thisUser)
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
 
     const [showUpdateForm, setShowUpdateForm] = useState(false) 
 
-    // console.log('restaurants', restaurants)
     const nearByRestaurants = restaurants.filter(i => i.ort == town)
-    // console.log('nearbyrestaurants', nearByRestaurants)
     
     const seeDetails = (thisRestaurant) => {
-        // console.log('clicked on: ', thisRestaurant)
-
         if (clickedRestaurant === null) {
             setClickedRestaurant(thisRestaurant)
             setShowDetails(true)

@@ -6,7 +6,6 @@ import '../assets/scss/mapStyling.scss'
 import SearchForm from '../components/SearchForm'
 import DirectionForm from '../components/DirectionForm'
 import MarkersComponent from '../components/MarkersComponent'
-import useGetCollection from '../hooks/useGetCollection'
 import useStreamCollection from '../hooks/useStreamCollection'
 import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
 import '../assets/scss/HomePage.scss'
@@ -28,23 +27,22 @@ const HomePage = () => {
 
     // get all reastaurants from firestore
     const allRestaurants = useStreamCollection('restaurants')
-    // console.log('allRestaurants', allRestaurants)
 
     // Default Position(Malmö) om getMyPos failar
     const [position, setPosition] = useState({lat: 55.604981, lng: 13.003822})
+
     const [userMarker, setUserMarker] = useState(null)
     const [renderDirection, setRenderDirection] = useState(null)
     const [weHaveReadableTown, setWeHaveReadableTown] = useState(null)
-
     const [searched, setSearched] = useState(false)
     const [searchedLocation, setSearchedLocation] = useState(null)
     const [showList, setShowList] = useState(false)
-
+    
+    // states for filtering
     const [filteredListByTyp, setFilteredListByTyp] = useState(null)
     const [filteredListByUtbud, setFilteredListByUtbud] = useState(null)
 
     const toGetOnlyByTyp = (typ) => {
-
         if(filteredListByUtbud) {
             setFilteredListByUtbud(null)
         }
@@ -72,7 +70,6 @@ const HomePage = () => {
     }
 
     const toGetOnlyByUtbud = (utbud) => {
-
         if(filteredListByUtbud != null && filteredListByUtbud.length > 0 && filteredListByUtbud[0].utbud == utbud) {
             setFilteredListByUtbud(null)
             return
@@ -189,7 +186,6 @@ const HomePage = () => {
                         )}
                     </GoogleMap>
 
-
                     {allRestaurants.data && !searched && (
                             <>
                                 {showList && (
@@ -229,10 +225,6 @@ const HomePage = () => {
                                 )}
                             </>
                         )}
-
-
-
-
 
                     <div className="mapButtonLayout">
 
