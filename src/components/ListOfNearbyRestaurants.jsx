@@ -3,10 +3,19 @@ import {ListGroup, Button} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import useGetCollection from '../hooks/useGetCollection'
 import MarkersComponent from './MarkersComponent'
+import useUsers from '../hooks/useUsers'
 import { useAuthContext } from '../contexts/AuthContext'
 
 const ListOfNearbyRestaurants = ({restaurants, town}) => {
+    let thisUser
     const { currentUser } = useAuthContext()
+    const allUsers = useUsers()
+    // console.log(allUsers)
+    if (currentUser) {
+        const user = allUsers.data.filter(user => user.email == currentUser.email)
+        thisUser = user
+    }
+    // console.log(thisUser)
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
 
@@ -102,7 +111,7 @@ const ListOfNearbyRestaurants = ({restaurants, town}) => {
                                         </span>
                                     )}
                                 </div>
-                                {currentUser && (
+                                {thisUser.length === 1 && thisUser[0].admin && (
                                     <Button className="mt-2"
                                         as={Link}
                                         to="/update-restaurant"
