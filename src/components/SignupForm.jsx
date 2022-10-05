@@ -5,6 +5,7 @@ import { useAuthContext } from '../contexts/AuthContext'
 
 const SignupForm = () => {
 	const emailRef = useRef()
+	const displayNameRef = useRef()
 	const passwordRef = useRef()
 	const passwordConfirmRef = useRef()
 	const [error, setError] = useState(null)
@@ -36,7 +37,7 @@ const SignupForm = () => {
 		// try to sign up the user with the specified credentials
 		try {
 			setLoading(true)
-            await signup(emailRef.current.value, passwordRef.current.value, photo)
+            await signup(emailRef.current.value, passwordRef.current.value, displayNameRef.current.value, photo)
 			navigate('/')
 
 		} catch (err) {
@@ -66,6 +67,11 @@ const SignupForm = () => {
 												: 'No photo selected'
 										}
 									</Form.Text>
+								</Form.Group>
+
+								<Form.Group id="displayName" className="mb-3">
+									<Form.Label>Name</Form.Label>
+									<Form.Control type="text" ref={displayNameRef} required />
 								</Form.Group>
 
 								<Form.Group id="email" className="mb-3">

@@ -9,8 +9,8 @@ const UserListPage = () => {
     const columns = useMemo(() => {
         return [
             {
-                Header: 'ID',
-                accessor: 'id'
+                Header: 'Namn',
+                accessor: 'name'
             },
             {
                 Header: 'Email',
@@ -28,8 +28,6 @@ const UserListPage = () => {
             }
         ]
     }, [])
-
-    console.log(users)
 
     return (
         <>

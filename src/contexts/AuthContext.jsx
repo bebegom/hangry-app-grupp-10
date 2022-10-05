@@ -13,11 +13,12 @@ const useAuthContext = () => {
 
 const AuthContextProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null)
+    const [userName, setUserName] = useState(null)
     const [userEmail, setUserEmail] = useState(null)
     const [userPhotoUrl, setUserPhotoUrl] = useState(null)
     const [loading, setLoading] = useState(true)
 
-    const signup = async (email, password, photo) => {
+    const signup = async (email, password, name, photo) => {
 		await createUserWithEmailAndPassword(auth, email, password)
 
 		const photoPicture = await setDisplayPhoto(photo)
@@ -25,6 +26,7 @@ const AuthContextProvider = ({ children }) => {
 
 		const docRef = doc(db, 'users', auth.currentUser.uid) 
 		await setDoc(docRef, {
+			name,
 			email,
 			photoURL: photoPicture,
 			admin: false,
@@ -63,6 +65,7 @@ const AuthContextProvider = ({ children }) => {
 		// listen for auth-state changes
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
 			setCurrentUser(user)
+			setUserName(user?.displayName)
 			setUserEmail(user?.email)
             setUserPhotoUrl(user?.photoURL)
 			setLoading(false)
@@ -74,10 +77,11 @@ const AuthContextProvider = ({ children }) => {
     const values = {
         // everything the children needs
         currentUser,
-        signup,
+		signup,
         login,
         logout,
         setDisplayPhoto,
+		userName,
 		userEmail,
 		userPhotoUrl
     }
