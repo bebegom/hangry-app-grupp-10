@@ -110,8 +110,6 @@ const UpdateRestaurantForm = ({thisRestaurant}) => {
                         <option value='cafe'>Cafe</option>
                         <option value='restaurang'>Restaurang</option>
                         <option value='snabbmat'>Snabbmat</option>
-                        <option value='kiosk/grill'>Kiosk/Grill</option>
-                        <option value='foodtruck'>Foodtruck</option>
                     </select>
                     {errors.typ && <span>{errors.typ.message}</span>}
                 </Form.Group>
@@ -123,8 +121,7 @@ const UpdateRestaurantForm = ({thisRestaurant}) => {
                     })} className='form-select'>
                         <option value={thisRestaurant.utbud}>{thisRestaurant.utbud}</option>
                         <option value='lunch'>Lunch</option>
-                        <option value='after work'>After Work</option>
-                        <option value='middag/a la carte'>Middag/A la Carte</option>
+                        <option value='middag'>Middag</option>
                     </select>
                     {errors.utbud && <span>{errors.utbud.message}</span>}
                 </Form.Group>
