@@ -46,7 +46,7 @@ const HomePage = () => {
         console.log('typ:' , typ)
 
         if(searched) {
-            if(filteredListByTyp != null && filteredListByTyp[0].typ == typ) {
+            if(filteredListByTyp != null && filteredListByTyp.length > 0 && filteredListByTyp[0].typ == typ) {
                 setFilteredListByTyp(null)
                 console.log('typ is the same')
                 return
@@ -59,7 +59,7 @@ const HomePage = () => {
             return
         }
 
-        if(filteredListByTyp != null && filteredListByTyp[0].typ == typ) {
+        if(filteredListByTyp != null && filteredListByTyp.length > 0 && filteredListByTyp[0].typ == typ) {
             setFilteredListByTyp(null)
             console.log('typ is the same')
             return
