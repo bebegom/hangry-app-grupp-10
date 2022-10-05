@@ -24,6 +24,7 @@ const Navigation = () => {
 								<NavLink to="/logout" className="dropdown-item">Log Out</NavLink>
 								<NavLink to="/create-new-restaurant" className="dropdown-item">Create New</NavLink>
 								<NavLink to="/tips" className='dropdown-item'>Tips</NavLink>
+								<NavLink to="/send-tips" className='dropdown-item'>Send tips</NavLink>
 								<NavLink to="/userlist" className='dropdown-item'>Admins</NavLink>
 								<NavLink to="/restaurantlist" className='dropdown-item'>Restaurants</NavLink>
 						</NavDropdown>
