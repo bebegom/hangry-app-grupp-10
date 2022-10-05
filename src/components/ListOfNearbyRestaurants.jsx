@@ -12,6 +12,7 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
     const restaurants = useGetCollection('restaurants', searchedLocation)
     const [list, setList] = useState(null)
 
+    // filter list to only get restaurants
     const toGetOnlyRestaurants = () => {
         setShowDetails(false)
         setOnlySnabbmat(null)
