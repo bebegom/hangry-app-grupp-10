@@ -106,7 +106,7 @@ const UpdateRestaurantForm = ({thisRestaurant}) => {
                     <select {...register('typ', {
                         required: 'Please choose a type'
                     })} className='form-select'>
-                        <option selected value={thisRestaurant.typ}>{thisRestaurant.typ}</option> {/* TODO: getting a warning in console */}
+                        <option value={thisRestaurant.typ}>{thisRestaurant.typ}</option>
                         <option value='cafe'>Cafe</option>
                         <option value='restaurang'>Restaurang</option>
                         <option value='snabbmat'>Snabbmat</option>
@@ -121,7 +121,7 @@ const UpdateRestaurantForm = ({thisRestaurant}) => {
                     <select {...register('utbud', {
                         required: 'Please choose'
                     })} className='form-select'>
-                        <option selected value={thisRestaurant.utbud}>{thisRestaurant.utbud}</option> {/* TODO: getting a warning in console */}
+                        <option value={thisRestaurant.utbud}>{thisRestaurant.utbud}</option>
                         <option value='lunch'>Lunch</option>
                         <option value='after work'>After Work</option>
                         <option value='middag/a la carte'>Middag/A la Carte</option>

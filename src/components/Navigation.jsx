@@ -24,6 +24,7 @@ const Navigation = () => {
 								<NavLink to="/logout" className="dropdown-item">Log Out</NavLink>
 								<NavLink to="/create-new-restaurant" className="dropdown-item">Create New</NavLink>
 								<NavLink to="/tips" className='dropdown-item'>Tips</NavLink>
+								<NavLink to="/send-tips" className='dropdown-item'>Send tips</NavLink>
 								<NavLink to="/userlist" className='dropdown-item'>Admins</NavLink>
 								<NavLink to="/restaurantlist" className='dropdown-item'>Restaurants</NavLink>
 						</NavDropdown>
@@ -31,6 +32,7 @@ const Navigation = () => {
 				) : (
 					<>
 						{/* No user is logged in */}
+						<Nav.Link as={NavLink} to="/send-tips">Send Tips</Nav.Link>
 						<Nav.Link as={NavLink} to="/login">Login</Nav.Link>
 						<Nav.Link as={NavLink} to="/signup">Signup</Nav.Link>
 					</>

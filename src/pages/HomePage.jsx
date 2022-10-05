@@ -2,13 +2,10 @@ import { GoogleMap, useJsApiLoader, Marker, DirectionsRenderer} from '@react-goo
 import GMapAPI from '../services/GMapAPI'
 import { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
 import '../assets/scss/mapStyling.scss'
 import SearchForm from '../components/SearchForm'
 import DirectionForm from '../components/DirectionForm'
 import MarkersComponent from '../components/MarkersComponent'
-// import useStreamCollection from '../hooks/useStreamCollection'
-// import { where } from 'firebase/firestore'
 import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
 import '../assets/scss/HomePage.scss'
 
@@ -36,6 +33,7 @@ const HomePage = () => {
     const [searched, setSearched] = useState(false)
     const [searchedLocation, setSearchedLocation] = useState(null)
     const [showList, setShowList] = useState(false)
+    // const [showFilters, setShowFilters] = useState(false)
 
     // Get value from SearchForm and execute new coords
     const searchSubmit = async (address) => {
@@ -69,7 +67,6 @@ const HomePage = () => {
     }
 
     const directionSubmit = async (origin, destination) => {
-  
         const google = window.google
         const directionsService = new google.maps.DirectionsService()
 
@@ -104,6 +101,7 @@ const HomePage = () => {
             {/* if true, render map and searchform */}
             {isLoaded && (
                 <>
+
                     <GoogleMap
                         zoom={12}
                         center={position}
@@ -111,22 +109,21 @@ const HomePage = () => {
                     >
                         {userMarker && <Marker position={userMarker} label="You" />}
                         {renderDirection && <DirectionsRenderer directions={renderDirection} />}
-
-                        {weHaveReadableTown && <MarkersComponent town={weHaveReadableTown} />}
+                        
                         {weHaveReadableTown && showList && <ListOfNearbyRestaurants searchedLocation={weHaveReadableTown} />}
 
                         {/* Get list of places/restaurants nearby the searched city */}
                         {searched && (
                             <>
                                 {showList && <ListOfNearbyRestaurants searchedLocation={searchedLocation} />}
-                                <MarkersComponent town={searchedLocation}/>
+                                {/* <MarkersComponent restaurants={restaurants} town={searchedLocation}/> */}
                             </>
                         )}
 
                     </GoogleMap>                    
                     <div className="mapButtonLayout">
 
-                        <Button className="mt-3 btnBlack" onClick={() => setShowList(!showList)}>Show list</Button>
+                        <Button className="mt-3 btnBlack" onClick={() => setShowList(!showList)}>{showList ? 'Hide list' : 'Show list'}</Button>
 
                         <SearchForm onSubmit={searchSubmit} />
 
