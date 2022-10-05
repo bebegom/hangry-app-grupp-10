@@ -2,10 +2,10 @@ import {useState} from 'react'
 import {ListGroup, Button} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import useGetCollection from '../hooks/useGetCollection'
+import MarkersComponent from './MarkersComponent'
 import { useAuthContext } from '../contexts/AuthContext'
 
 const ListOfNearbyRestaurants = ({searchedLocation}) => {
-    // const [listOfRestaurants, setListOfRestaurants] = useState([])
     const { currentUser } = useAuthContext()
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
@@ -14,6 +14,7 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
     const restaurants = useGetCollection('restaurants', searchedLocation)
     const [list, setList] = useState(null)
 
+    // filter list to only get restaurants
     const toGetOnlyRestaurants = () => {
         setShowDetails(false)
         setOnlySnabbmat(null)
@@ -154,24 +155,23 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
                                             </span>
                                         )}
 
-                                        {clickedRestaurant.instagram && (
-                                            <span>
-                                                Instagram: {clickedRestaurant.instagram}
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    {currentUser && (
-                                        <Button className="mt-2"
-                                            as={Link}
-                                            to="/update-restaurant"
-                                        >Update info</Button>
+                                    {clickedRestaurant.instagram && (
+                                        <span>
+                                            Instagram: {clickedRestaurant.instagram}
+                                        </span>
                                     )}
-                                
                                 </div>
+                                {currentUser && (
+                                    <Button className="mt-2"
+                                        as={Link}
+                                        to="/update-restaurant"
+                                    >Update info</Button>
+                                )}
+                            </div>
                             )}
                         </div>
                     </div>
+                    <MarkersComponent restaurants={restaurants} town={searchedLocation} filteredList={list} />
                 </>
             )}
         </>

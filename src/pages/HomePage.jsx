@@ -123,7 +123,7 @@ const HomePage = () => {
                     </GoogleMap>                    
                     <div className="mapButtonLayout">
 
-                        <Button className="mt-3 btnBlack" onClick={() => setShowList(!showList)}>Show list</Button>
+                        <Button className="mt-3 btnBlack" onClick={() => setShowList(!showList)}>{showList ? 'Hide list' : 'Show list'}</Button>
 
                         <SearchForm onSubmit={searchSubmit} />
 
