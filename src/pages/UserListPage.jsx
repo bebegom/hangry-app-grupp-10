@@ -6,6 +6,8 @@ import SortableTable from '../components/SortableTable'
 const UserListPage = () => {
     const { data: users, error, isError, isLoading } = useUsers('users')
 
+    const admins = users.filter(i => i.admin === true)
+    
     const columns = useMemo(() => {
         return [
             {
@@ -38,7 +40,7 @@ const UserListPage = () => {
 
                 {isError && (<p>{error.message}</p>)}
 
-                {users && <SortableTable columns={columns} data={users} />}
+                {admins && <SortableTable columns={columns} data={admins} />}
             </Container>
         </>
     )
