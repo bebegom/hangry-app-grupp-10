@@ -43,17 +43,31 @@ const HomePage = () => {
     const [filteredListByTyp, setFilteredListByTyp] = useState(null)
 
     const toGetOnlyByTyp = (typ) => {
+        console.log('typ:' , typ)
+
         if(searched) {
+            if(filteredListByTyp != null && filteredListByTyp[0].typ == typ) {
+                setFilteredListByTyp(null)
+                console.log('typ is the same')
+                return
+            }
+
             const filteredByTyp = allRestaurants.data.filter(i => i.typ == typ)
             const filteredList = filteredByTyp.filter(i => i.ort == searchedLocation)
-            console.log(filteredList)
+            // console.log(filteredList)
             setFilteredListByTyp(filteredList)
+            return
+        }
+
+        if(filteredListByTyp != null && filteredListByTyp[0].typ == typ) {
+            setFilteredListByTyp(null)
+            console.log('typ is the same')
             return
         }
 
         const filteredByTyp = allRestaurants.data.filter(i => i.typ == typ)
         const filteredList = filteredByTyp.filter(i => i.ort == weHaveReadableTown)
-        console.log(filteredList)
+        // console.log(filteredList)
         setFilteredListByTyp(filteredList)
     }
 

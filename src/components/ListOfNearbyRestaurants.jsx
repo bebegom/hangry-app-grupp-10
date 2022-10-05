@@ -6,9 +6,9 @@ const ListOfNearbyRestaurants = ({restaurants, town}) => {
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
 
-    console.log('restaurants', restaurants)
+    // console.log('restaurants', restaurants)
     const nearByRestaurants = restaurants.filter(i => i.ort == town)
-    console.log('nearbyrestaurants', nearByRestaurants)
+    // console.log('nearbyrestaurants', nearByRestaurants)
     
     const seeDetails = (thisRestaurant) => {
         // console.log('clicked on: ', thisRestaurant)
