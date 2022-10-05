@@ -28,7 +28,7 @@ const AuthContextProvider = ({ children }) => {
 		await setDoc(docRef, {
 			name,
 			email,
-			photoURL: photoPicture,
+			photoURL: photoPicture ? photoPicture : null,
 			admin: false,
 		})
 	}
