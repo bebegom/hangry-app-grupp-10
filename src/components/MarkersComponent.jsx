@@ -1,19 +1,23 @@
 import { Marker} from '@react-google-maps/api'
-import useGetCollection from '../hooks/useGetCollection'
 
-const MarkersComponent = ({town}) => {
-    const listOfNearByPlaces = useGetCollection('restaurants', town)
-    console.log(listOfNearByPlaces)
+const MarkersComponent = ({restaurants, town, filteredList}) => {
 
     return (
         <>
-            {listOfNearByPlaces.data && (
+            {restaurants && !filteredList && (
                 <>
-                    {listOfNearByPlaces.data.map(restaurant => (
+                    {restaurants.data.map(restaurant => (
                         <Marker key={restaurant.id} position={{lat: restaurant.lat, lng: restaurant.lng}} label={restaurant.namn} />
                     ))}
                 </>
-                
+            )}
+
+            {filteredList && (
+                <>
+                    {filteredList.map(restaurant => (
+                        <Marker key={restaurant.id} position={{lat: restaurant.lat, lng: restaurant.lng}} label={restaurant.namn} />
+                    ))}
+                </>
             )}
         </>
     )
