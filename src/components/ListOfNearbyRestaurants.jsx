@@ -26,7 +26,13 @@ const ListOfNearbyRestaurants = ({restaurants, town}) => {
 
     return (
         <>
-            {nearByRestaurants && (
+            {nearByRestaurants && nearByRestaurants.length == 0 && (
+                <div className='absolute-list p-2'>
+                    No matches
+                </div>
+            )}
+
+            {nearByRestaurants && nearByRestaurants.length > 0 && (
                 <>
                     <div className='absolute-list p-2 d-flex'>
                         <div className='d-md-inline-block'>
