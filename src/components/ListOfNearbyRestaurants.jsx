@@ -171,6 +171,7 @@ const ListOfNearbyRestaurants = ({searchedLocation}) => {
                             )}
                         </div>
                     </div>
+                    <MarkersComponent restaurants={restaurants} town={searchedLocation} filteredList={list} />
                 </>
             )}
         </>
