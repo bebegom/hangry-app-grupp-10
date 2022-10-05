@@ -44,7 +44,6 @@ const HomePage = () => {
     const [filteredListByUtbud, setFilteredListByUtbud] = useState(null)
 
     const toGetOnlyByTyp = (typ) => {
-        console.log('typ:' , typ)
 
         if(filteredListByUtbud) {
             setFilteredListByUtbud(null)
@@ -53,31 +52,26 @@ const HomePage = () => {
         if(searched) {
             if(filteredListByTyp != null && filteredListByTyp.length > 0 && filteredListByTyp[0].typ == typ) {
                 setFilteredListByTyp(null)
-                console.log('typ is the same')
                 return
             }
 
             const filteredByTyp = allRestaurants.data.filter(i => i.typ == typ)
             const filteredList = filteredByTyp.filter(i => i.ort == searchedLocation)
-            // console.log(filteredList)
             setFilteredListByTyp(filteredList)
             return
         }
 
         if(filteredListByTyp != null && filteredListByTyp.length > 0 && filteredListByTyp[0].typ == typ) {
             setFilteredListByTyp(null)
-            console.log('typ is the same')
             return
         }
 
         const filteredByTyp = allRestaurants.data.filter(i => i.typ == typ)
         const filteredList = filteredByTyp.filter(i => i.ort == weHaveReadableTown)
-        // console.log(filteredList)
         setFilteredListByTyp(filteredList)
     }
 
     const toGetOnlyByUtbud = (utbud) => {
-        console.log('utbud: ', utbud)
 
         if(filteredListByUtbud != null && filteredListByUtbud.length > 0 && filteredListByUtbud[0].utbud == utbud) {
             setFilteredListByUtbud(null)
@@ -86,7 +80,6 @@ const HomePage = () => {
 
         const newList = filteredListByTyp.filter(i => i.utbud == utbud)
         setFilteredListByUtbud(newList)
-        // setHaveFilteredByUtbud(true)
     }
 
     // Get value from SearchForm and execute new coords
@@ -113,7 +106,6 @@ const HomePage = () => {
         const getUserCoords = await GMapAPI.getUserLatLng()
 
         const weHaveReadable = await GMapAPI.getAdressFromLatLng(getUserCoords.lat, getUserCoords.lng)
-        // console.log('weHaveReadable: ', weHaveReadable)
 
         // update state to user location
         setPosition(getUserCoords)
@@ -162,7 +154,6 @@ const HomePage = () => {
                     >
                         {userMarker && <Marker position={userMarker} label="You" />}
                         {renderDirection && <DirectionsRenderer directions={renderDirection} />}
-
 
                         {allRestaurants.data && !searched && (
                             <>
@@ -227,18 +218,16 @@ const HomePage = () => {
                                 )}
                             </>
                         )}
-
                     </GoogleMap>
+
                     <div className="mapButtonLayout">
 
                         <div className='mt-3'>
                             <Button onClick={() => toGetOnlyByTyp('restaurang')} variant='outline-primary'>Restaurang</Button>
                             <Button onClick={() => toGetOnlyByTyp('snabbmat')} variant='outline-primary'>Snabbmat</Button>
                             <Button onClick={() => toGetOnlyByTyp('cafe')} variant='outline-primary'>Café</Button>
-                            {/* <Button onClick={() => toGetOnlyByTyp('kiosk/grill')} variant='outline-primary'>Kiosk/grill</Button>
-                            <Button onClick={() => toGetOnlyByTyp('foodtruck')} variant='outline-primary'>Foodtruck</Button> */}
-
                         </div>
+
                         <div className={`mt-3 ${filteredListByTyp ? '' : 'd-none'}`}>
                             <Button disabled={!filteredListByTyp} onClick={() => toGetOnlyByUtbud('lunch')} variant='outline-primary'>Lunch</Button>
                             <Button disabled={!filteredListByTyp} onClick={() => toGetOnlyByUtbud('middag')} variant='outline-primary'>Middag</Button>
