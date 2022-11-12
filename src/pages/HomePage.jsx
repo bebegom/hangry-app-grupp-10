@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import '../assets/scss/mapStyling.scss'
 import SearchForm from '../components/SearchForm'
-import DirectionForm from '../components/DirectionForm'
 import MarkersComponent from '../components/MarkersComponent'
 import useRestaurants from '../hooks/useRestaurants'
 import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
@@ -99,20 +98,42 @@ const HomePage = () => {
         setShowList(false)
     }
 
-    // When clicked "get my position" run this
-    const getMyPos = async () => {
-        // call on api 
-        const getUserCoords = await GMapAPI.getUserLatLng()
-
-        const weHaveReadable = await GMapAPI.getAdressFromLatLng(getUserCoords.lat, getUserCoords.lng)
-
-        // update state to user location
-        setPosition(getUserCoords)
-        setUserMarker(getUserCoords)
-        setWeHaveReadableTown(weHaveReadable)
+    const showLocation = (position) => {
+        let userCoords = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+        }
+       /*  console.log("Latitude : " + userCoords.lat + " Longitude: " + userCoords.lng) */
+        setPosition(userCoords)
+        setUserMarker(userCoords)
     }
 
-    const directionSubmit = async (origin, destination) => {
+    const errorHandler = (err) => {
+        if(err.code == 1) {
+           console.log("Error: Access is denied!");
+        } else if( err.code == 2) {
+           console.log("Error: Position is unavailable!");
+        }
+    }
+
+    // When clicked "get my position" run this
+    const getMyPos = async () => {
+
+        const weHaveReadable = await GMapAPI.getAdressFromLatLng(getUserCoords.lat, getUserCoords.lng)
+        // update state to user location
+        setWeHaveReadableTown(weHaveReadable)
+        
+        if(navigator.geolocation) {
+            // timeout at 60000 milliseconds (60 seconds)
+            let options = {timeout:60000};
+            navigator.geolocation.getCurrentPosition(showLocation, errorHandler, options)
+        } else {
+            alert("Sorry, browser does not support geolocation!");
+        }
+
+    }
+
+    const handleWaypoint = async (origin, destination) => {
         const google = window.google
         const directionsService = new google.maps.DirectionsService()
 
@@ -245,8 +266,6 @@ const HomePage = () => {
                         </Button>
 
                         <SearchForm onSubmit={searchSubmit} />
-
-                        <DirectionForm onSubmit={directionSubmit} />
 
                         {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>}
 
