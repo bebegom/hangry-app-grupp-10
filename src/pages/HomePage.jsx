@@ -9,6 +9,9 @@ import MarkersComponent from '../components/MarkersComponent'
 import useRestaurants from '../hooks/useRestaurants'
 import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
 import '../assets/scss/HomePage.scss'
+import { useAuthContext } from '../contexts/AuthContext'
+import UpdateRestaurantForm from '../components/UpdateRestaurantForm'
+import useUsers from '../hooks/useUsers'
 
 /* a library of data for maps api */
 const libraries = ['places']
@@ -19,6 +22,14 @@ const places = [{
 }]
 
 const HomePage = () => {
+    const { currentUser } = useAuthContext()
+    let thisUser
+    const allUsers = useUsers()
+    if (currentUser) {
+        const user = allUsers.data.filter(user => user.email == currentUser.email)
+        thisUser = user
+    }
+
     /* Call on maps api, give apikey and libraries */
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -38,6 +49,8 @@ const HomePage = () => {
     const [searched, setSearched] = useState(false)
     const [searchedLocation, setSearchedLocation] = useState(null)
     const [showList, setShowList] = useState(false)
+    const [clickedOnMarker, setClickedOnMarker] = useState(null)
+    const [showUpdateForm, setShowUpdateForm] = useState(false)
     
     // states for filtering
     const [filteredListByTyp, setFilteredListByTyp] = useState(null)
@@ -191,7 +204,7 @@ const HomePage = () => {
                         {allRestaurants.data && !searched && (
                             <>
                                 {!filteredListByTyp && (
-                                    <MarkersComponent restaurants={allRestaurants.data} town={weHaveReadableTown} />
+                                    <MarkersComponent clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={allRestaurants.data} town={weHaveReadableTown} />
                                 )}
 
                                 {filteredListByTyp && !filteredListByUtbud && (
@@ -220,6 +233,73 @@ const HomePage = () => {
                             </>
                         )}
                     </GoogleMap>
+
+                    {clickedOnMarker && (
+                        <div className='d-md-inline-block border rounded p-2'>
+                            <div className='d-flex flex-column'>
+                                <h5>
+                                    {clickedOnMarker.namn}
+                                </h5>
+                                <span>
+                                    {clickedOnMarker.beskrivning}
+                                </span>
+                                <span>
+                                    Adress: {clickedOnMarker.adress}
+                                </span>
+                                <span>
+                                    Ort: {clickedOnMarker.ort}
+                                </span>
+                                <span>
+                                    Cuisine: {clickedOnMarker.cuisine}
+                                </span>
+                                <span>
+                                    Typ: {clickedOnMarker.typ}
+                                </span>
+                                <span>
+                                    Utbud: {clickedOnMarker.utbud}
+                                </span>
+
+                                    {clickedOnMarker.telefon && (
+                                        <span>
+                                            Telefon: {clickedOnMarker.telefon}
+                                        </span>
+                                    )}
+
+                                    {clickedOnMarker.facebook && (
+                                        <span>
+                                            Facebook: {clickedOnMarker.facebook}
+                                        </span>
+                                    )}
+
+                                    {clickedOnMarker.email && (
+                                        <span>
+                                            Email: {clickedOnMarker.email}
+                                        </span>
+                                    )}
+
+                                    {clickedOnMarker.hemsida && (
+                                        <span>
+                                            Hemsida: {clickedOnMarker.hemsida}
+                                        </span>
+                                    )}
+
+                                {clickedOnMarker.instagram && (
+                                    <span>
+                                        Instagram: {clickedOnMarker.instagram}
+                                    </span>
+                                )}
+                            </div>
+                            {currentUser && thisUser.length === 1 && thisUser[0].admin && (
+                                <Button className="mt-2"
+                                    onClick={() => setShowUpdateForm(!showUpdateForm)}
+                                >{showUpdateForm ? 'Close Form' : 'Update info'}</Button>
+                            )}
+
+                            {showUpdateForm && (
+                                <UpdateRestaurantForm thisRestaurant={clickedOnMarker} />
+                            )}
+                        </div>
+                    )}
 
                     {allRestaurants.data && !searched && (
                             <>
