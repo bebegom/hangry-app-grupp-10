@@ -8,6 +8,9 @@ import MarkersComponent from '../components/MarkersComponent'
 import useRestaurants from '../hooks/useRestaurants'
 import ListOfNearbyRestaurants from '../components/ListOfNearbyRestaurants'
 import '../assets/scss/HomePage.scss'
+import { useAuthContext } from '../contexts/AuthContext'
+import UpdateRestaurantForm from '../components/UpdateRestaurantForm'
+import useUsers from '../hooks/useUsers'
 
 /* a library of data for maps api */
 const libraries = ['places']
@@ -18,6 +21,14 @@ const places = [{
 }]
 
 const HomePage = () => {
+    const { currentUser } = useAuthContext()
+    let thisUser
+    const allUsers = useUsers()
+    if (currentUser) {
+        const user = allUsers.data.filter(user => user.email == currentUser.email)
+        thisUser = user
+    }
+
     /* Call on maps api, give apikey and libraries */
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -38,10 +49,46 @@ const HomePage = () => {
     const [searched, setSearched] = useState(false)
     const [searchedLocation, setSearchedLocation] = useState(null)
     const [showList, setShowList] = useState(false)
+    const [clickedOnMarker, setClickedOnMarker] = useState(null)
+    const [showUpdateForm, setShowUpdateForm] = useState(false)
     
     // states for filtering
     const [filteredListByTyp, setFilteredListByTyp] = useState(null)
     const [filteredListByUtbud, setFilteredListByUtbud] = useState(null)
+
+    const filterActive = (e) => {
+        console.log(e.target)
+
+        // disable the other 'typ'-buttons
+        if(e.target.classList.contains("btn-filter-typ")) {
+            const allFilterBtns = document.getElementsByClassName("btn-filter-typ")
+
+            allFilterBtns[0].classList.toggle("disabled")
+            allFilterBtns[1].classList.toggle("disabled")
+            allFilterBtns[2].classList.toggle("disabled")
+
+            e.target.classList.remove("disabled")
+        } 
+        
+        // disable the other 'utbud'-buttons
+        if(e.target.classList.contains("btn-filter-utbud")) {
+            const allFilterBtns = document.getElementsByClassName("btn-filter-utbud")
+
+            allFilterBtns[0].classList.toggle("disabled")
+            allFilterBtns[1].classList.toggle("disabled")
+
+            e.target.classList.remove("disabled")
+        }
+
+        // show if filtering is active of not
+        if(e.target.classList.contains('btn-outline-primary')) {
+            e.target.classList.remove('btn-outline-primary')
+            e.target.classList.add('btn-primary')
+        } else {
+            e.target.classList.remove('btn-primary')
+            e.target.classList.add('btn-outline-primary')
+        }
+    }
 
     const toGetOnlyByTyp = (typ) => {
         if(filteredListByUtbud) {
@@ -190,7 +237,7 @@ const HomePage = () => {
                         {allRestaurants.data && !searched && (
                             <>
                                 {!filteredListByTyp && (
-                                    <MarkersComponent restaurants={allRestaurants.data} town={weHaveReadableTown} />
+                                    <MarkersComponent clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={allRestaurants.data} town={weHaveReadableTown} />
                                 )}
 
                                 {filteredListByTyp && !filteredListByUtbud && (
@@ -219,6 +266,73 @@ const HomePage = () => {
                             </>
                         )}
                     </GoogleMap>
+
+                    {clickedOnMarker && (
+                        <div className='d-md-inline-block border rounded p-2'>
+                            <div className='d-flex flex-column'>
+                                <h5>
+                                    {clickedOnMarker.namn}
+                                </h5>
+                                <span>
+                                    {clickedOnMarker.beskrivning}
+                                </span>
+                                <span>
+                                    Adress: {clickedOnMarker.adress}
+                                </span>
+                                <span>
+                                    Ort: {clickedOnMarker.ort}
+                                </span>
+                                <span>
+                                    Cuisine: {clickedOnMarker.cuisine}
+                                </span>
+                                <span>
+                                    Typ: {clickedOnMarker.typ}
+                                </span>
+                                <span>
+                                    Utbud: {clickedOnMarker.utbud}
+                                </span>
+
+                                    {clickedOnMarker.telefon && (
+                                        <span>
+                                            Telefon: {clickedOnMarker.telefon}
+                                        </span>
+                                    )}
+
+                                    {clickedOnMarker.facebook && (
+                                        <span>
+                                            Facebook: {clickedOnMarker.facebook}
+                                        </span>
+                                    )}
+
+                                    {clickedOnMarker.email && (
+                                        <span>
+                                            Email: {clickedOnMarker.email}
+                                        </span>
+                                    )}
+
+                                    {clickedOnMarker.hemsida && (
+                                        <span>
+                                            Hemsida: {clickedOnMarker.hemsida}
+                                        </span>
+                                    )}
+
+                                {clickedOnMarker.instagram && (
+                                    <span>
+                                        Instagram: {clickedOnMarker.instagram}
+                                    </span>
+                                )}
+                            </div>
+                            {currentUser && thisUser.length === 1 && thisUser[0].admin && (
+                                <Button className="mt-2"
+                                    onClick={() => setShowUpdateForm(!showUpdateForm)}
+                                >{showUpdateForm ? 'Close Form' : 'Update info'}</Button>
+                            )}
+
+                            {showUpdateForm && (
+                                <UpdateRestaurantForm thisRestaurant={clickedOnMarker} />
+                            )}
+                        </div>
+                    )}
 
                     {allRestaurants.data && !searched && (
                             <>
@@ -264,14 +378,29 @@ const HomePage = () => {
                     <div className="mapButtonLayout">
 
                         <div className='mt-3'>
-                            <Button onClick={() => toGetOnlyByTyp('restaurang')} variant='outline-primary'>Restaurang</Button>
-                            <Button onClick={() => toGetOnlyByTyp('snabbmat')} variant='outline-primary'>Snabbmat</Button>
-                            <Button onClick={() => toGetOnlyByTyp('cafe')} variant='outline-primary'>Café</Button>
+                            <Button className='btn-filter btn-filter-typ' onClick={(e) => {
+                                toGetOnlyByTyp('restaurang')
+                                filterActive(e)
+                                }} variant='outline-primary'>Restaurang</Button>
+                            <Button className='btn-filter btn-filter-typ' onClick={(e) => {
+                                toGetOnlyByTyp('snabbmat')
+                                filterActive(e)
+                                }} variant='outline-primary'>Snabbmat</Button>
+                            <Button className='btn-filter btn-filter-typ' onClick={(e) => {
+                                toGetOnlyByTyp('cafe')
+                                filterActive(e)
+                                }} variant='outline-primary'>Café</Button>
                         </div>
 
                         <div className={`mt-3 ${filteredListByTyp ? '' : 'd-none'}`}>
-                            <Button disabled={!filteredListByTyp} onClick={() => toGetOnlyByUtbud('lunch')} variant='outline-primary'>Lunch</Button>
-                            <Button disabled={!filteredListByTyp} onClick={() => toGetOnlyByUtbud('middag')} variant='outline-primary'>Middag</Button>
+                            <Button className='btn-filter btn-filter-utbud' disabled={!filteredListByTyp} onClick={(e) => {
+                                toGetOnlyByUtbud('lunch')
+                                filterActive(e)
+                                }} variant='outline-primary'>Lunch</Button>
+                            <Button className='btn-filter btn-filter-utbud' disabled={!filteredListByTyp} onClick={(e) => {
+                                toGetOnlyByUtbud('middag')
+                                filterActive(e)
+                                }} variant='outline-primary'>Middag</Button>
                         </div>
 
                         <Button disabled={allRestaurants.data.length == 0} className="mt-3 btnBlack" onClick={() => setShowList(!showList)}>
