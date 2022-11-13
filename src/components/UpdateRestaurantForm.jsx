@@ -148,7 +148,7 @@ const UpdateRestaurantForm = ({thisRestaurant}) => {
                         {thisRestaurant.utbud == "middag" && (
                             <>
                                 <option value={thisRestaurant.utbud}>{thisRestaurant.utbud.charAt(0).toUpperCase() + thisRestaurant.utbud.slice(1)}</option>
-                                <option value='middag'>Middag</option>
+                                <option value='lunch'>Lunch</option>
                             </>
                         )}
                     </select>
