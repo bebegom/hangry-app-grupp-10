@@ -43,6 +43,40 @@ const HomePage = () => {
     const [filteredListByTyp, setFilteredListByTyp] = useState(null)
     const [filteredListByUtbud, setFilteredListByUtbud] = useState(null)
 
+    const filterActive = (e) => {
+        console.log(e.target)
+
+        // disable the other 'typ'-buttons
+        if(e.target.classList.contains("btn-filter-typ")) {
+            const allFilterBtns = document.getElementsByClassName("btn-filter-typ")
+
+            allFilterBtns[0].classList.toggle("disabled")
+            allFilterBtns[1].classList.toggle("disabled")
+            allFilterBtns[2].classList.toggle("disabled")
+
+            e.target.classList.remove("disabled")
+        } 
+        
+        // disable the other 'utbud'-buttons
+        if(e.target.classList.contains("btn-filter-utbud")) {
+            const allFilterBtns = document.getElementsByClassName("btn-filter-utbud")
+
+            allFilterBtns[0].classList.toggle("disabled")
+            allFilterBtns[1].classList.toggle("disabled")
+
+            e.target.classList.remove("disabled")
+        }
+
+        // show if filtering is active of not
+        if(e.target.classList.contains('btn-outline-primary')) {
+            e.target.classList.remove('btn-outline-primary')
+            e.target.classList.add('btn-primary')
+        } else {
+            e.target.classList.remove('btn-primary')
+            e.target.classList.add('btn-outline-primary')
+        }
+    }
+
     const toGetOnlyByTyp = (typ) => {
         if(filteredListByUtbud) {
             setFilteredListByUtbud(null)
@@ -230,14 +264,29 @@ const HomePage = () => {
                     <div className="mapButtonLayout">
 
                         <div className='mt-3'>
-                            <Button onClick={() => toGetOnlyByTyp('restaurang')} variant='outline-primary'>Restaurang</Button>
-                            <Button onClick={() => toGetOnlyByTyp('snabbmat')} variant='outline-primary'>Snabbmat</Button>
-                            <Button onClick={() => toGetOnlyByTyp('cafe')} variant='outline-primary'>Café</Button>
+                            <Button className='btn-filter btn-filter-typ' onClick={(e) => {
+                                toGetOnlyByTyp('restaurang')
+                                filterActive(e)
+                                }} variant='outline-primary'>Restaurang</Button>
+                            <Button className='btn-filter btn-filter-typ' onClick={(e) => {
+                                toGetOnlyByTyp('snabbmat')
+                                filterActive(e)
+                                }} variant='outline-primary'>Snabbmat</Button>
+                            <Button className='btn-filter btn-filter-typ' onClick={(e) => {
+                                toGetOnlyByTyp('cafe')
+                                filterActive(e)
+                                }} variant='outline-primary'>Café</Button>
                         </div>
 
                         <div className={`mt-3 ${filteredListByTyp ? '' : 'd-none'}`}>
-                            <Button disabled={!filteredListByTyp} onClick={() => toGetOnlyByUtbud('lunch')} variant='outline-primary'>Lunch</Button>
-                            <Button disabled={!filteredListByTyp} onClick={() => toGetOnlyByUtbud('middag')} variant='outline-primary'>Middag</Button>
+                            <Button className='btn-filter btn-filter-utbud' disabled={!filteredListByTyp} onClick={(e) => {
+                                toGetOnlyByUtbud('lunch')
+                                filterActive(e)
+                                }} variant='outline-primary'>Lunch</Button>
+                            <Button className='btn-filter btn-filter-utbud' disabled={!filteredListByTyp} onClick={(e) => {
+                                toGetOnlyByUtbud('middag')
+                                filterActive(e)
+                                }} variant='outline-primary'>Middag</Button>
                         </div>
 
                         <Button disabled={allRestaurants.data.length == 0} className="mt-3 btnBlack" onClick={() => setShowList(!showList)}>
