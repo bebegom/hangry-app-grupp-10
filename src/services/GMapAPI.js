@@ -23,6 +23,17 @@ const getLatLng = async (address) => {
 
 }
 
+const getUserLatLng = async () => {
+
+    // request to URL
+    const res = await axios.post(`https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`)
+    // Get the location(latitude and longitude) of the address from response data
+    const coordinates = res.data.location
+
+     /* return the coordinates to whatever called the function */
+    return coordinates
+}
+
 const getAdressFromLatLng = async (lat, lng) => {
     const res = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`)
 
@@ -32,6 +43,7 @@ const getAdressFromLatLng = async (lat, lng) => {
 }
 
 const exports = {
+    getUserLatLng,
     getLatLng,
     getAdressFromLatLng,
 }

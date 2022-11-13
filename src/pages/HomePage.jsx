@@ -119,6 +119,8 @@ const HomePage = () => {
     // When clicked "get my position" run this
     const getMyPos = async () => {
 
+        const getUserCoords = await GMapAPI.getUserLatLng()
+
         const weHaveReadable = await GMapAPI.getAdressFromLatLng(getUserCoords.lat, getUserCoords.lng)
         // update state to user location
         setWeHaveReadableTown(weHaveReadable)
