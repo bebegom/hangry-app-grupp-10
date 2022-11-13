@@ -238,11 +238,11 @@ const HomePage = () => {
                                 )}
 
                                 {filteredListByTyp && !filteredListByUtbud && (
-                                    <MarkersComponent restaurants={filteredListByTyp} town={weHaveReadableTown} />
+                                    <MarkersComponent clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={filteredListByTyp} town={weHaveReadableTown} />
                                 )}
 
                                 {filteredListByUtbud && (
-                                    <MarkersComponent restaurants={filteredListByUtbud} town={weHaveReadableTown} />
+                                    <MarkersComponent clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={filteredListByUtbud} town={weHaveReadableTown} />
                                 )}
                             </>
                         )}
@@ -250,15 +250,15 @@ const HomePage = () => {
                         {searched && (
                             <>
                                 {!filteredListByTyp && (
-                                    <MarkersComponent restaurants={allRestaurants.data} town={searchedLocation} />
+                                    <MarkersComponent clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={allRestaurants.data} town={searchedLocation} />
                                 )}
 
                                 {filteredListByTyp && !filteredListByUtbud && (
-                                    <MarkersComponent restaurants={filteredListByTyp} town={searchedLocation} />
+                                    <MarkersComponent clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={filteredListByTyp} town={searchedLocation} />
                                 )}
 
                                 {filteredListByUtbud && (
-                                    <MarkersComponent restaurants={filteredListByUtbud} town={searchedLocation} />
+                                    <MarkersComponent clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={filteredListByUtbud} town={searchedLocation} />
                                 )}
                             </>
                         )}
