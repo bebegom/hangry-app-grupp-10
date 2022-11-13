@@ -106,10 +106,29 @@ const UpdateRestaurantForm = ({thisRestaurant}) => {
                     <select {...register('typ', {
                         required: 'Please choose a type'
                     })} className='form-select'>
-                        <option value={thisRestaurant.typ}>{thisRestaurant.typ}</option>
-                        <option value='cafe'>Cafe</option>
-                        <option value='restaurang'>Restaurang</option>
-                        <option value='snabbmat'>Snabbmat</option>
+                        {thisRestaurant.typ == "restaurang" && (
+                            <>
+                                <option value={thisRestaurant.typ}>{thisRestaurant.typ.charAt(0).toUpperCase() + thisRestaurant.typ.slice(1)}</option>
+                                <option value='cafe'>Cafe</option>
+                                <option value='snabbmat'>Snabbmat</option>
+                            </>
+                        )}
+
+                        {thisRestaurant.typ == "cafe" && (
+                            <>
+                                <option value={thisRestaurant.typ}>{thisRestaurant.typ.charAt(0).toUpperCase() + thisRestaurant.typ.slice(1)}</option>
+                                <option value='restaurang'>Restaurang</option>
+                                <option value='snabbmat'>Snabbmat</option>
+                            </>
+                        )}
+
+                        {thisRestaurant.typ == "snabbmat" && (
+                            <>
+                                <option value={thisRestaurant.typ}>{thisRestaurant.typ.charAt(0).toUpperCase() + thisRestaurant.typ.slice(1)}</option>
+                                <option value='cafe'>Cafe</option>
+                                <option value='restaurang'>Restaurang</option>
+                            </>
+                        )}
                     </select>
                     {errors.typ && <span>{errors.typ.message}</span>}
                 </Form.Group>
@@ -119,9 +138,19 @@ const UpdateRestaurantForm = ({thisRestaurant}) => {
                     <select {...register('utbud', {
                         required: 'Please choose'
                     })} className='form-select'>
-                        <option value={thisRestaurant.utbud}>{thisRestaurant.utbud}</option>
-                        <option value='lunch'>Lunch</option>
-                        <option value='middag'>Middag</option>
+                        {thisRestaurant.utbud == "lunch" && (
+                            <>
+                                <option value={thisRestaurant.utbud}>{thisRestaurant.utbud.charAt(0).toUpperCase() + thisRestaurant.utbud.slice(1)}</option>
+                                <option value='middag'>Middag</option>
+                            </>
+                        )}
+
+                        {thisRestaurant.utbud == "middag" && (
+                            <>
+                                <option value={thisRestaurant.utbud}>{thisRestaurant.utbud.charAt(0).toUpperCase() + thisRestaurant.utbud.slice(1)}</option>
+                                <option value='middag'>Middag</option>
+                            </>
+                        )}
                     </select>
                     {errors.utbud && <span>{errors.utbud.message}</span>}
                 </Form.Group>
