@@ -33,6 +33,7 @@ const HomePage = () => {
 
     const [userMarker, setUserMarker] = useState(null)
     const [renderDirection, setRenderDirection] = useState(null)
+    const [restaurantDestination, setRestaurantDestination] = useState(null)
     const [weHaveReadableTown, setWeHaveReadableTown] = useState(null)
     const [searched, setSearched] = useState(false)
     const [searchedLocation, setSearchedLocation] = useState(null)
@@ -135,20 +136,28 @@ const HomePage = () => {
 
     }
 
-    const handleWaypoint = async (origin, destination) => {
-        const google = window.google
-        const directionsService = new google.maps.DirectionsService()
+    const chosenRestaurant = (address) => {
+        setRestaurantDestination(address)
+    }
 
-        const results = await new directionsService.route(
-            {
-                origin: origin,
-                destination: destination,
-                travelMode: google.maps.TravelMode.DRIVING
-            }
-        )
+    const handleDirection = async () => {
+    
+        const getUserCoords = await GMapAPI.getUserLatLng()
 
-        // update renderDirection state
-        setRenderDirection(results)
+        if(getUserCoords) {
+            const google = window.google
+            const directionsService = new google.maps.DirectionsService()
+
+            const results = await new directionsService.route(
+                {
+                    origin: userMarker,
+                    destination: restaurantDestination,
+                    travelMode: google.maps.TravelMode.DRIVING
+                }
+            )
+            // update renderDirection state
+            setRenderDirection(results)
+        }  
     }
 
     // removes direction from map
@@ -158,7 +167,8 @@ const HomePage = () => {
 
     useEffect(() => {
         getMyPos()
-    }, [])
+        handleDirection()
+    }, [restaurantDestination])
 
    return (
         <>
@@ -235,15 +245,16 @@ const HomePage = () => {
                                 {showList && (
                                     <>
                                         {!filteredListByTyp && (
-                                            <ListOfNearbyRestaurants restaurants={allRestaurants.data} town={searchedLocation} />
+                                            <ListOfNearbyRestaurants restaurants={allRestaurants.data} town={searchedLocation} chosenRestaurant={chosenRestaurant} />
                                         )}
 
                                         {filteredListByTyp && !filteredListByUtbud && (
-                                            <ListOfNearbyRestaurants restaurants={filteredListByTyp} town={searchedLocation} />
+                                            <ListOfNearbyRestaurants restaurants={filteredListByTyp} town={searchedLocation} 
+                                            chosenRestaurant={chosenRestaurant} />
                                         )}
 
                                         {filteredListByUtbud && (
-                                            <ListOfNearbyRestaurants restaurants={filteredListByUtbud} town={searchedLocation} />
+                                            <ListOfNearbyRestaurants restaurants={filteredListByUtbud} town={searchedLocation} chosenRestaurant={chosenRestaurant} />
                                         )}
                                     </>
                                 )}
