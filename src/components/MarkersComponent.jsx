@@ -1,6 +1,6 @@
 import { Marker} from '@react-google-maps/api'
 
-const MarkersComponent = ({clickedOnMarker, showUpdateForm, changeShowUpdateForm, changeClickedOnMarker, restaurants, town = null}) => {
+const MarkersComponent = ({setNewCenter, clickedOnMarker, showUpdateForm, changeShowUpdateForm, changeClickedOnMarker, restaurants, town = null}) => {
     const array = restaurants.filter(i => i.ort == town)
 
     const showDetails = (restaurant) => {
@@ -10,6 +10,7 @@ const MarkersComponent = ({clickedOnMarker, showUpdateForm, changeShowUpdateForm
             return
         }
         changeClickedOnMarker(restaurant)
+        setNewCenter({lat: restaurant.lat, lng: restaurant.lng})
         changeShowUpdateForm(false)
     }
 

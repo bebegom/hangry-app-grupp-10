@@ -4,7 +4,7 @@ import useUsers from '../hooks/useUsers'
 import UpdateRestaurantForm from './UpdateRestaurantForm'
 import { useAuthContext } from '../contexts/AuthContext'
 
-const ListOfNearbyRestaurants = ({restaurants, town, chosenRestaurant }) => {
+const ListOfNearbyRestaurants = ({setNewCenter, restaurants, town}) => {
     let thisUser
     const { currentUser } = useAuthContext()
     const allUsers = useUsers()
@@ -22,24 +22,16 @@ const ListOfNearbyRestaurants = ({restaurants, town, chosenRestaurant }) => {
     const seeDetails = (thisRestaurant) => {
         if (clickedRestaurant === null) {
             setClickedRestaurant(thisRestaurant)
+            setNewCenter({lat: thisRestaurant.lat, lng: thisRestaurant.lng})
             setShowDetails(true)
         } else if(clickedRestaurant === thisRestaurant) {
             setShowDetails(!showDetails)
         } else {
             setClickedRestaurant(thisRestaurant)
+            setNewCenter({lat: thisRestaurant.lat, lng: thisRestaurant.lng})
             setShowDetails(true)
         }
     }
-
-    const wantedDirection = () => {
-        if(clickedRestaurant) {
-            chosenRestaurant(clickedRestaurant.adress)
-        }else {
-            return
-        }
-    }
-
-    
 
     return (
         <>
@@ -114,9 +106,6 @@ const ListOfNearbyRestaurants = ({restaurants, town, chosenRestaurant }) => {
                                             Instagram: {clickedRestaurant.instagram}
                                         </span>
                                     )}
-                                    <div className="mt-4">
-                                        <Button onClick={wantedDirection}>Get waypoint</Button>
-                                    </div>
                                 </div>
                                 {currentUser && thisUser.length === 1 && thisUser[0].admin && (
                                     <Button className="mt-2"

@@ -51,6 +51,8 @@ const HomePage = () => {
     const [showList, setShowList] = useState(false)
     const [clickedOnMarker, setClickedOnMarker] = useState(null)
     const [showUpdateForm, setShowUpdateForm] = useState(false)
+
+    const [newCenter, setNewCenter] = useState(null)
     
     // states for filtering
     const [filteredListByTyp, setFilteredListByTyp] = useState(null)
@@ -225,24 +227,25 @@ const HomePage = () => {
                 <>
                     <GoogleMap
                         zoom={12}
-                        center={position}
+                        // center={clickedOnMarker ? {lat: clickedOnMarker.lat, lng: clickedOnMarker.lng} : position}
+                        center={newCenter ? {lat: newCenter.lat, lng: newCenter.lng} : position}
                         mapContainerClassName="mapContainer"
                     >
-                        {userMarker && <Marker position={userMarker} label="You" />}
+                        {userMarker && <Marker onClick={() => setNewCenter(position)} position={userMarker} label="You" />}
                         {renderDirection && (<DirectionsRenderer directions={renderDirection} />)}
 
                         {allRestaurants.data && !searched && (
                             <>
                                 {!filteredListByTyp && (
-                                    <MarkersComponent clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={allRestaurants.data} town={weHaveReadableTown} />
+                                    <MarkersComponent setNewCenter={setNewCenter} clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={allRestaurants.data} town={weHaveReadableTown} />
                                 )}
 
                                 {filteredListByTyp && !filteredListByUtbud && (
-                                    <MarkersComponent clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={filteredListByTyp} town={weHaveReadableTown} />
+                                    <MarkersComponent setNewCenter={setNewCenter} clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={filteredListByTyp} town={weHaveReadableTown} />
                                 )}
 
                                 {filteredListByUtbud && (
-                                    <MarkersComponent clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={filteredListByUtbud} town={weHaveReadableTown} />
+                                    <MarkersComponent setNewCenter={setNewCenter} clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={filteredListByUtbud} town={weHaveReadableTown} />
                                 )}
                             </>
                         )}
@@ -250,15 +253,15 @@ const HomePage = () => {
                         {searched && (
                             <>
                                 {!filteredListByTyp && (
-                                    <MarkersComponent clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={allRestaurants.data} town={searchedLocation} />
+                                    <MarkersComponent setNewCenter={setNewCenter} clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={allRestaurants.data} town={searchedLocation} />
                                 )}
 
                                 {filteredListByTyp && !filteredListByUtbud && (
-                                    <MarkersComponent clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={filteredListByTyp} town={searchedLocation} />
+                                    <MarkersComponent setNewCenter={setNewCenter} clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={filteredListByTyp} town={searchedLocation} />
                                 )}
 
                                 {filteredListByUtbud && (
-                                    <MarkersComponent clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={filteredListByUtbud} town={searchedLocation} />
+                                    <MarkersComponent setNewCenter={setNewCenter} clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={filteredListByUtbud} town={searchedLocation} />
                                 )}
                             </>
                         )}
@@ -336,15 +339,15 @@ const HomePage = () => {
                                 {showList && (
                                     <>
                                         {!filteredListByTyp && (
-                                            <ListOfNearbyRestaurants restaurants={allRestaurants.data} town={weHaveReadableTown} />
+                                            <ListOfNearbyRestaurants setNewCenter={setNewCenter} restaurants={allRestaurants.data} town={weHaveReadableTown} />
                                         )}
 
                                         {filteredListByTyp && !filteredListByUtbud && (
-                                            <ListOfNearbyRestaurants restaurants={filteredListByTyp} town={weHaveReadableTown} />
+                                            <ListOfNearbyRestaurants setNewCenter={setNewCenter} restaurants={filteredListByTyp} town={weHaveReadableTown} />
                                         )}
 
                                         {filteredListByUtbud && (
-                                            <ListOfNearbyRestaurants restaurants={filteredListByUtbud} town={weHaveReadableTown} />
+                                            <ListOfNearbyRestaurants setNewCenter={setNewCenter} restaurants={filteredListByUtbud} town={weHaveReadableTown} />
                                         )}
                                     </>
                                 )}
@@ -373,7 +376,7 @@ const HomePage = () => {
                         )}
 
                     <div className="mapButtonLayout">
-
+                        
                         <div className='mt-3'>
                             <Button className='btn-filter btn-filter-typ' onClick={(e) => {
                                 toGetOnlyByTyp('restaurang')
