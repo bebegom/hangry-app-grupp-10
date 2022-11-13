@@ -205,9 +205,9 @@ const HomePage = () => {
     }
 
     // removes direction from map
-    const removeDirection = () => {
+    /* const removeDirection = () => {
         setRenderDirection(null)
-    }
+    } */
 
     useEffect(() => {
         getMyPos()
@@ -229,7 +229,7 @@ const HomePage = () => {
                         mapContainerClassName="mapContainer"
                     >
                         {userMarker && <Marker position={userMarker} label="You" />}
-                        {renderDirection && <DirectionsRenderer directions={renderDirection} />}
+                        {renderDirection && (<DirectionsRenderer directions={renderDirection} />)}
 
                         {allRestaurants.data && !searched && (
                             <>
@@ -406,7 +406,7 @@ const HomePage = () => {
 
                         <SearchForm onSubmit={searchSubmit} />
 
-                        {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>}
+                        {/* {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>} */}
 
                         {!userMarker && <Button className="btnBlack mb-2" onClick={getMyPos}>Get my location</Button>}
                     </div>
