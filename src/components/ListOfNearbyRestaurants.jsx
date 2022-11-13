@@ -33,7 +33,6 @@ const ListOfNearbyRestaurants = ({restaurants, town, chosenRestaurant }) => {
 
     const wantedDirection = () => {
         if(clickedRestaurant) {
-            console.log(clickedRestaurant.namn)
             chosenRestaurant(clickedRestaurant.adress)
         }else {
             return

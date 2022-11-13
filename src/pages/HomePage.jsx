@@ -188,10 +188,7 @@ const HomePage = () => {
     }
 
     const handleDirection = async () => {
-    
-        const getUserCoords = await GMapAPI.getUserLatLng()
-
-        if(getUserCoords) {
+        if(userMarker) {
             const google = window.google
             const directionsService = new google.maps.DirectionsService()
 
