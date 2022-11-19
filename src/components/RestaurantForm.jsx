@@ -11,8 +11,14 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
         setLoading(true)
 
         // Get lat and lng for the restaurant
-        const [latLng, _city] = await GMapAPI.getLatLng(`${data.adress} ${data.ort}`)
-        console.log(latLng)
+        const [latLng, _city, resStatus] = await GMapAPI.getLatLng(`${data.adress} ${data.ort}`)
+
+        if(resStatus == null){
+            console.log("abort mission")
+            alert("Check the adress again")
+            setLoading(false)
+            return
+        }
 
         // create the restaurant and store it in Cloud Firestore
         await addOrUpdate(col(db, 'restaurants'), {

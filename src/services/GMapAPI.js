@@ -6,7 +6,12 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 const getLatLng = async (address) => {
     // Request to api with address and apiKey
     const res = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`)
-    
+    const resStatus = res.data.status;
+
+    if(res.data.status != "OK" || res.data.results[0].geometry.location_type == "APPROXIMATE" || res.data.results[0].address_components.length != 6){
+        return [null, null, null]
+    }
+
     // Get the location(latitude and longitude) of the address from response data
     const coordinates = res.data.results[0].geometry.location
 
@@ -19,7 +24,7 @@ const getLatLng = async (address) => {
     }
 
     /* return the coordinates to whatever called the function */
-    return [coordinates, cityObj]
+    return [coordinates, cityObj, resStatus]
 
 }
 
