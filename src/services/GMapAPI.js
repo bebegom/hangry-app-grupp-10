@@ -8,6 +8,27 @@ const getLatLng = async (address) => {
     const res = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`)
     const resStatus = res.data.status;
 
+    // Get the location(latitude and longitude) of the address from response data
+    const coordinates = res.data.results[0].geometry.location
+
+    // Get the city of address user searched for
+    const addressComponents = res.data.results[0].address_components
+    let cityObj = addressComponents.find(i => i.types[0] === "locality")
+
+    if(cityObj === undefined) {
+        cityObj = addressComponents.find(i => i.types[0] === "postal_town")
+    }
+
+    /* return the coordinates to whatever called the function */
+    return [coordinates, cityObj, resStatus]
+
+}
+
+const getLatLngCreateNewRestaurant = async (address) => {
+    // Request to api with address and apiKey
+    const res = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`)
+    const resStatus = res.data.status;
+
     if(res.data.status != "OK" || res.data.results[0].geometry.location_type == "APPROXIMATE" || res.data.results[0].address_components.length != 6){
         return [null, null, null]
     }
@@ -50,6 +71,7 @@ const getAdressFromLatLng = async (lat, lng) => {
 const exports = {
     getUserLatLng,
     getLatLng,
+    getLatLngCreateNewRestaurant,
     getAdressFromLatLng,
 }
 

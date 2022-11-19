@@ -11,7 +11,7 @@ const RestaurantForm = ({ addOrUpdate, col, db }) => {
         setLoading(true)
 
         // Get lat and lng for the restaurant
-        const [latLng, _city, resStatus] = await GMapAPI.getLatLng(`${data.adress} ${data.ort}`)
+        const [latLng, _city, resStatus] = await GMapAPI.getLatLngCreateNewRestaurant(`${data.adress} ${data.ort}`)
 
         if(resStatus == null){
             console.log("abort mission")
