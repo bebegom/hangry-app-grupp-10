@@ -265,7 +265,7 @@ const HomePage = () => {
                                 )}
 
                                 {filteredListByUtbud && (
-                                    <MarkersComponent setNewCenter={setNewCenter} clickedOnMarker={clickedOnMarker} showUpdateForm={showUpdateForm} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={filteredListByUtbud} town={searchedLocation} />
+                                    <MarkersComponent onSetNewCenter={setNewCenter} clickedOnMarker={clickedOnMarker} changeShowUpdateForm={setShowUpdateForm} changeClickedOnMarker={setClickedOnMarker} restaurants={filteredListByUtbud} town={searchedLocation} />
                                 )}
                             </>
                         )}
@@ -363,16 +363,16 @@ const HomePage = () => {
                                 {showList && (
                                     <>
                                         {!filteredListByTyp && (
-                                            <ListOfNearbyRestaurants restaurants={allRestaurants.data} town={searchedLocation} chosenRestaurant={chosenRestaurant} />
+                                            <ListOfNearbyRestaurants setNewCenter={setNewCenter} restaurants={allRestaurants.data} town={searchedLocation} chosenRestaurant={chosenRestaurant} />
                                         )}
 
                                         {filteredListByTyp && !filteredListByUtbud && (
-                                            <ListOfNearbyRestaurants restaurants={filteredListByTyp} town={searchedLocation} 
+                                            <ListOfNearbyRestaurants setNewCenter={setNewCenter} restaurants={filteredListByTyp} town={searchedLocation} 
                                             chosenRestaurant={chosenRestaurant} />
                                         )}
 
                                         {filteredListByUtbud && (
-                                            <ListOfNearbyRestaurants restaurants={filteredListByUtbud} town={searchedLocation} chosenRestaurant={chosenRestaurant} />
+                                            <ListOfNearbyRestaurants setNewCenter={setNewCenter} restaurants={filteredListByUtbud} town={searchedLocation} chosenRestaurant={chosenRestaurant} />
                                         )}
                                     </>
                                 )}
