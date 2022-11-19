@@ -11,6 +11,7 @@ import '../assets/scss/HomePage.scss'
 import { useAuthContext } from '../contexts/AuthContext'
 import UpdateRestaurantForm from '../components/UpdateRestaurantForm'
 import useUsers from '../hooks/useUsers'
+import { useSearchParams } from 'react-router-dom'
 
 /* a library of data for maps api */
 const libraries = ['places']
@@ -51,6 +52,8 @@ const HomePage = () => {
     const [showList, setShowList] = useState(false)
     const [clickedOnMarker, setClickedOnMarker] = useState(null)
     const [showUpdateForm, setShowUpdateForm] = useState(false)
+    const [searchParams, setSearchParams] = useSearchParams()
+    const query = searchParams.get('query')
 
     const [newCenter, setNewCenter] = useState(null)
     
@@ -215,6 +218,7 @@ const HomePage = () => {
         getMyPos()
         handleDirection()
     }, [restaurantDestination])
+
 
    return (
         <>
@@ -411,7 +415,7 @@ const HomePage = () => {
 
                         {/* {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>} */}
 
-                        {!userMarker && <Button className="btnBlack mb-2" onClick={getMyPos}>Get my location</Button>}
+                        {<Button className="btn my-2" onClick={getMyPos}>Get my location</Button>}
                     </div>
                 </>
             )}
