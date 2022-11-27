@@ -2,8 +2,9 @@ import { Container } from 'react-bootstrap'
 import { useMemo } from 'react'
 import useRestaurants from '../hooks/useRestaurants'
 import SortableTable from '../components/SortableTable'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
+import UpdateRestaurantPage from './UpdateRestaurantPage'
 
 const RestaurantsListPage = () => {
     const { data: restaurants, error, isError, isLoading } = useRestaurants('restaurants')
@@ -18,7 +19,7 @@ const RestaurantsListPage = () => {
                 Header: 'Gatuadress',
                 accessor: 'adress'
             },
-            {
+            {   
                 Header: 'Ort',
                 accessor: 'ort'
             },
@@ -27,16 +28,22 @@ const RestaurantsListPage = () => {
                 accessor: 'typ'
             },
             {
-                Header: 'Actions',
-                Cell: () => 
-                <Button 
-                    className="mt-2"
-                    as={Link} to={`/update-restaurant`}
-                >Update Info
-                </Button>
-            }
+				Header: "Mer info",
+				disableSortBy: true,
+				Cell: () => (
+					<Button
+						className="mt-2"
+						onClick={() =>
+							navigate("/update-restaurant")
+						}
+					>Mer info
+					</Button>
+				),
+			},
         ]
     }, [])
+
+    const navigate = useNavigate()
 
     return (
         <>
