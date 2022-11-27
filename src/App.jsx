@@ -6,7 +6,6 @@ import LogoutPage from './pages/LogoutPage'
 import SignupPage from './pages/SignupPage'
 import NotFound from './pages/NotFound'
 import CreateNewRestaurantPage from './pages/CreateNewRestaurantPage'
-import UpdateRestaurantPage from './pages/UpdateRestaurantPage'
 import '../src/assets/scss/App.scss'
 import CreateTipsPage from './pages/CreateTipsPage'
 import TipsPage from './pages/TipsPage'
@@ -33,12 +32,6 @@ function App() {
 			<Route path="/create-new-restaurant" element={
 				<RequireAuth>
 					<CreateNewRestaurantPage/>
-				</RequireAuth>
-			} />
-
-			<Route path="/update-restaurant" element={
-				<RequireAuth>
-				<UpdateRestaurantPage/>
 				</RequireAuth>
 			} />
 
