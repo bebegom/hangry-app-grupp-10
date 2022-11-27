@@ -1,11 +1,10 @@
-import { Button, Container, ListGroup} from 'react-bootstrap'
+import { Button, Container, Table} from 'react-bootstrap'
 import { useState } from 'react'
 import useRestaurants from '../hooks/useRestaurants'
 import UpdateRestaurantForm from '../components/UpdateRestaurantForm'
 
 const RestaurantsListPage = () => {
     const { data: restaurants, error, isError, isLoading } = useRestaurants('restaurants')
-    
     const [showDetails, setShowDetails] = useState(false)
     const [clickedRestaurant, setClickedRestaurant] = useState(null)
     const [showUpdateForm, setShowUpdateForm] = useState(false) 
@@ -33,11 +32,22 @@ const RestaurantsListPage = () => {
 
                 {restaurants && (
                     <>
-                        <ListGroup>
-                            {restaurants.map(restaurant => (
-                                <ListGroup.Item onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}</ListGroup.Item>
-                            ))}
-                        </ListGroup>
+                        <Table >
+                            <thead>
+                                <tr>
+                                    <th>Namn</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    {restaurants.map(restaurant => (
+                                        <td 
+                                            onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}
+                                        </td>
+                                    ))}
+                                </tr>
+                            </tbody>
+                        </Table>
                         
                         {showDetails && (
                             <div className='d-md-inline-block border rounded p-2'>
@@ -64,29 +74,29 @@ const RestaurantsListPage = () => {
                                         Utbud: {clickedRestaurant.utbud}
                                     </span>
 
-                                        {clickedRestaurant.telefon && (
-                                            <span>
-                                                Telefon: {clickedRestaurant.telefon}
-                                            </span>
-                                        )}
+                                    {clickedRestaurant.telefon && (
+                                        <span>
+                                            Telefon: {clickedRestaurant.telefon}
+                                        </span>
+                                    )}
 
-                                        {clickedRestaurant.facebook && (
-                                            <span>
-                                                Facebook: {clickedRestaurant.facebook}
-                                            </span>
-                                        )}
+                                    {clickedRestaurant.facebook && (
+                                        <span>
+                                            Facebook: {clickedRestaurant.facebook}
+                                        </span>
+                                    )}
 
-                                        {clickedRestaurant.email && (
-                                            <span>
-                                                Email: {clickedRestaurant.email}
-                                            </span>
-                                        )}
+                                    {clickedRestaurant.email && (
+                                        <span>
+                                            Email: {clickedRestaurant.email}
+                                        </span>
+                                    )}
 
-                                        {clickedRestaurant.hemsida && (
-                                            <span>
-                                                Hemsida: {clickedRestaurant.hemsida}
-                                            </span>
-                                        )}
+                                    {clickedRestaurant.hemsida && (
+                                        <span>
+                                            Hemsida: {clickedRestaurant.hemsida}
+                                        </span>
+                                    )}
 
                                     {clickedRestaurant.instagram && (
                                         <span>
@@ -99,7 +109,6 @@ const RestaurantsListPage = () => {
                                     onClick={() => setShowUpdateForm(!showUpdateForm)}
                                 >{showUpdateForm ? 'Close Form' : 'Update info'}</Button>
                                 
-
                                 {showUpdateForm && (
                                     <UpdateRestaurantForm thisRestaurant={clickedRestaurant} />
                                 )}
