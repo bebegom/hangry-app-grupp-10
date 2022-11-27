@@ -39,13 +39,13 @@ const RestaurantsListPage = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    {restaurants.map(restaurant => (
+                                {restaurants.map(restaurant => (
+                                    <tr>
                                         <td 
                                             onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}
                                         </td>
-                                    ))}
-                                </tr>
+                                    </tr>
+                                ))}
                             </tbody>
                         </Table>
                         
