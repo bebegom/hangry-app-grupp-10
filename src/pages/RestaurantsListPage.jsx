@@ -40,9 +40,9 @@ const RestaurantsListPage = () => {
                             </thead>
                             <tbody>
                                 {restaurants.map(restaurant => (
-                                    <tr>
+                                    <tr key={restaurant.id}>
                                         <td 
-                                            onClick={() => seeDetails(restaurant)} key={restaurant.id}>{restaurant.namn}
+                                            onClick={() => seeDetails(restaurant)}>{restaurant.namn}
                                         </td>
                                     </tr>
                                 ))}
