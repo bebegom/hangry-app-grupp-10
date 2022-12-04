@@ -13,6 +13,7 @@ import UpdateRestaurantForm from '../components/UpdateRestaurantForm'
 import useUsers from '../hooks/useUsers'
 import { useSearchParams } from 'react-router-dom'
 
+
 /* a library of data for maps api */
 const libraries = ['places']
 
@@ -130,6 +131,7 @@ const HomePage = () => {
 
         const newList = filteredListByTyp.filter(i => i.utbud == utbud)
         setFilteredListByUtbud(newList)
+
     }
 
     // Get value from SearchForm and execute new coords
@@ -218,6 +220,32 @@ const HomePage = () => {
         getMyPos()
         handleDirection()
     }, [restaurantDestination])
+
+    useEffect(() => {
+        let listByTyp = localStorage.getItem('byTyp') || []
+        let listByUtbud = localStorage.getItem('byUtbud') || []
+
+        if(listByTyp != null) {
+            listByTyp = JSON.parse(localStorage.getItem('byTyp')) || []
+            setFilteredListByTyp(listByTyp)
+        } 
+
+        if(listByUtbud != null) {
+            listByUtbud = JSON.parse(localStorage.getItem('byUtbud')) || []
+            setFilteredListByUtbud(listByUtbud)
+        }
+
+    }, [])
+
+    useEffect(() => {
+        if(filteredListByTyp != null) {
+            localStorage.setItem('byTyp', JSON.stringify(filteredListByTyp)) || []
+        }
+        if(filteredListByUtbud != null) {    
+            localStorage.setItem('byUtbud', JSON.stringify(filteredListByUtbud)) || []
+        }
+        
+    }, [filteredListByTyp, filteredListByUtbud])
 
 
    return (
