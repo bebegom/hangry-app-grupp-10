@@ -38,7 +38,6 @@ const HomePage = () => {
     })
 
     // get all reastaurants from firestore
-    // const allRestaurants = useStreamCollection('restaurants')
     const allRestaurants = useRestaurants()
 
     // Default Position(Malmö) om getMyPos failar
@@ -63,10 +62,10 @@ const HomePage = () => {
     const [filteredListByUtbud, setFilteredListByUtbud] = useState(null)
 
     const filterActive = (e) => {
-        console.log(e.target)
 
         // disable the other 'typ'-buttons
-        if(e.target.classList.contains("btn-filter-typ")) {
+        if(e.target.classList.contains("btn-filter-typ") ) {
+
             const allFilterBtns = document.getElementsByClassName("btn-filter-typ")
 
             allFilterBtns[0].classList.toggle("disabled")
@@ -74,6 +73,17 @@ const HomePage = () => {
             allFilterBtns[2].classList.toggle("disabled")
 
             e.target.classList.remove("disabled")
+
+            if(allFilterBtns[0].classList.contains('disabled') || allFilterBtns[1].classList.contains('disabled') || allFilterBtns[2].classList.contains('disabled')) {
+                localStorage.setItem('activeFilterTyp', e.target.innerText)
+            } else {
+                localStorage.removeItem('activeFilterTyp')
+                const allFilterUtbudBtns = document.getElementsByClassName("btn-filter-utbud")
+                allFilterUtbudBtns[0].classList.remove("disabled")
+                allFilterUtbudBtns[1].classList.remove("disabled")
+
+                localStorage.clear()
+            }
         } 
         
         // disable the other 'utbud'-buttons
@@ -84,54 +94,73 @@ const HomePage = () => {
             allFilterBtns[1].classList.toggle("disabled")
 
             e.target.classList.remove("disabled")
-        }
 
-        // show if filtering is active of not
-        if(e.target.classList.contains('btn-outline-primary')) {
-            e.target.classList.remove('btn-outline-primary')
-            e.target.classList.add('btn-primary')
-        } else {
-            e.target.classList.remove('btn-primary')
-            e.target.classList.add('btn-outline-primary')
+            if(allFilterBtns[0].classList.contains('disabled') || allFilterBtns[1].classList.contains('disabled')) {
+                localStorage.setItem('activeFilterUtbud', e.target.innerText)
+            } else {
+                localStorage.removeItem('activeFilterUtbud')
+                localStorage.removeItem('byUtbud')
+            }
         }
     }
 
     const toGetOnlyByTyp = (typ) => {
         if(filteredListByUtbud) {
             setFilteredListByUtbud(null)
+            localStorage.removeItem('byUtbud')
+            localStorage.removeItem('activeFilterUtbud')
         }
 
         if(searched) {
             if(filteredListByTyp != null && filteredListByTyp.length > 0 && filteredListByTyp[0].typ == typ) {
                 setFilteredListByTyp(null)
+                setFilteredListByUtbud(null)
+                // localStorage.removeItem('byTyp')
+                // localStorage.removeItem('activeFilterTyp')
+
+                // localStorage.removeItem('byUtbud')
+                // localStorage.removeItem('activeFilterUtbud')
+
+                localStorage.clear()
+
                 return
             }
 
             const filteredByTyp = allRestaurants.data.filter(i => i.typ == typ)
             const filteredList = filteredByTyp.filter(i => i.ort == searchedLocation)
             setFilteredListByTyp(filteredList)
+            localStorage.setItem('byTyp', JSON.stringify(filteredList))
             return
         }
 
-        if(filteredListByTyp != null && filteredListByTyp.length > 0 && filteredListByTyp[0].typ == typ) {
+        if(filteredListByTyp != null && filteredListByTyp.length > 0 && filteredListByTyp[0].typ == typ || filteredListByTyp != null && filteredListByTyp.length == 0) {
             setFilteredListByTyp(null)
+            setFilteredListByUtbud(null)
+            localStorage.clear()
             return
         }
 
         const filteredByTyp = allRestaurants.data.filter(i => i.typ == typ)
         const filteredList = filteredByTyp.filter(i => i.ort == weHaveReadableTown)
         setFilteredListByTyp(filteredList)
+
+        localStorage.setItem('byTyp', JSON.stringify(filteredList))
     }
 
     const toGetOnlyByUtbud = (utbud) => {
-        if(filteredListByUtbud != null && filteredListByUtbud.length > 0 && filteredListByUtbud[0].utbud == utbud) {
+        if(filteredListByUtbud != null) {
             setFilteredListByUtbud(null)
+            localStorage.removeItem('byUtbud')
+            localStorage.removeItem('activeFilterUtbud')
+
+            const filteredByTyp = allRestaurants.data.filter(i => i.typ == localStorage.getItem('activeFilterTyp').toLowerCase())
+            setFilteredListByTyp(filteredByTyp)
             return
         }
 
         const newList = filteredListByTyp.filter(i => i.utbud == utbud)
         setFilteredListByUtbud(newList)
-
+        localStorage.setItem('byUtbud', JSON.stringify(newList))
     }
 
     // Get value from SearchForm and execute new coords
@@ -140,6 +169,19 @@ const HomePage = () => {
         if(!address) {
             return
         }
+
+        localStorage.clear()
+        setFilteredListByTyp(null)
+        setFilteredListByUtbud(null)
+
+        const allFilterTypBtns = document.getElementsByClassName("btn-filter-typ")
+        allFilterTypBtns[0].classList.remove('disabled')
+        allFilterTypBtns[1].classList.remove('disabled')
+        allFilterTypBtns[2].classList.remove('disabled')
+
+        const allFilterUtbudBtns = document.getElementsByClassName("btn-filter-utbud")
+        allFilterUtbudBtns[0].classList.remove('disabled')
+        allFilterUtbudBtns[1].classList.remove('disabled')
 
         // Get coordinates
         const [newCoords, city] = await GMapAPI.getLatLng(address)
@@ -158,7 +200,6 @@ const HomePage = () => {
             lat: position.coords.latitude,
             lng: position.coords.longitude
         }
-       /*  console.log("Latitude : " + userCoords.lat + " Longitude: " + userCoords.lng) */
         setPosition(userCoords)
         setUserMarker(userCoords)
     }
@@ -173,7 +214,8 @@ const HomePage = () => {
 
     // When clicked "get my position" run this
     const getMyPos = async () => {
-
+        setNewCenter(null)
+        setSearched(false)
         const getUserCoords = await GMapAPI.getUserLatLng()
 
         const weHaveReadable = await GMapAPI.getAdressFromLatLng(getUserCoords.lat, getUserCoords.lng)
@@ -212,9 +254,9 @@ const HomePage = () => {
     }
 
     // removes direction from map
-    /* const removeDirection = () => {
-        setRenderDirection(null)
-    } */
+    //  const removeDirection = () => {
+    //     setRenderDirection(null)
+    // }
 
     useEffect(() => {
         getMyPos()
@@ -222,31 +264,24 @@ const HomePage = () => {
     }, [restaurantDestination])
 
     useEffect(() => {
-        let listByTyp = localStorage.getItem('byTyp') || []
-        let listByUtbud = localStorage.getItem('byUtbud') || []
+
+        console.log(searchParams)
+
+        let listByTyp = localStorage.getItem('byTyp')
+        let listByUtbud = localStorage.getItem('byUtbud')
 
         if(listByTyp != null) {
-            listByTyp = JSON.parse(localStorage.getItem('byTyp')) || []
+            listByTyp = JSON.parse(localStorage.getItem('byTyp'))
             setFilteredListByTyp(listByTyp)
         } 
 
         if(listByUtbud != null) {
-            listByUtbud = JSON.parse(localStorage.getItem('byUtbud')) || []
+            listByUtbud = JSON.parse(localStorage.getItem('byUtbud'))
             setFilteredListByUtbud(listByUtbud)
         }
 
-    }, [])
-
-    useEffect(() => {
-        if(filteredListByTyp != null) {
-            localStorage.setItem('byTyp', JSON.stringify(filteredListByTyp)) || []
-        }
-        if(filteredListByUtbud != null) {    
-            localStorage.setItem('byUtbud', JSON.stringify(filteredListByUtbud)) || []
-        }
         
-    }, [filteredListByTyp, filteredListByUtbud])
-
+    }, [])
 
    return (
         <>
@@ -259,7 +294,6 @@ const HomePage = () => {
                 <>
                     <GoogleMap
                         zoom={12}
-                        // center={clickedOnMarker ? {lat: clickedOnMarker.lat, lng: clickedOnMarker.lng} : position}
                         center={newCenter ? {lat: newCenter.lat, lng: newCenter.lng} : position}
                         mapContainerClassName="mapContainer"
                     >
@@ -410,29 +444,62 @@ const HomePage = () => {
                     <div className="mapButtonLayout">
                         
                         <div className='mt-3'>
-                            <Button className='btn-filter btn-filter-typ' onClick={(e) => {
-                                toGetOnlyByTyp('restaurang')
-                                filterActive(e)
-                                }} variant='outline-primary'>Restaurang</Button>
-                            <Button className='btn-filter btn-filter-typ' onClick={(e) => {
-                                toGetOnlyByTyp('snabbmat')
-                                filterActive(e)
-                                }} variant='outline-primary'>Snabbmat</Button>
-                            <Button className='btn-filter btn-filter-typ' onClick={(e) => {
-                                toGetOnlyByTyp('cafe')
-                                filterActive(e)
-                                }} variant='outline-primary'>Café</Button>
+                            <Button 
+                                className='btn-filter btn-filter-typ' 
+                                onClick={(e) => {
+                                    toGetOnlyByTyp('restaurang')
+                                    filterActive(e)
+                                }} 
+                                variant={localStorage.getItem('activeFilterTyp') == "Restaurang" ? 'primary' : 'outline-primary'}
+                            >
+                                Restaurang
+                            </Button>
+
+                            <Button 
+                                className='btn-filter btn-filter-typ' 
+                                onClick={(e) => {
+                                    toGetOnlyByTyp('snabbmat')
+                                    filterActive(e)
+                                }} 
+                                variant={localStorage.getItem('activeFilterTyp') == "Snabbmat" ? 'primary' : 'outline-primary'}
+                                >
+                                    Snabbmat
+                                </Button>
+
+                            <Button
+                                className='btn-filter btn-filter-typ' 
+                                onClick={(e) => {
+                                    toGetOnlyByTyp('cafe')
+                                    filterActive(e)
+                                }} 
+                                variant={localStorage.getItem('activeFilterTyp') == "Café" ? 'primary' : 'outline-primary'}
+                            >
+                                Café
+                            </Button>
                         </div>
 
                         <div className={`mt-3 ${filteredListByTyp ? '' : 'd-none'}`}>
-                            <Button className='btn-filter btn-filter-utbud' disabled={!filteredListByTyp} onClick={(e) => {
-                                toGetOnlyByUtbud('lunch')
-                                filterActive(e)
-                                }} variant='outline-primary'>Lunch</Button>
-                            <Button className='btn-filter btn-filter-utbud' disabled={!filteredListByTyp} onClick={(e) => {
-                                toGetOnlyByUtbud('middag')
-                                filterActive(e)
-                                }} variant='outline-primary'>Middag</Button>
+                            <Button
+                                className='btn-filter btn-filter-utbud'  
+                                onClick={(e) => {
+                                    toGetOnlyByUtbud('lunch')
+                                    filterActive(e)
+                                }} 
+                                variant={localStorage.getItem('activeFilterUtbud') == "Lunch" ? 'primary' : 'outline-primary'}
+                            >
+                                Lunch
+                            </Button>
+
+                            <Button 
+                                className='btn-filter btn-filter-utbud' 
+                                onClick={(e) => {
+                                    toGetOnlyByUtbud('middag')
+                                    filterActive(e)
+                                }} 
+                                variant={localStorage.getItem('activeFilterUtbud') == "Middag" ? 'primary' : 'outline-primary'}
+                                >
+                                    Middag
+                                </Button>
                         </div>
 
                         <Button disabled={allRestaurants.data.length == 0} className="mt-3 btnBlack" onClick={() => setShowList(!showList)}>
@@ -443,7 +510,22 @@ const HomePage = () => {
 
                         {/* {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>} */}
 
-                        {<Button className="btn my-2" onClick={getMyPos}>Get my location</Button>}
+                        {<Button className="btn my-2" onClick={() => {
+                            getMyPos()
+                            setFilteredListByTyp(null)
+                            setFilteredListByUtbud(null)
+                            localStorage.clear()
+
+                            const allFilterTypBtns = document.getElementsByClassName("btn-filter-typ")
+                            allFilterTypBtns[0].classList.remove('disabled')
+                            allFilterTypBtns[1].classList.remove('disabled')
+                            allFilterTypBtns[2].classList.remove('disabled')
+
+                            const allFilterUtbudBtns = document.getElementsByClassName("btn-filter-utbud")
+                            allFilterUtbudBtns[0].classList.remove('disabled')
+                            allFilterUtbudBtns[1].classList.remove('disabled')
+
+                        }}>Get my location</Button>}
                     </div>
                 </>
             )}
