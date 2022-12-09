@@ -68,38 +68,62 @@ const HomePage = () => {
 
             const allFilterBtns = document.getElementsByClassName("btn-filter-typ")
 
-            allFilterBtns[0].classList.toggle("disabled")
-            allFilterBtns[1].classList.toggle("disabled")
-            allFilterBtns[2].classList.toggle("disabled")
+            if(allFilterBtns[0].classList.contains('disabled') || allFilterBtns[1].classList.contains('disabled') || allFilterBtns[2].classList.contains('disabled') || localStorage.getItem('activeFilterTyp')) {
 
-            e.target.classList.remove("disabled")
-
-            if(allFilterBtns[0].classList.contains('disabled') || allFilterBtns[1].classList.contains('disabled') || allFilterBtns[2].classList.contains('disabled')) {
-                localStorage.setItem('activeFilterTyp', e.target.innerText)
-            } else {
                 localStorage.removeItem('activeFilterTyp')
+                console.log("removing activeFilterTyp: ", localStorage.getItem('activeFilterTyp'))
+                // localStorage.removeItem('byTyp')
+
+                allFilterBtns[0].classList.remove("disabled")
+                allFilterBtns[1].classList.remove("disabled")
+                allFilterBtns[2].classList.remove("disabled")
+
+                e.target.classList.remove("disabled")
+
                 const allFilterUtbudBtns = document.getElementsByClassName("btn-filter-utbud")
                 allFilterUtbudBtns[0].classList.remove("disabled")
                 allFilterUtbudBtns[1].classList.remove("disabled")
 
                 localStorage.clear()
+                console.log("clearing")
+                console.log("clearing: ", localStorage.getItem('byTyp'))
+                
+            } else {
+                // if they do not contain disabled
+                localStorage.setItem('activeFilterTyp', e.target.innerText)
+                console.log("setting activeFilterTyp: ", localStorage.getItem('activeFilterTyp'))
+                
+                allFilterBtns[0].classList.add("disabled")
+                allFilterBtns[1].classList.add("disabled")
+                allFilterBtns[2].classList.add("disabled")
+
+                // e.target.classList.remove("disabled")
+
             }
         } 
         
         // disable the other 'utbud'-buttons
         if(e.target.classList.contains("btn-filter-utbud")) {
+
             const allFilterBtns = document.getElementsByClassName("btn-filter-utbud")
 
-            allFilterBtns[0].classList.toggle("disabled")
-            allFilterBtns[1].classList.toggle("disabled")
+            if(allFilterBtns[0].classList.contains('disabled') || allFilterBtns[1].classList.contains('disabled') || localStorage.getItem('activeFilterUtbud')) {
+                
 
-            e.target.classList.remove("disabled")
+                allFilterBtns[0].classList.remove("disabled")
+                allFilterBtns[1].classList.remove("disabled")
 
-            if(allFilterBtns[0].classList.contains('disabled') || allFilterBtns[1].classList.contains('disabled')) {
-                localStorage.setItem('activeFilterUtbud', e.target.innerText)
-            } else {
                 localStorage.removeItem('activeFilterUtbud')
                 localStorage.removeItem('byUtbud')
+
+            // e.target.classList.remove("disabled")
+            } else {
+                allFilterBtns[0].classList.add("disabled")
+                allFilterBtns[1].classList.add("disabled")
+
+                e.target.classList.remove("disabled")
+
+                localStorage.setItem('activeFilterUtbud', e.target.innerText)
             }
         }
     }
@@ -108,7 +132,11 @@ const HomePage = () => {
         if(filteredListByUtbud) {
             setFilteredListByUtbud(null)
             localStorage.removeItem('byUtbud')
-            localStorage.removeItem('activeFilterUtbud')
+            // localStorage.removeItem('activeFilterUtbud')
+            setFilteredListByTyp(null)
+            localStorage.removeItem('byTyp')
+            // localStorage.removeItem('activeFilterTyp')
+            return
         }
 
         if(searched) {
@@ -122,6 +150,8 @@ const HomePage = () => {
                 // localStorage.removeItem('activeFilterUtbud')
 
                 localStorage.clear()
+                console.log("clearing")
+
 
                 return
             }
@@ -136,7 +166,14 @@ const HomePage = () => {
         if(filteredListByTyp != null && filteredListByTyp.length > 0 && filteredListByTyp[0].typ == typ || filteredListByTyp != null && filteredListByTyp.length == 0) {
             setFilteredListByTyp(null)
             setFilteredListByUtbud(null)
+            // localStorage.removeItem('activeFilterTyp')
+            // localStorage.removeItem('activeFilterUtbud')
+            localStorage.removeItem('byTyp')
+            localStorage.removeItem('byUtbud')
+
             localStorage.clear()
+            console.log("clearing")
+
             return
         }
 
@@ -151,7 +188,7 @@ const HomePage = () => {
         if(filteredListByUtbud != null) {
             setFilteredListByUtbud(null)
             localStorage.removeItem('byUtbud')
-            localStorage.removeItem('activeFilterUtbud')
+            // localStorage.removeItem('activeFilterUtbud')
 
             const filteredByTyp = allRestaurants.data.filter(i => i.typ == localStorage.getItem('activeFilterTyp').toLowerCase())
             setFilteredListByTyp(filteredByTyp)
@@ -269,8 +306,6 @@ const HomePage = () => {
 
     useEffect(() => {
 
-        console.log(searchParams)
-
         let listByTyp = localStorage.getItem('byTyp')
         let listByUtbud = localStorage.getItem('byUtbud')
 
@@ -283,7 +318,6 @@ const HomePage = () => {
             listByUtbud = JSON.parse(localStorage.getItem('byUtbud'))
             setFilteredListByUtbud(listByUtbud)
         }
-
         
     }, [])
 
@@ -449,10 +483,11 @@ const HomePage = () => {
                         
                         <div className='mt-3'>
                             <Button 
+                                disabled={localStorage.getItem('activeFilterTyp') && localStorage.getItem('activeFilterTyp') != 'Restaurang'}
                                 className='btn-filter btn-filter-typ' 
                                 onClick={(e) => {
-                                    toGetOnlyByTyp('restaurang')
                                     filterActive(e)
+                                    toGetOnlyByTyp('restaurang')
                                 }} 
                                 variant={localStorage.getItem('activeFilterTyp') == "Restaurang" ? 'primary' : 'outline-primary'}
                             >
@@ -460,10 +495,11 @@ const HomePage = () => {
                             </Button>
 
                             <Button 
+                                disabled={localStorage.getItem('activeFilterTyp') && localStorage.getItem('activeFilterTyp') != 'Snabbmat'}
                                 className='btn-filter btn-filter-typ' 
                                 onClick={(e) => {
-                                    toGetOnlyByTyp('snabbmat')
                                     filterActive(e)
+                                    toGetOnlyByTyp('snabbmat')
                                 }} 
                                 variant={localStorage.getItem('activeFilterTyp') == "Snabbmat" ? 'primary' : 'outline-primary'}
                                 >
@@ -471,10 +507,11 @@ const HomePage = () => {
                                 </Button>
 
                             <Button
+                                disabled={localStorage.getItem('activeFilterTyp') && localStorage.getItem('activeFilterTyp') != 'Café'}
                                 className='btn-filter btn-filter-typ' 
                                 onClick={(e) => {
-                                    toGetOnlyByTyp('cafe')
                                     filterActive(e)
+                                    toGetOnlyByTyp('cafe')
                                 }} 
                                 variant={localStorage.getItem('activeFilterTyp') == "Café" ? 'primary' : 'outline-primary'}
                             >
@@ -484,10 +521,11 @@ const HomePage = () => {
 
                         <div className={`mt-3 ${filteredListByTyp ? '' : 'd-none'}`}>
                             <Button
+                                disabled={localStorage.getItem('activeFilterUtbud') && localStorage.getItem('activeFilterUtbud') != 'Lunch'}
                                 className='btn-filter btn-filter-utbud'  
                                 onClick={(e) => {
-                                    toGetOnlyByUtbud('lunch')
                                     filterActive(e)
+                                    toGetOnlyByUtbud('lunch')
                                 }} 
                                 variant={localStorage.getItem('activeFilterUtbud') == "Lunch" ? 'primary' : 'outline-primary'}
                             >
@@ -495,10 +533,11 @@ const HomePage = () => {
                             </Button>
 
                             <Button 
+                            disabled={localStorage.getItem('activeFilterUtbud') && localStorage.getItem('activeFilterUtbud') != 'Middag'}
                                 className='btn-filter btn-filter-utbud' 
                                 onClick={(e) => {
-                                    toGetOnlyByUtbud('middag')
                                     filterActive(e)
+                                    toGetOnlyByUtbud('middag')
                                 }} 
                                 variant={localStorage.getItem('activeFilterUtbud') == "Middag" ? 'primary' : 'outline-primary'}
                                 >
@@ -519,6 +558,8 @@ const HomePage = () => {
                             setFilteredListByTyp(null)
                             setFilteredListByUtbud(null)
                             localStorage.clear()
+                console.log("clearing")
+
 
                             const allFilterTypBtns = document.getElementsByClassName("btn-filter-typ")
                             allFilterTypBtns[0].classList.remove('disabled')
