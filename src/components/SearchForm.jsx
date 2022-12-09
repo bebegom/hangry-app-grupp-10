@@ -21,8 +21,6 @@ const SearchForm = ({ onSubmit }) => {
             return
         }
 
-        console.log(ref.current.value)
-
         /* Submit the value to caller */
         onSubmit(ref.current.value)
         setSearchParams({ query: ref.current.value })
