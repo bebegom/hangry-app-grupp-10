@@ -14,6 +14,7 @@ import useUsers from '../hooks/useUsers'
 import { useSearchParams } from 'react-router-dom'
 
 
+
 /* a library of data for maps api */
 const libraries = ['places']
 
@@ -38,7 +39,7 @@ const HomePage = () => {
     })
 
     // get all reastaurants from firestore
-    // const allRestaurants = useStreamCollection('restaurants')
+    /* const allRestaurants = useStreamCollection('restaurants') */
     const allRestaurants = useRestaurants()
 
     // Default Position(Malmö) om getMyPos failar
@@ -173,10 +174,6 @@ const HomePage = () => {
 
     // When clicked "get my position" run this
     const getMyPos = async () => {
-
-        if(searchParams) {
-            setSearchParams()
-        }
 
         const getUserCoords = await GMapAPI.getUserLatLng()
 
