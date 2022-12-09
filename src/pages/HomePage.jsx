@@ -14,6 +14,7 @@ import useUsers from '../hooks/useUsers'
 import { useSearchParams } from 'react-router-dom'
 
 
+
 /* a library of data for maps api */
 const libraries = ['places']
 
@@ -230,11 +231,9 @@ const HomePage = () => {
 
     // When clicked "get my position" run this
     const getMyPos = async () => {
+
         setNewCenter(null)
         setSearched(false)
-        if(searchParams) {
-            setSearchParams()
-        }
 
         const getUserCoords = await GMapAPI.getUserLatLng()
 
