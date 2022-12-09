@@ -4,7 +4,7 @@ import useUsers from '../hooks/useUsers'
 import UpdateRestaurantForm from './UpdateRestaurantForm'
 import { useAuthContext } from '../contexts/AuthContext'
 
-const ListOfNearbyRestaurants = ({clickedOnMarker, setClickedOnMarker, setNewCenter, restaurants, town}) => {
+const ListOfNearbyRestaurants = ({clickedOnMarker, setClickedOnMarker, setNewCenter, restaurants, town, chosenRestaurant}) => {
     
     const nearByRestaurants = restaurants.filter(i => i.ort == town)
     
