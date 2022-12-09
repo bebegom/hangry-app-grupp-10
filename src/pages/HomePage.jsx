@@ -62,6 +62,15 @@ const HomePage = () => {
     const [filteredListByTyp, setFilteredListByTyp] = useState(null)
     const [filteredListByUtbud, setFilteredListByUtbud] = useState(null)
 
+    const wantedDirection = () => {
+        console.log(clickedOnMarker)
+        if(clickedOnMarker) {
+            chosenRestaurant(clickedOnMarker.adress)
+        }else {
+            return
+        }
+    }
+
     const filterActive = (e) => {
 
         // disable the other 'typ'-buttons
@@ -403,6 +412,9 @@ const HomePage = () => {
                                         Instagram: {clickedOnMarker.instagram}
                                     </span>
                                 )}
+                            </div>
+                            <div className="mt-4">
+                                <Button onClick={wantedDirection}>Get waypoint</Button>
                             </div>
                             {currentUser && thisUser.length === 1 && thisUser[0].admin && (
                                 <Button className="mt-2"
