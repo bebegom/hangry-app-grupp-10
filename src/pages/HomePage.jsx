@@ -216,6 +216,10 @@ const HomePage = () => {
     const getMyPos = async () => {
         setNewCenter(null)
         setSearched(false)
+        if(searchParams) {
+            setSearchParams()
+        }
+
         const getUserCoords = await GMapAPI.getUserLatLng()
 
         const weHaveReadable = await GMapAPI.getAdressFromLatLng(getUserCoords.lat, getUserCoords.lng)
@@ -231,7 +235,7 @@ const HomePage = () => {
         }
 
     }
-
+    
     const chosenRestaurant = (address) => {
         setRestaurantDestination(address)
     }
