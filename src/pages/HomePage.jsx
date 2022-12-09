@@ -174,6 +174,10 @@ const HomePage = () => {
     // When clicked "get my position" run this
     const getMyPos = async () => {
 
+        if(searchParams) {
+            setSearchParams()
+        }
+
         const getUserCoords = await GMapAPI.getUserLatLng()
 
         const weHaveReadable = await GMapAPI.getAdressFromLatLng(getUserCoords.lat, getUserCoords.lng)
@@ -189,7 +193,7 @@ const HomePage = () => {
         }
 
     }
-
+    
     const chosenRestaurant = (address) => {
         setRestaurantDestination(address)
     }
@@ -443,7 +447,7 @@ const HomePage = () => {
 
                         {/* {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>} */}
 
-                        {<Button className="btn my-2" onClick={getMyPos}>Get my location</Button>}
+                        <Button className="btn my-2" onClick={getMyPos}>Get my location</Button>
                     </div>
                 </>
             )}
