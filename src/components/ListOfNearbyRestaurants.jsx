@@ -4,32 +4,20 @@ import useUsers from '../hooks/useUsers'
 import UpdateRestaurantForm from './UpdateRestaurantForm'
 import { useAuthContext } from '../contexts/AuthContext'
 
-const ListOfNearbyRestaurants = ({setNewCenter, restaurants, town}) => {
-    let thisUser
-    const { currentUser } = useAuthContext()
-    const allUsers = useUsers()
-    if (currentUser) {
-        const user = allUsers.data.filter(user => user.email == currentUser.email)
-        thisUser = user
-    }
-    const [showDetails, setShowDetails] = useState(false)
-    const [clickedRestaurant, setClickedRestaurant] = useState(null)
-
-    const [showUpdateForm, setShowUpdateForm] = useState(false) 
-
+const ListOfNearbyRestaurants = ({clickedOnMarker, setClickedOnMarker, setNewCenter, restaurants, town}) => {
+    
     const nearByRestaurants = restaurants.filter(i => i.ort == town)
     
     const seeDetails = (thisRestaurant) => {
-        if (clickedRestaurant === null) {
-            setClickedRestaurant(thisRestaurant)
+        if (clickedOnMarker === null) {
+            setClickedOnMarker(thisRestaurant)
             setNewCenter({lat: thisRestaurant.lat, lng: thisRestaurant.lng})
-            setShowDetails(true)
-        } else if(clickedRestaurant === thisRestaurant) {
-            setShowDetails(!showDetails)
+        } else if(clickedOnMarker === thisRestaurant) {
+            setClickedOnMarker(null)
+
         } else {
-            setClickedRestaurant(thisRestaurant)
+            setClickedOnMarker(thisRestaurant)
             setNewCenter({lat: thisRestaurant.lat, lng: thisRestaurant.lng})
-            setShowDetails(true)
         }
     }
 
@@ -51,73 +39,6 @@ const ListOfNearbyRestaurants = ({setNewCenter, restaurants, town}) => {
                                 ))}
                             </ListGroup>
                         </div>
-                        
-                        {showDetails && (
-                            <div className='d-md-inline-block border rounded p-2'>
-                                <div className='d-flex flex-column'>
-                                    <h5>
-                                        {clickedRestaurant.namn}
-                                    </h5>
-                                    <span>
-                                        {clickedRestaurant.beskrivning}
-                                    </span>
-                                    <span>
-                                        Adress: {clickedRestaurant.adress}
-                                    </span>
-                                    <span>
-                                        Ort: {clickedRestaurant.ort}
-                                    </span>
-                                    <span>
-                                        Cuisine: {clickedRestaurant.cuisine}
-                                    </span>
-                                    <span>
-                                        Typ: {clickedRestaurant.typ}
-                                    </span>
-                                    <span>
-                                        Utbud: {clickedRestaurant.utbud}
-                                    </span>
-
-                                        {clickedRestaurant.telefon && (
-                                            <span>
-                                                Telefon: {clickedRestaurant.telefon}
-                                            </span>
-                                        )}
-
-                                        {clickedRestaurant.facebook && (
-                                            <span>
-                                                Facebook: {clickedRestaurant.facebook}
-                                            </span>
-                                        )}
-
-                                        {clickedRestaurant.email && (
-                                            <span>
-                                                Email: {clickedRestaurant.email}
-                                            </span>
-                                        )}
-
-                                        {clickedRestaurant.hemsida && (
-                                            <span>
-                                                Hemsida: {clickedRestaurant.hemsida}
-                                            </span>
-                                        )}
-
-                                    {clickedRestaurant.instagram && (
-                                        <span>
-                                            Instagram: {clickedRestaurant.instagram}
-                                        </span>
-                                    )}
-                                </div>
-                                {currentUser && thisUser.length === 1 && thisUser[0].admin && (
-                                    <Button className="mt-2"
-                                        onClick={() => setShowUpdateForm(!showUpdateForm)}
-                                    >{showUpdateForm ? 'Close Form' : 'Update info'}</Button>
-                                )}
-
-                                {showUpdateForm && (
-                                    <UpdateRestaurantForm thisRestaurant={clickedRestaurant} />
-                                )}
-                            </div>
-                        )}
                     </div>
                 </>
             )}

@@ -71,8 +71,6 @@ const HomePage = () => {
             if(allFilterBtns[0].classList.contains('disabled') || allFilterBtns[1].classList.contains('disabled') || allFilterBtns[2].classList.contains('disabled') || localStorage.getItem('activeFilterTyp')) {
 
                 localStorage.removeItem('activeFilterTyp')
-                console.log("removing activeFilterTyp: ", localStorage.getItem('activeFilterTyp'))
-                // localStorage.removeItem('byTyp')
 
                 allFilterBtns[0].classList.remove("disabled")
                 allFilterBtns[1].classList.remove("disabled")
@@ -85,19 +83,16 @@ const HomePage = () => {
                 allFilterUtbudBtns[1].classList.remove("disabled")
 
                 localStorage.clear()
-                console.log("clearing")
-                console.log("clearing: ", localStorage.getItem('byTyp'))
                 
             } else {
                 // if they do not contain disabled
                 localStorage.setItem('activeFilterTyp', e.target.innerText)
-                console.log("setting activeFilterTyp: ", localStorage.getItem('activeFilterTyp'))
                 
                 allFilterBtns[0].classList.add("disabled")
                 allFilterBtns[1].classList.add("disabled")
                 allFilterBtns[2].classList.add("disabled")
 
-                // e.target.classList.remove("disabled")
+                e.target.classList.remove("disabled")
 
             }
         } 
@@ -116,7 +111,6 @@ const HomePage = () => {
                 localStorage.removeItem('activeFilterUtbud')
                 localStorage.removeItem('byUtbud')
 
-            // e.target.classList.remove("disabled")
             } else {
                 allFilterBtns[0].classList.add("disabled")
                 allFilterBtns[1].classList.add("disabled")
@@ -132,10 +126,8 @@ const HomePage = () => {
         if(filteredListByUtbud) {
             setFilteredListByUtbud(null)
             localStorage.removeItem('byUtbud')
-            // localStorage.removeItem('activeFilterUtbud')
             setFilteredListByTyp(null)
             localStorage.removeItem('byTyp')
-            // localStorage.removeItem('activeFilterTyp')
             return
         }
 
@@ -143,16 +135,8 @@ const HomePage = () => {
             if(filteredListByTyp != null && filteredListByTyp.length > 0 && filteredListByTyp[0].typ == typ) {
                 setFilteredListByTyp(null)
                 setFilteredListByUtbud(null)
-                // localStorage.removeItem('byTyp')
-                // localStorage.removeItem('activeFilterTyp')
-
-                // localStorage.removeItem('byUtbud')
-                // localStorage.removeItem('activeFilterUtbud')
 
                 localStorage.clear()
-                console.log("clearing")
-
-
                 return
             }
 
@@ -166,14 +150,10 @@ const HomePage = () => {
         if(filteredListByTyp != null && filteredListByTyp.length > 0 && filteredListByTyp[0].typ == typ || filteredListByTyp != null && filteredListByTyp.length == 0) {
             setFilteredListByTyp(null)
             setFilteredListByUtbud(null)
-            // localStorage.removeItem('activeFilterTyp')
-            // localStorage.removeItem('activeFilterUtbud')
             localStorage.removeItem('byTyp')
             localStorage.removeItem('byUtbud')
 
             localStorage.clear()
-            console.log("clearing")
-
             return
         }
 
@@ -188,7 +168,6 @@ const HomePage = () => {
         if(filteredListByUtbud != null) {
             setFilteredListByUtbud(null)
             localStorage.removeItem('byUtbud')
-            // localStorage.removeItem('activeFilterUtbud')
 
             const filteredByTyp = allRestaurants.data.filter(i => i.typ == localStorage.getItem('activeFilterTyp').toLowerCase())
             setFilteredListByTyp(filteredByTyp)
@@ -443,15 +422,15 @@ const HomePage = () => {
                                 {showList && (
                                     <>
                                         {!filteredListByTyp && (
-                                            <ListOfNearbyRestaurants setNewCenter={setNewCenter} restaurants={allRestaurants.data} town={weHaveReadableTown} />
+                                            <ListOfNearbyRestaurants clickedOnMarker={clickedOnMarker} setClickedOnMarker={setClickedOnMarker} setNewCenter={setNewCenter} restaurants={allRestaurants.data} town={weHaveReadableTown} />
                                         )}
 
                                         {filteredListByTyp && !filteredListByUtbud && (
-                                            <ListOfNearbyRestaurants setNewCenter={setNewCenter} restaurants={filteredListByTyp} town={weHaveReadableTown} />
+                                            <ListOfNearbyRestaurants clickedOnMarker={clickedOnMarker} setClickedOnMarker={setClickedOnMarker} setNewCenter={setNewCenter} restaurants={filteredListByTyp} town={weHaveReadableTown} />
                                         )}
 
                                         {filteredListByUtbud && (
-                                            <ListOfNearbyRestaurants setNewCenter={setNewCenter} restaurants={filteredListByUtbud} town={weHaveReadableTown} />
+                                            <ListOfNearbyRestaurants clickedOnMarker={clickedOnMarker} setClickedOnMarker={setClickedOnMarker} setNewCenter={setNewCenter} restaurants={filteredListByUtbud} town={weHaveReadableTown} />
                                         )}
                                     </>
                                 )}
@@ -463,16 +442,16 @@ const HomePage = () => {
                                 {showList && (
                                     <>
                                         {!filteredListByTyp && (
-                                            <ListOfNearbyRestaurants setNewCenter={setNewCenter} restaurants={allRestaurants.data} town={searchedLocation} chosenRestaurant={chosenRestaurant} />
+                                            <ListOfNearbyRestaurants clickedOnMarker={clickedOnMarker} setClickedOnMarker={setClickedOnMarker} setNewCenter={setNewCenter} restaurants={allRestaurants.data} town={searchedLocation} chosenRestaurant={chosenRestaurant} />
                                         )}
 
                                         {filteredListByTyp && !filteredListByUtbud && (
-                                            <ListOfNearbyRestaurants setNewCenter={setNewCenter} restaurants={filteredListByTyp} town={searchedLocation} 
+                                            <ListOfNearbyRestaurants clickedOnMarker={clickedOnMarker} setClickedOnMarker={setClickedOnMarker} setNewCenter={setNewCenter} restaurants={filteredListByTyp} town={searchedLocation} 
                                             chosenRestaurant={chosenRestaurant} />
                                         )}
 
                                         {filteredListByUtbud && (
-                                            <ListOfNearbyRestaurants setNewCenter={setNewCenter} restaurants={filteredListByUtbud} town={searchedLocation} chosenRestaurant={chosenRestaurant} />
+                                            <ListOfNearbyRestaurants clickedOnMarker={clickedOnMarker} setClickedOnMarker={setClickedOnMarker} setNewCenter={setNewCenter} restaurants={filteredListByUtbud} town={searchedLocation} chosenRestaurant={chosenRestaurant} />
                                         )}
                                     </>
                                 )}
@@ -558,8 +537,6 @@ const HomePage = () => {
                             setFilteredListByTyp(null)
                             setFilteredListByUtbud(null)
                             localStorage.clear()
-                console.log("clearing")
-
 
                             const allFilterTypBtns = document.getElementsByClassName("btn-filter-typ")
                             allFilterTypBtns[0].classList.remove('disabled')
