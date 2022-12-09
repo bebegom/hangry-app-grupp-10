@@ -13,6 +13,7 @@ import UpdateRestaurantForm from '../components/UpdateRestaurantForm'
 import useUsers from '../hooks/useUsers'
 import { useSearchParams } from 'react-router-dom'
 
+
 /* a library of data for maps api */
 const libraries = ['places']
 
@@ -130,6 +131,7 @@ const HomePage = () => {
 
         const newList = filteredListByTyp.filter(i => i.utbud == utbud)
         setFilteredListByUtbud(newList)
+
     }
 
     // Get value from SearchForm and execute new coords
@@ -172,6 +174,10 @@ const HomePage = () => {
     // When clicked "get my position" run this
     const getMyPos = async () => {
 
+        if(searchParams) {
+            setSearchParams()
+        }
+
         const getUserCoords = await GMapAPI.getUserLatLng()
 
         const weHaveReadable = await GMapAPI.getAdressFromLatLng(getUserCoords.lat, getUserCoords.lng)
@@ -187,7 +193,7 @@ const HomePage = () => {
         }
 
     }
-
+    
     const chosenRestaurant = (address) => {
         setRestaurantDestination(address)
     }
@@ -218,6 +224,32 @@ const HomePage = () => {
         getMyPos()
         handleDirection()
     }, [restaurantDestination])
+
+    useEffect(() => {
+        let listByTyp = localStorage.getItem('byTyp') || []
+        let listByUtbud = localStorage.getItem('byUtbud') || []
+
+        if(listByTyp != null) {
+            listByTyp = JSON.parse(localStorage.getItem('byTyp')) || []
+            setFilteredListByTyp(listByTyp)
+        } 
+
+        if(listByUtbud != null) {
+            listByUtbud = JSON.parse(localStorage.getItem('byUtbud')) || []
+            setFilteredListByUtbud(listByUtbud)
+        }
+
+    }, [])
+
+    useEffect(() => {
+        if(filteredListByTyp != null) {
+            localStorage.setItem('byTyp', JSON.stringify(filteredListByTyp)) || []
+        }
+        if(filteredListByUtbud != null) {    
+            localStorage.setItem('byUtbud', JSON.stringify(filteredListByUtbud)) || []
+        }
+        
+    }, [filteredListByTyp, filteredListByUtbud])
 
 
    return (
@@ -415,7 +447,7 @@ const HomePage = () => {
 
                         {/* {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>} */}
 
-                        {<Button className="btn my-2" onClick={getMyPos}>Get my location</Button>}
+                        <Button className="btn my-2" onClick={getMyPos}>Get my location</Button>
                     </div>
                 </>
             )}
