@@ -56,6 +56,7 @@ const HomePage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
     const query = searchParams.get('query')
 
+
     const [newCenter, setNewCenter] = useState(null)
     
     // states for filtering
@@ -69,7 +70,7 @@ const HomePage = () => {
         }
 
         if(clickedOnMarker) {
-            chosenRestaurant(clickedOnMarker.adress)
+            chosenRestaurant(clickedOnMarker.adress + ', ' + clickedOnMarker.ort)
         }else {
             return
         }
@@ -241,11 +242,40 @@ const HomePage = () => {
            console.log("Error: Position is unavailable!");
         }
     }
-
+    
     // When clicked "get my position" run this
     const getMyPos = async () => {
 
+        if(query) {
+            searchParams.delete('query')
+
+            setSearchParams(searchParams)
+        }
+
         setNewCenter(null)
+        setSearched(false)
+
+        const getUserCoords = await GMapAPI.getUserLatLng()
+
+        const weHaveReadable = await GMapAPI.getAdressFromLatLng(getUserCoords.lat, getUserCoords.lng)
+        // update state to user location
+        setWeHaveReadableTown(weHaveReadable)
+        
+        if(navigator.geolocation) {
+            // timeout at 60000 milliseconds (60 seconds)
+            let options = {timeout:60000};
+            navigator.geolocation.getCurrentPosition(showLocation, errorHandler, options)
+        } else {
+            alert("Sorry, browser does not support geolocation!");
+        }
+
+    }
+
+    // for when the website is first rendered and when user refreshes the page
+    const getInitialPos = async () => {
+        
+        /* setNewCenter(null) */
+        
         setSearched(false)
 
         const getUserCoords = await GMapAPI.getUserLatLng()
@@ -286,9 +316,13 @@ const HomePage = () => {
     }
 
     useEffect(() => {
-        getMyPos()
+        getInitialPos()
         handleDirection()
     }, [restaurantDestination])
+
+    useEffect(() => {
+        getInitialPos()
+    }, [])
 
     useEffect(() => {
 
