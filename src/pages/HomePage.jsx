@@ -63,7 +63,11 @@ const HomePage = () => {
     const [filteredListByUtbud, setFilteredListByUtbud] = useState(null)
 
     const wantedDirection = () => {
-        console.log(clickedOnMarker)
+        if(renderDirection) {
+            window.location.reload()
+            return
+        }
+
         if(clickedOnMarker) {
             chosenRestaurant(clickedOnMarker.adress)
         }else {
@@ -281,11 +285,6 @@ const HomePage = () => {
         }  
     }
 
-    // removes direction from map
-    //  const removeDirection = () => {
-    //     setRenderDirection(null)
-    // }
-
     useEffect(() => {
         getMyPos()
         handleDirection()
@@ -414,7 +413,7 @@ const HomePage = () => {
                                 )}
                             </div>
                             <div className="mt-4">
-                                <Button onClick={wantedDirection}>Get waypoint</Button>
+                                <Button onClick={wantedDirection}>{renderDirection ? 'Remove waypoint' : 'Get waypoint'}</Button>
                             </div>
                             {currentUser && thisUser.length === 1 && thisUser[0].admin && (
                                 <Button className="mt-2"
@@ -540,8 +539,6 @@ const HomePage = () => {
                         </Button>
 
                         <SearchForm onSubmit={searchSubmit} />
-
-                        {/* {renderDirection && <Button onClick={removeDirection}>Remove Direction</Button>} */}
 
                         {<Button className="btn my-2" onClick={() => {
                             getMyPos()
